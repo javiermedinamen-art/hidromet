@@ -2,6 +2,7 @@ import pandas as pd
 import geopandas as gpd
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse, Response # Usaremos Response en lugar de HTMLResponse
+from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from shapely.geometry import Point
 import json
@@ -9,6 +10,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
 from datetime import datetime
+import io
 
 # --- Configuración de FastAPI ---
 app = FastAPI(
@@ -175,20 +177,25 @@ async def get_series_chart(code_internal: str):
     
     
     # 1. Preparar datos y nombre
-    series_data = df_series[[code_internal]].dropna()
-    
+    # Aseguramos que solo se consideren valores NO nulos
+    series_data = df_series[[code_internal]].dropna() # <--- Esto es lo que usas ahora
+    # Opcional: Si tienes problemas de ceros, verifica que el valor sea > 0 o simplemente usa dropna()
+
     station_info = gdf_estaciones[gdf_estaciones['code_internal'] == code_internal]
     station_name = station_info['name'].iloc[0] if not station_info.empty else code_internal
-    
+
+
     # 2. Crear el gráfico base (Plotly Graph Objects para control avanzado)
     fig = go.Figure()
-    
+
     fig.add_trace(go.Scatter(
         x=series_data.index,
         y=series_data[code_internal],
         mode='lines',
+        # Esto asegura que los puntos con NaN no se conecten ni se muestren.
+        # Como ya usamos .dropna() arriba, Plotly simplemente dibujará una línea continua.
         name='Precipitación',
-        line=dict(color='#007bff', width=2)
+        line=dict(color="#000000", width=2)
     ))
 
     # 3. Generar la lista de años únicos
@@ -246,8 +253,6 @@ async def get_series_chart(code_internal: str):
         xaxis=dict(
             rangeselector=dict(
                 buttons=list([
-                    dict(count=1, label="1m", step="month", stepmode="backward"),
-                    dict(count=6, label="6m", step="month", stepmode="backward"),
                     dict(count=1, label="YTD", step="year", stepmode="todate"),
                     dict(count=1, label="1a", step="year", stepmode="backward"),
                     dict(step="all")
@@ -272,3 +277,37 @@ async def get_series_chart(code_internal: str):
             "Access-Control-Allow-Headers": "*"
         }
     )
+    
+
+# End point para descargar la serie en CSV
+@app.get("/api/v1/series/download/{code_internal}", tags=["Datos"])
+async def download_series(code_internal: str):
+    """Devuelve la serie temporal de la estación seleccionada en formato CSV."""
+    global df_series
+    
+    code_internal = str(code_internal).strip().lower()
+    
+    if df_series is None or code_internal not in df_series.columns:
+        # Intentar con la versión upper si la columna está en mayúsculas
+        if code_internal.upper() in df_series.columns:
+             code_internal = code_internal.upper()
+        else:
+             return Response(content="Serie no encontrada", status_code=404)
+    
+    # Prepara el DataFrame para la descarga (incluyendo el índice de fecha)
+    series_to_download = df_series[[code_internal]].copy().dropna()
+    
+    # Crear un buffer en memoria
+    stream = io.StringIO()
+    series_to_download.to_csv(stream, index=True, index_label="Fecha")
+    
+    response = StreamingResponse(
+        iter([stream.getvalue()]),
+        media_type="text/csv"
+    )
+    
+    # Forzar la descarga en el navegador
+    response.headers["Content-Disposition"] = f"attachment; filename=precipitacion_{code_internal}.csv"
+    return response
+
+# --- FIN DE LOS ENDPOINTS ---

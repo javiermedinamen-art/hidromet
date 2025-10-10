@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <style>
-        /* ... (Estilos CSS permanecen igual) ... */
+        /* --- Estilos CSS --- */
         body {
             font-family: 'Roboto', sans-serif;
             color: #333;
@@ -62,7 +62,7 @@
             flex-direction: column;
         }
 
-        /* --- MAPA Y GRÁFICO --- */
+        /* --- MAPA Y GRÁFICO (Contenedor ahora es un IFRAME) --- */
         #mapa {
             height: 100%;
             min-height: 650px;
@@ -70,18 +70,7 @@
             border: none; 
         }
 
-        #chartContainer {
-            flex-grow: 1; 
-            background: #ffffff;
-            padding: 0px; 
-            border-radius: 6px;
-            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
-            min-height: 580px; 
-            overflow: hidden;
-            display: flex;
-            align-items: center; 
-            justify-content: center;
-        }
+        /* El contenedor del gráfico ha sido reemplazado por #chartIframe */
 
         /* --- CONTROLES Y LEYENDA --- */
         .controls {
@@ -136,9 +125,15 @@
                         </select>
                 </div>
                 
-                <div id="chartContainer">
+                <iframe 
+                    id="chartIframe" 
+                    style="flex-grow: 1; border: none; width: 100%; min-height: 580px; background-color: #ffffff;"
+                    src="" 
+                    title="Gráfico de Serie Temporal"
+                    allow="fullscreen"
+                >
                     <p id="chartStatus" style="text-align: center; color: #6c757d; padding: 100px;">Seleccione una estación en el mapa o en el selector para ver la serie de precipitación.</p>
-                </div>
+                </iframe>
             </div>
             
         </div>
@@ -147,7 +142,8 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script>
-        // --- VARIABLES GLOBALES PARA MANEJO DE ESTADO ---'http://127.0.0.1:8000/api/v1'; 'https://hidromet.onrender.com/api/v1'
+        // --- VARIABLES GLOBALES PARA MANEJO DE ESTADO ---
+        // ASEGÚRATE que esta URL sea correcta.
         const API_BASE_URL = 'https://hidromet.onrender.com/api/v1'; 
         
         let mapa = null;
@@ -211,7 +207,7 @@
         
         // 2. Cargar Estaciones (Puntos) y llenar el selector
         async function cargarDatosGeoespaciales() {
-            const API_URL = `https://hidromet.onrender.com/api/v1/lugares`;
+            const API_URL = `${API_BASE_URL}/lugares`;
 
             try {
                 const response = await fetch(API_URL);
@@ -253,12 +249,12 @@
 
                             // Crear Popup
                             const html = `<h4 style="margin: 0 0 5px; color: ${getColorByFuente(fuente)}; font-weight: 500;">${name}</h4>
-                                          <p style="margin: 0;"><b>Código:</b> ${code}</p>
-                                          <p style="margin: 0;"><b>Cuenca:</b> ${cuenca}</p>
-                                          <p style="margin: 0;"><b>Elevación:</b> ${elev} m s.n.m.</p>
-                                          <p style="margin: 0;"><b>Fuente:</b> <span style="font-weight: bold;">${fuente}</span></p>
-                                          <hr style="margin: 5px 0;">
-                                          <button onclick="displayTimeSeries('${code}')">Ver Serie Temporal</button>`;
+                                             <p style="margin: 0;"><b>Código:</b> ${code}</p>
+                                             <p style="margin: 0;"><b>Cuenca:</b> ${cuenca}</p>
+                                             <p style="margin: 0;"><b>Elevación:</b> ${elev} m s.n.m.</p>
+                                             <p style="margin: 0;"><b>Fuente:</b> <span style="font-weight: bold;">${fuente}</span></p>
+                                             <hr style="margin: 5px 0;">
+                                             <button onclick="displayTimeSeries('${code}')">Ver Serie Temporal</button>`;
                             layer.bindPopup(html);
                         }
                     }
@@ -271,7 +267,9 @@
                 
             } catch (error) {
                 console.error("Error al obtener los datos de estaciones:", error);
-                document.getElementById('chartStatus').innerText = "Error: No se pudieron cargar las estaciones. Asegúrese de que la API de Render esté activa.";
+                // Si la API falla, muestra un mensaje en el área del gráfico (aunque ahora sea un iframe)
+                const iframe = document.getElementById('chartIframe');
+                iframe.srcdoc = `<p style="text-align: center; color: #dc3545; padding: 100px;">Error: No se pudieron cargar las estaciones. Asegúrese de que la API de Render esté activa.</p>`;
             }
         }
         
@@ -279,33 +277,15 @@
         async function displayTimeSeries(stationCode) {
             if (!stationCode || stationCode === 'N/A') return;
 
-            const chartContainer = document.getElementById('chartContainer');
-            
-            // Actualizar selector y estado
+            // Referencia al IFRAME
+            const chartIframe = document.getElementById('chartIframe');
+            const API_URL_CHART = `${API_BASE_URL}/series/chart/${stationCode}`; 
+
+            // Actualizar selector
             document.getElementById('station-select').value = stationCode;
-            chartContainer.innerHTML = `<p id="chartStatus" style="text-align: center; color: #007bff; padding: 100px;">Cargando gráfico para ${stationCode}...</p>`;
-
-
-            try {
-                // Llama al nuevo endpoint que devuelve HTML con botones de Plotly
-                const API_URL = `https://hidromet.onrender.com/api/v1/series/chart/${stationCode}`;
-                const response = await fetch(API_URL);
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(`Error ${response.status}: ${errorText}`);
-                }
-
-                // Inyectar el HTML de Plotly directamente
-                const chartHtml = await response.text();
-                chartContainer.innerHTML = chartHtml;
-
-            } catch (error) {
-                console.error("Error al obtener el gráfico:", error);
-                chartContainer.innerHTML = `<p id="chartStatus" style="text-align: center; color: #dc3545; padding: 100px;">
-                                              Error al cargar el gráfico. ${error.message}
-                                            </p>`;
-            }
+            
+            // 🚨 SOLUCIÓN IFRAME: Simplemente apunta el SRC al endpoint del backend.
+            chartIframe.src = API_URL_CHART;
         }
         
         // --- INICIO DE LA APLICACIÓN ---
