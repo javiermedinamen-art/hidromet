@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualización Geoespacial Simple</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #mapa {
+            height: 600px; /* Altura del mapa */
+            width: 80%; /* Ancho del mapa */
+            margin: 20px auto;
+            border: 1px solid #ccc;
+        }
+        /* Estilos para el control de la leyenda */
+        .legend {
+            padding: 6px 8px;
+            font: 14px/16px Arial, Helvetica, sans-serif;
+            background: white;
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+        }
+        .legend i {
+            width: 10px;
+            height: 10px;
+            float: left;
+            margin-right: 8px;
+            border-radius: 50%;
+            border: 1px solid #000; /* Para que se vean los bordes de los círculos */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Visualización de Estaciones Hidrométricas (Datos de Chile)</h1>
+    <div id="mapa"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script>
+        // --- Lógica de Colores por Fuente (Igual que antes) ---
+        function getColorByFuente(fuente) {
+            fuente = (fuente || '').toUpperCase();
+            switch (fuente) {
+                case 'DGA':
+                    return '#007bff'; // Azul
+                case 'CEAZAMET':
+                    return '#28a745'; // Verde
+                case 'CIEP':
+                    return '#ffc107'; // Amarillo/Naranja
+                case 'CECS':
+                    return '#dc3545'; // Rojo
+                case 'DMC':
+                    return '#6f42c1'; // Púrpura
+                case 'CR2':
+                    return '#fd7e14'; // Naranja Brillante
+                default:
+                    return '#6c757d'; // Gris por defecto
+            }
+        }
+        
+        // Mapeo de Fuentes a Colores para la Leyenda
+        const FUENTES_MAP = {
+            'DGA': '#007bff', 
+            'CEAZAMET': '#28a745', 
+            'CIEP': '#ffc107', 
+            'CECS': '#dc3545', 
+            'DMC': '#6f42c1', 
+            'CR2': '#fd7e14', 
+            'Otro': '#6c757d'
+        };
+
+        // 1. Inicializar el mapa
+        const mapa = L.map('mapa').setView([-33.4489, -70.6693], 5);
+
+        // --- 2. Definición y Control de Capas Base ---
+        
+        // 2a. Capa Base Standard (OpenStreetMap) - PREDETERMINADA
+        const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(mapa);
+        
+        // 2b. Capa Base Satelital (Usando Esri World Imagery)
+        // Usamos Esri World Imagery porque es libre y estable. Google Maps requiere una API Key.
+        const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+        });
+
+        const baseMaps = {
+            "OpenStreetMap (Calles)": osm,
+            "Esri World Imagery (Satelital)": satelite
+        };
+        
+        // Añadir el control de capas (permite al usuario cambiar entre baseMaps)
+        L.control.layers(baseMaps).addTo(mapa);
+        
+        // --- 3. Definición de la Leyenda ---
+        const legend = L.control({position: 'bottomright'});
+
+        legend.onAdd = function (map) {
+            const div = L.DomUtil.create('div', 'info legend');
+            let labels = ['<b>Fuentes de Estaciones</b>'];
+
+            // Generar la leyenda a partir del mapa de fuentes/colores
+            for (const key in FUENTES_MAP) {
+                labels.push(
+                    '<i style="background:' + FUENTES_MAP[key] + '"></i> ' + key
+                );
+            }
+
+            div.innerHTML = labels.join('<br>');
+            return div;
+        };
+
+        legend.addTo(mapa);
+        
+        // --- 4. Función para cargar los datos de la API (Puntos) ---
+
+        async function cargarDatosGeoespaciales() {
+            const API_URL = 'http://127.0.0.1:8000/api/v1/lugares';
+
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) {
+                    throw new Error(`Error HTTP: ${response.status}`);
+                }
+
+                const geojsonData = await response.json();
+
+                // Añadir la capa GeoJSON
+                const geojsonLayer = L.geoJSON(geojsonData, {
+                    pointToLayer: function (feature, latlng) {
+                        const fuente = feature.properties.fuente;
+                        const color = getColorByFuente(fuente);
+                        
+                        return L.circleMarker(latlng, {
+                            radius: 6,
+                            fillColor: color,
+                            color: "#000",
+                            weight: 1,
+                            opacity: 1,
+                            fillOpacity: 0.8
+                        });
+                    },
+                    onEachFeature: function (feature, layer) {
+                        // Despliegue de información
+                        if (feature.properties) {
+                            const name = feature.properties.name || 'N/A';
+                            const code = feature.properties.code_internal || 'N/A';
+                            const elev = feature.properties.elevation || 'N/A';
+                            const fuente = feature.properties.fuente || 'N/A';
+                            
+                            const html = `
+                                <b>Estación: ${name}</b><br>
+                                Código: ${code}<br>
+                                Elevación: ${elev} m s.n.m.<br>
+                                Fuente: ${fuente}
+                            `;
+                            
+                            layer.bindPopup(html);
+                        }
+                    }
+                }).addTo(mapa);
+
+                // Ajustar la vista del mapa a los límites de los features leídos
+                try {
+                    const bounds = geojsonLayer.getBounds();
+                    if (bounds.isValid()) {
+                        mapa.fitBounds(bounds.pad(0.1)); 
+                    }
+                } catch (e) {}
+
+                console.log(`Datos de ${geojsonLayer.getLayers().length} estaciones cargados correctamente.`);
+
+            } catch (error) {
+                console.error("Error al obtener los datos geoespaciales:", error);
+                alert("No se pudieron cargar los datos del backend. Asegúrate de que FastAPI esté corriendo en http://127.0.0.1:8000/");
+            }
+        }
+
+        cargarDatosGeoespaciales();
+    </script>
+
+</body>
+</html>
