@@ -72,7 +72,7 @@ def cargar_estaciones():
 
 # --- Función de Carga de Datos (Actualizada con formato forzado) ---
 
-def cargar_series_temporales():
+def cargar_series_temporales(): 
     """Carga los datos de series temporales, asegura la conversión a datetime y numérico."""
     global df_series
     file_path = "data/PPT_clean_v1.csv"
