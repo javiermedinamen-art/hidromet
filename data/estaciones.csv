@@ -1,68 +1,68 @@
-code_internal,name,lat,lon,elevation,basin,fuente
-04302001,Rio Toro antes Junta Rio La Laguna,-29.97278,-70.09194,2165,Elqui,DGA
-04302014,Juntas,-29.97667,-70.09417,2150,Elqui,DGA
-04313003,Cochiguaz,-30.1425,-70.40667,1560,Elqui,DGA
-04300004,Glaciar Tapado en Los Corrales,-30.1554,-69.88275,4060,Elqui,DGA
-0430004,Tapado (TPF),-30.1583,-69.90818,4306,Elqui,CEAZAMET
-04301005,Embalse La Laguna,-30.20222,-70.04139,3160,Elqui,DGA
-0430009,La Laguna,-30.20311,-70.03722,3209,Elqui,CEAZAMET
-04311005,La Ortiga,-30.20972,-70.49028,1560,Elqui,DGA
-04300001,Cerro Olivares,-30.25669,-69.93542,3550,Elqui,DGA
-05414004,Resguardo Los Patos,-32.50139,-70.58167,1220,Aconcagua,DGA
-05415004,Jahuel,-32.68722,-70.59639,1020,Aconcagua,DGA
-05404001,Canal Colorado en Bocatoma,-32.83833,-70.35528,1391,Aconcagua,DGA
-05410002,Rio Aconcagua en Chacabuquito,-32.85056,-70.50944,950,Aconcagua,DGA
-05410006,Vilcuya,-32.86028,-70.47167,1100,Aconcagua,DGA
-05401003,Rio Juncal en Juncal,-32.87028,-70.14722,2200,Aconcagua,DGA
-05403002,Rio Aconcagua en Rio Blanco,-32.91028,-70.30722,1420,Aconcagua,DGA
-05411001,Estero Pocuro en El Sifon,-32.92056,-70.54333,1000,Aconcagua,DGA
-05403006,Riecillos,-32.9225,-70.35722,1290,Aconcagua,DGA
-05733007,Caleu,-33.00556,-70.99361,1120,Maipo,DGA
-05706004,Glaciar Juncal Sur,-33.1175,-70.1119,4035,Maipo,DGA
-05706002,Glaciar Olivares Gamma,-33.15639,-70.15278,3628,Maipo,DGA
-05706005,Glaciar Olivares Alfa,-33.1786,-70.21806,4230,Maipo,DGA
-05706003,Valle Olivares,-33.19099,-70.11405,2787,Maipo,DGA
-05721017,Estero Yerba Loca en Piedra Carvajal,-33.22194,-70.27361,3250,Maipo,DGA
-05721016,Rio San Francisco antes Junta Estero Yerba Loca,-33.30861,-70.35722,1535,Maipo,DGA
-Cerro3Puntas,Cerro3Puntas,-33.32,-70.23194,3685,Maipo,CR2
-05722001,Estero Arrayan en La Montosa,-33.32889,-70.45944,880,Maipo,DGA
-05721001,Estero Yerba Loca antes Junta San Francisco,-33.34444,-70.36389,1350,Maipo,DGA
-05720001,Rio Molina antes Junta San Francisco,-33.37361,-70.39639,1158,Maipo,DGA
-05706001,Rio Olivares antes Junta Rio Colorado,-33.49306,-70.1375,1580,Maipo,DGA
-05705001,Rio Colorado Antes Junta Rio Olivares,-33.495,-70.13722,1550,Maipo,DGA
-05707003,Maitenes,-33.53111,-70.26194,1143,Maipo,DGA
-05703014,Termas Del Plomo,-33.6133,-69.9058,3000,Maipo,DGA
-05703008,El Yeso Embalse,-33.67583,-70.08861,2475,Maipo,DGA
-05704004,San Gabriel,-33.7825,-70.23944,1266,Maipo,DGA
-05702011,Glaciar San Francisco en Aguas Panimavida,-33.80583,-70.07,2220,Maipo,DGA
-05702001,Rio Volcan en Queltehues,-33.80944,-70.21028,1365,Maipo,DGA
-05701009,Rio Maipo en Queltehues,-33.81694,-70.22361,1317,Maipo,DGA
-05701010,Las Melosas Ruta de Nieve,-33.86389,-70.2725,3320,Maipo,DGA
-08130006,Diguillin,-36.87056,-71.6425,670,Itata,DGA
-08130004,Las Trancas,-36.91083,-71.47944,1242,Itata,DGA
-08130002,Rio Diguillin en San Lorenzo (Atacalco),-36.92444,-71.57583,727,Itata,DGA
-09401001,Tricauco,-38.84389,-71.55139,520,Tolten,DGA
-09416002,Lago Tinquilco,-39.1725,-71.73194,850,Tolten,DGA
-09412002,Curarrehue,-39.365,-71.58222,420,Tolten,DGA
-1110001,Puyuhuapi,-44.4479,-72.5968,,Costeras (111),CIEP
-1110002,Puerto Cisnes,-44.7447,-72.7016,,Costeras (111),CIEP
-1130002,Mirador Marchant. Coyhaique,-45.5253,-72.0981,,Aysen,DMC
-1130003,Teniente Vidal. Coyhaique Ad,-45.5908,-72.1022,299,Aysen,DMC
-1130001,Cordon Divisadero,-45.61647,-72.01345,1430,Aysen,CECS
-1130004,Balmaceda Ad,-45.9183,-71.6778,517,Aysen,DMC
-11503002,Portezuelo Iba ez,-46.0778,-72.0508,1080,Baker,DGA
-11503001,Villa Cerro Castillo,-46.12111,-72.15861,345,Baker,DGA
-11505001,Rio Iba ez en Desembocadura,-46.26861,-71.98889,220,Baker,DGA
-11513001,Bahia Murta,-46.45583,-72.6725,240,Baker,DGA
-11521002,Chile Chico,-46.54333,-71.69944,215,Baker,DGA
-11521005,Lago General Carrera Fachinal,-46.54333,-72.22639,18,Baker,DGA
-1150001,Rio Tranquilo,-46.6341,-72.6484,,Baker,CIEP
-11523002,Lago General Carrera en Puerto Guadal,-46.84194,-72.69722,205,Baker,DGA
-11517002,Lago General Carrera en Desag e,-46.84639,-72.80333,210,Baker,DGA
-11533001,Estancia Valle Chacabuco,-47.11861,-72.49389,343,Baker,DGA
-11532001,Rio Nef antes Junta Estero El Rebalse,-47.14,-73.09389,280,Baker,DGA
-11540000,Lago Cachet 2 en Glaciar Colonia ,-47.19889,-73.25,427,Baker,DGA
-1150002,Tortel,-47.7949,-73.5316,,Baker,CIEP
-RioTranquilo_NERC,RioTranquilo_NERC,,,,Baker,CIEP_NERC
-ValleNevado_METEO,ValleNevado_METEO,,,,Maipo,DGA
-ValleNevado_SPA,ValleNevado_SPA,,,,Maipo,DGA
+code_internal,name,lat,lon,elevation,basin,fuente,nom_cuen
+04302001,Rio Toro antes Junta Rio La Laguna,-29.97278,-70.09194,2165,Elqui,DGA,Rio Elqui
+04302014,Juntas,-29.97667,-70.09417,2150,Elqui,DGA,Rio Elqui
+04313003,Cochiguaz,-30.1425,-70.40667,1560,Elqui,DGA,Rio Elqui
+04300004,Glaciar Tapado en Los Corrales,-30.1554,-69.88275,4060,Elqui,DGA,Rio Elqui
+0430004,Tapado (TPF),-30.1583,-69.90818,4306,Elqui,CEAZAMET,Rio Elqui
+04301005,Embalse La Laguna,-30.20222,-70.04139,3160,Elqui,DGA,Rio Elqui
+0430009,La Laguna,-30.20311,-70.03722,3209,Elqui,CEAZAMET,Rio Elqui
+04311005,La Ortiga,-30.20972,-70.49028,1560,Elqui,DGA,Rio Elqui
+04300001,Cerro Olivares,-30.25669,-69.93542,3550,Elqui,DGA,Rio Elqui
+05414004,Resguardo Los Patos,-32.50139,-70.58167,1220,Aconcagua,DGA,Rio Aconcagua
+05415004,Jahuel,-32.68722,-70.59639,1020,Aconcagua,DGA,Rio Aconcagua
+05404001,Canal Colorado en Bocatoma,-32.83833,-70.35528,1391,Aconcagua,DGA,Rio Aconcagua
+05410002,Rio Aconcagua en Chacabuquito,-32.85056,-70.50944,950,Aconcagua,DGA,Rio Aconcagua
+05410006,Vilcuya,-32.86028,-70.47167,1100,Aconcagua,DGA,Rio Aconcagua
+05401003,Rio Juncal en Juncal,-32.87028,-70.14722,2200,Aconcagua,DGA,Rio Aconcagua
+05403002,Rio Aconcagua en Rio Blanco,-32.91028,-70.30722,1420,Aconcagua,DGA,Rio Aconcagua
+05411001,Estero Pocuro en El Sifon,-32.92056,-70.54333,1000,Aconcagua,DGA,Rio Aconcagua
+05403006,Riecillos,-32.9225,-70.35722,1290,Aconcagua,DGA,Rio Aconcagua
+05733007,Caleu,-33.00556,-70.99361,1120,Maipo,DGA,Rio Maipo
+05706004,Glaciar Juncal Sur,-33.1175,-70.1119,4035,Maipo,DGA,Rio Maipo
+05706002,Glaciar Olivares Gamma,-33.15639,-70.15278,3628,Maipo,DGA,Rio Maipo
+05706005,Glaciar Olivares Alfa,-33.1786,-70.21806,4230,Maipo,DGA,Rio Maipo
+05706003,Valle Olivares,-33.19099,-70.11405,2787,Maipo,DGA,Rio Maipo
+05721017,Estero Yerba Loca en Piedra Carvajal,-33.22194,-70.27361,3250,Maipo,DGA,Rio Maipo
+05721016,Rio San Francisco antes Junta Estero Yerba Loca,-33.30861,-70.35722,1535,Maipo,DGA,Rio Maipo
+Cerro3Puntas,Cerro3Puntas,-33.32,-70.23194,3685,Maipo,CR2,Rio Maipo
+05722001,Estero Arrayan en La Montosa,-33.32889,-70.45944,880,Maipo,DGA,Rio Maipo
+05721001,Estero Yerba Loca antes Junta San Francisco,-33.34444,-70.36389,1350,Maipo,DGA,Rio Maipo
+05720001,Rio Molina antes Junta San Francisco,-33.37361,-70.39639,1158,Maipo,DGA,Rio Maipo
+05706001,Rio Olivares antes Junta Rio Colorado,-33.49306,-70.1375,1580,Maipo,DGA,Rio Maipo
+05705001,Rio Colorado Antes Junta Rio Olivares,-33.495,-70.13722,1550,Maipo,DGA,Rio Maipo
+05707003,Maitenes,-33.53111,-70.26194,1143,Maipo,DGA,Rio Maipo
+05703014,Termas Del Plomo,-33.6133,-69.9058,3000,Maipo,DGA,Rio Maipo
+05703008,El Yeso Embalse,-33.67583,-70.08861,2475,Maipo,DGA,Rio Maipo
+05704004,San Gabriel,-33.7825,-70.23944,1266,Maipo,DGA,Rio Maipo
+05702011,Glaciar San Francisco en Aguas Panimavida,-33.80583,-70.07,2220,Maipo,DGA,Rio Maipo
+05702001,Rio Volcan en Queltehues,-33.80944,-70.21028,1365,Maipo,DGA,Rio Maipo
+05701009,Rio Maipo en Queltehues,-33.81694,-70.22361,1317,Maipo,DGA,Rio Maipo
+05701010,Las Melosas Ruta de Nieve,-33.86389,-70.2725,3320,Maipo,DGA,Rio Maipo
+08130006,Diguillin,-36.87056,-71.6425,670,Itata,DGA,Rio Itata
+08130004,Las Trancas,-36.91083,-71.47944,1242,Itata,DGA,Rio Itata
+08130002,Rio Diguillin en San Lorenzo (Atacalco),-36.92444,-71.57583,727,Itata,DGA,Rio Itata
+09401001,Tricauco,-38.84389,-71.55139,520,Tolten,DGA,Rio Tolten
+09416002,Lago Tinquilco,-39.1725,-71.73194,850,Tolten,DGA,Rio Tolten
+09412002,Curarrehue,-39.365,-71.58222,420,Tolten,DGA,Rio Tolten
+1110001,Puyuhuapi,-44.4479,-72.5968,,Costeras (111),CIEP,Costeras e Islas entre R.Palena y R.Aisen
+1110002,Puerto Cisnes,-44.7447,-72.7016,,Costeras (111),CIEP,Costeras e Islas entre R.Palena y R.Aisen
+1130002,Mirador Marchant. Coyhaique,-45.5253,-72.0981,,Aysen,DMC,Rio Aisen
+1130003,Teniente Vidal. Coyhaique Ad,-45.5908,-72.1022,299,Aysen,DMC,Rio Aisen
+1130001,Cordon Divisadero,-45.61647,-72.01345,1430,Aysen,CECS,Rio Aisen
+1130004,Balmaceda Ad,-45.9183,-71.6778,517,Aysen,DMC,Rio Aisen
+11503002,Portezuelo Iba ez,-46.0778,-72.0508,1080,Baker,DGA,Rio Baker
+11503001,Villa Cerro Castillo,-46.12111,-72.15861,345,Baker,DGA,Rio Baker
+11505001,Rio Iba ez en Desembocadura,-46.26861,-71.98889,220,Baker,DGA,Rio Baker
+11513001,Bahia Murta,-46.45583,-72.6725,240,Baker,DGA,Rio Baker
+11521002,Chile Chico,-46.54333,-71.69944,215,Baker,DGA,Rio Baker
+11521005,Lago General Carrera Fachinal,-46.54333,-72.22639,18,Baker,DGA,Rio Baker
+1150001,Rio Tranquilo,-46.6341,-72.6484,,Baker,CIEP,Rio Baker
+11523002,Lago General Carrera en Puerto Guadal,-46.84194,-72.69722,205,Baker,DGA,Rio Baker
+11517002,Lago General Carrera en Desag e,-46.84639,-72.80333,210,Baker,DGA,Rio Baker
+11533001,Estancia Valle Chacabuco,-47.11861,-72.49389,343,Baker,DGA,Rio Baker
+11532001,Rio Nef antes Junta Estero El Rebalse,-47.14,-73.09389,280,Baker,DGA,Rio Baker
+11540000,Lago Cachet 2 en Glaciar Colonia ,-47.19889,-73.25,427,Baker,DGA,Rio Baker
+1150002,Tortel,-47.7949,-73.5316,,Baker,CIEP,Rio Baker
+RioTranquilo_NERC,RioTranquilo_NERC,,,,Baker,CIEP_NERC,Rio Baker
+ValleNevado_METEO,ValleNevado_METEO,,,,Maipo,DGA,Rio Maipo
+ValleNevado_SPA,ValleNevado_SPA,,,,Maipo,DGA,Rio Maipo

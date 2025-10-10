@@ -3,44 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualización Geoespacial (Chile)</title>
+    <title>Visualización Geoespacial Hidrométrica (Chile)</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Estilos Base Estéticos */
+        /* --- ESTILOS GENERALES Y LAYOUT --- */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-family: 'Roboto', sans-serif;
             color: #333;
-            background-color: #f8f9fa;
+            background-color: #f0f2f5;
             text-align: center;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
         }
 
         h1 {
-            color: #007bff;
+            color: #004d99;
             font-weight: 300;
-            margin-bottom: 30px;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            font-size: 26px;
         }
         
-        /* Estilos del Mapa (Aesthetic) */
+        /* --- MAPA --- */
         #mapa {
-            height: 600px;
-            width: 80%;
-            max-width: 1000px;
-            margin: 20px auto;
-            border: 5px solid #fff;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            height: 650px;
+            width: 100%;
+            border: none; 
             border-radius: 8px;
         }
         
-        /* Estilos de la Leyenda */
-        .legend {
+        /* --- ESTILO RESTAURADO PARA EL FONDO DE LA LEYENDA (Clase .info) --- */
+        .info {
             padding: 6px 8px;
-            font-size: 13px;
-            background: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            font: 14px/16px 'Roboto', sans-serif;
+            background: white;
+            background: rgba(255,255,255,0.8); /* Fondo semitransparente */
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
             border-radius: 5px;
         }
+        .info h4 {
+            margin: 0 0 5px;
+            color: #777;
+            font-weight: 500;
+        }
+        
+        /* Estilos de los iconos de la Leyenda */
         .legend i {
             width: 10px;
             height: 10px;
@@ -49,211 +69,147 @@
             border-radius: 50%;
             border: 1px solid #000;
         }
-        .legend b {
-            color: #007bff;
-        }
     </style>
 </head>
 <body>
 
-    <h1>Visualización de Estaciones Hidrométricas (Datos de Chile)</h1>
-    <div id="mapa"></div>
+    <div class="main-container">
+        <h1>Visualización de Estaciones Hidrométricas (Datos de Chile)</h1>
+        
+        <div id="mapa"></div>
+    </div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script>
-        // --- Constantes de Fuentes y Colores ---
+        // --- VARIABLES GLOBALES PARA MANEJO DE ESTADO ---
+        const API_BASE_URL = 'https://hidromet.onrender.com/api/v1'; 
+        
+        let mapa = null;
+        let layerControl = null;
+        let estacionesLayer = null; 
+        
+        // --- Constantes y Estilos ---
         function getColorByFuente(fuente) {
-            fuente = (fuente || '').toUpperCase();
+            fuente = (fuente || '').toUpperCase().replace(/_NERC/g, ''); 
             switch (fuente) {
-                case 'DGA':
-                    return '#007bff';
-                case 'CEAZAMET':
-                    return '#28a745';
-                case 'CIEP':
-                    return '#ffc107';
-                case 'CECS':
-                    return '#dc3545';
-                case 'DMC':
-                    return '#6f42c1';
-                case 'CR2':
-                    return '#fd7e14';
-                default:
-                    return '#6c757d';
+                case 'DGA': return '#007bff';
+                case 'CEAZAMET': return '#28a745';
+                case 'CIEP': return '#ffc107';
+                case 'CECS': return '#dc3545';
+                case 'DMC': return '#6f42c1';
+                case 'CR2': return '#fd7e14';
+                default: return '#6c757d';
             }
         }
         
         const FUENTES_MAP = {
-            'DGA': '#007bff', 
-            'CEAZAMET': '#28a745', 
-            'CIEP': '#ffc107', 
-            'CECS': '#dc3545', 
-            'DMC': '#6f42c1', 
-            'CR2': '#fd7e14', 
-            'Otro': '#6c757d'
+            'DGA': '#007bff', 'CEAZAMET': '#28a745', 'CIEP': '#ffc107', 
+            'CECS': '#dc3545', 'DMC': '#6f42c1', 'CR2': '#fd7e14', 'Otro': '#6c757d'
         };
 
-        // 1. Inicializar el mapa
-        const mapa = L.map('mapa').setView([-33.4489, -70.6693], 5);
+        // 1. Inicializar el mapa y controles base
+        function inicializarMapa() {
+            mapa = L.map('mapa').setView([-33.4489, -70.6693], 5);
+            
+            const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(mapa);
+            
+            const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri'
+            });
 
-        // --- 2. Definición y Control de Capas Base ---
-        const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(mapa);
-        
-        const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-            attribution: 'Tiles &copy; Esri'
-        });
+            const baseMaps = {
+                "OpenStreetMap (Calles)": osm, "Esri World Imagery (Satelital)": satelite
+            };
+            
+            layerControl = L.control.layers(baseMaps, {}).addTo(mapa);
+            
+            // --- Leyenda de Fuentes ---
+            const legend = L.control({position: 'bottomright'});
 
-        const baseMaps = {
-            "OpenStreetMap (Calles)": osm,
-            "Esri World Imagery (Satelital)": satelite
-        };
-        
-        // El control de capas se inicializa aquí y se añaden los Overlays después de la carga
-        const layerControl = L.control.layers(baseMaps, {}).addTo(mapa);
-        
-        // --- 3. Definición de la Leyenda ---
-        const legend = L.control({position: 'bottomright'});
+            legend.onAdd = function (map) {
+                const div = L.DomUtil.create('div', 'info legend'); 
+                let labels = ['<b>Fuentes de Estaciones</b>'];
+                for (const key in FUENTES_MAP) {
+                    labels.push(
+                        '<i style="background:' + FUENTES_MAP[key] + '"></i> ' + key
+                    );
+                }
+                div.innerHTML = labels.join('<br>');
+                return div;
+            };
 
-        legend.onAdd = function (map) {
-            const div = L.DomUtil.create('div', 'info legend');
-            let labels = ['<b>Fuentes de Estaciones</b>'];
-            for (const key in FUENTES_MAP) {
-                labels.push(
-                    '<i style="background:' + FUENTES_MAP[key] + '"></i> ' + key
-                );
-            }
-            div.innerHTML = labels.join('<br>');
-            return div;
-        };
-
-        legend.addTo(mapa);
-        
-        // --- 4. Cargar Cuencas (Polígonos) ---
-        async function cargarCapaCuencas() {
-            // !!! TU URL PUBLICA AQUÍ !!!
-            const API_CUENCAS_URL = 'https://hidromet.onrender.com/api/v1/cuencas'; 
-
-            try {
-                const response = await fetch(API_CUENCAS_URL);
-                if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-                
-                const geojsonData = await response.json();
-
-                // Estilo suave para las cuencas
-                const cuencaStyle = {
-                    color: "#007bff", // Borde azul
-                    weight: 1,
-                    fillColor: "#007bff", // Relleno azul
-                    fillOpacity: 0.15 // Transparente para no ocultar el mapa base
-                };
-
-                const cuencasLayer = L.geoJSON(geojsonData, {
-                    style: cuencaStyle,
-                    onEachFeature: function (feature, layer) {
-                        // **IMPORTANTE**: Ajusta 'nombre_cuenca' al campo real de tu SHP si es diferente
-                        if (feature.properties.nombre_cuenca) { 
-                            layer.bindPopup(`<b>Cuenca:</b> ${feature.properties.nombre_cuenca}`);
-                        } else if (feature.properties.NOMBRE) { // Intenta con otra columna común
-                            layer.bindPopup(`<b>Cuenca:</b> ${feature.properties.NOMBRE}`);
-                        }
-                    }
-                }).addTo(mapa);
-                
-                // Añade la capa al control de capas
-                layerControl.addOverlay(cuencasLayer, "Cuencas Hidrográficas");
-
-            } catch (error) {
-                console.error("Error al obtener la capa de cuencas. ¿La API está desplegada y el SHP es accesible?:", error);
-            }
+            legend.addTo(mapa);
         }
 
-
-        // --- 5. Cargar Estaciones (Puntos) ---
+        
+        // 2. Cargar Estaciones (Puntos)
         async function cargarDatosGeoespaciales() {
-            // !!! TU URL PUBLICA AQUÍ !!!
-            const API_URL = 'https://hidromet.onrender.com/api/v1/lugares'; 
+            const API_URL = `${API_BASE_URL}/lugares`;
 
             try {
                 const response = await fetch(API_URL);
-                if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+                if (!response.ok) {
+                    console.error(`Error HTTP: ${response.status}`);
+                    throw new Error(`Error al obtener los datos de la API (${response.status})`);
+                }
 
                 const geojsonData = await response.json();
+                
+                if (estacionesLayer) { mapa.removeLayer(estacionesLayer); layerControl.removeLayer(estacionesLayer); }
 
-                const geojsonLayer = L.geoJSON(geojsonData, {
+                estacionesLayer = L.geoJSON(geojsonData, {
                     pointToLayer: function (feature, latlng) {
                         const color = getColorByFuente(feature.properties.fuente);
-                        
-                        return L.circleMarker(latlng, {
-                            radius: 6,
-                            fillColor: color,
-                            color: "#000",
-                            weight: 1,
-                            opacity: 1,
-                            fillOpacity: 0.8
+                        return L.circleMarker(latlng, { 
+                            radius: 6, 
+                            fillColor: color, 
+                            color: "#000", 
+                            weight: 1, 
+                            fillOpacity: 0.8 
                         });
                     },
                     onEachFeature: function (feature, layer) {
                         if (feature.properties) {
-                            // Usamos .get() con fallback por si los nombres de columnas no coinciden exactamente
+                            
                             const name = feature.properties.name || 'N/A';
                             const code = feature.properties.code_internal || 'N/A';
-                            // El backend renombró la columna de elevación a 'elevation'
                             const elev = feature.properties.elevation || 'N/A';
                             const fuente = feature.properties.fuente || 'N/A';
                             
-                            // Markup para un popup más limpio (Aesthetic)
-                            const html = `
-                                <div style="font-family: inherit; font-size: 14px; line-height: 1.5;">
-                                    <h4 style="margin: 0 0 5px; color: ${getColorByFuente(fuente)}; font-size: 16px;">${name}</h4>
-                                    <p style="margin: 0;"><b>Código:</b> ${code}</p>
-                                    <p style="margin: 0;"><b>Elevación:</b> ${elev} m s.n.m.</p>
-                                    <p style="margin: 0;"><b>Fuente:</b> <span style="font-weight: bold;">${fuente}</span></p>
-                                </div>
-                            `;
+                            // *** RESTAURADO A feature.properties.basin ***
+                            const cuenca = feature.properties.basin || 'N/A'; 
+                            
+                            const html = `<h4 style="margin: 0 0 5px; color: ${getColorByFuente(fuente)}; font-weight: 500;">${name}</h4>
+                                          <p style="margin: 0;"><b>Código:</b> ${code}</p>
+                                          <p style="margin: 0;"><b>Cuenca:</b> ${cuenca}</p>
+                                          <p style="margin: 0;"><b>Elevación:</b> ${elev} m s.n.m.</p>
+                                          <p style="margin: 0;"><b>Fuente:</b> <span style="font-weight: bold;">${fuente}</span></p>`;
                             layer.bindPopup(html);
                         }
                     }
                 }).addTo(mapa);
-
-                // Ajustar la vista a los límites de las estaciones
-                try {
-                    const bounds = geojsonLayer.getBounds();
-                    if (bounds.isValid()) {
-                        mapa.fitBounds(bounds.pad(0.1)); 
-                    }
-                } catch (e) {}
                 
-                // Añade la capa al control de capas
-                layerControl.addOverlay(geojsonLayer, "Estaciones Hidrométricas");
+                layerControl.addOverlay(estacionesLayer, "Estaciones Hidrométricas");
 
+                // Zoom al bounding box de todas las estaciones cargadas
+                const bounds = estacionesLayer.getBounds();
+                if (bounds.isValid()) { mapa.fitBounds(bounds.pad(0.1)); }
+                
             } catch (error) {
-                console.error("Error al obtener los datos de estaciones. ¿La API está desplegada?", error);
-                alert("No se pudieron cargar los datos. Asegúrate de que la API pública esté funcionando."); 
+                console.error("Error al obtener los datos de estaciones:", error);
+                alert("No se pudieron cargar los datos de estaciones. Por favor, revisa la consola para más detalles."); 
             }
         }
         
-        // --- 6. Keep-Alive para Render ---
-        function keepAlive() {
-            // !!! TU URL PUBLICA AQUÍ !!! (Debe ser la raíz del servicio)
-            const HEALTH_CHECK_URL = 'https://hidromet.onrender.com'; 
-
-            fetch(HEALTH_CHECK_URL, { method: 'GET' })
-                .then(response => {
-                    console.log(`Render Keep-Alive: ${response.ok ? 'OK' : 'Advertencia'} `);
-                })
-                .catch(error => {
-                    console.error('Render Keep-Alive: Error de conexión.', error);
-                });
-        }
-
-        // Ejecución al cargar (cargamos cuencas primero para que las estaciones queden encima)
-        cargarCapaCuencas(); 
-        cargarDatosGeoespaciales(); 
-
-        // Inicializa el Keep-Alive cada 10 minutos (600,000 ms)
-        setInterval(keepAlive, 600000); 
+        // --- INICIO DE LA APLICACIÓN ---
+        window.onload = function() {
+            inicializarMapa();
+            // Corrección del error tipográfico: 'cargarDatosGeoespacialess' -> 'cargarDatosGeoespaciales'
+            cargarDatosGeoespaciales(); 
+        };
     </script>
 
 </body>
