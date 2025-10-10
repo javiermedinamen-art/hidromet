@@ -24,7 +24,7 @@ code_internal,name,lat,lon,elevation,basin,fuente,nom_cuen
 05706003,Valle Olivares,-33.19099,-70.11405,2787,Maipo,DGA,Rio Maipo
 05721017,Estero Yerba Loca en Piedra Carvajal,-33.22194,-70.27361,3250,Maipo,DGA,Rio Maipo
 05721016,Rio San Francisco antes Junta Estero Yerba Loca,-33.30861,-70.35722,1535,Maipo,DGA,Rio Maipo
-Cerro3Puntas,Cerro3Puntas,-33.32,-70.23194,3685,Maipo,CR2,Rio Maipo
+cerro3puntas,Cerro3Puntas,-33.32,-70.23194,3685,Maipo,CR2,Rio Maipo
 05722001,Estero Arrayan en La Montosa,-33.32889,-70.45944,880,Maipo,DGA,Rio Maipo
 05721001,Estero Yerba Loca antes Junta San Francisco,-33.34444,-70.36389,1350,Maipo,DGA,Rio Maipo
 05720001,Rio Molina antes Junta San Francisco,-33.37361,-70.39639,1158,Maipo,DGA,Rio Maipo
@@ -63,6 +63,6 @@ Cerro3Puntas,Cerro3Puntas,-33.32,-70.23194,3685,Maipo,CR2,Rio Maipo
 11532001,Rio Nef antes Junta Estero El Rebalse,-47.14,-73.09389,280,Baker,DGA,Rio Baker
 11540000,Lago Cachet 2 en Glaciar Colonia ,-47.19889,-73.25,427,Baker,DGA,Rio Baker
 1150002,Tortel,-47.7949,-73.5316,,Baker,CIEP,Rio Baker
-RioTranquilo_NERC,RioTranquilo_NERC,,,,Baker,CIEP_NERC,Rio Baker
-ValleNevado_METEO,ValleNevado_METEO,,,,Maipo,DGA,Rio Maipo
-ValleNevado_SPA,ValleNevado_SPA,,,,Maipo,DGA,Rio Maipo
+riotranquilo_nerc,RioTranquilo_NERC,,,,Baker,CIEP_NERC,Rio Baker
+vallenevado_metep,ValleNevado_METEO,,,,Maipo,DGA,Rio Maipo
+vallenevado_spa,ValleNevado_SPA,,,,Maipo,DGA,Rio Maipo
