@@ -1,0 +1,13 @@
+# Entorno Virtual Conda
+geo_visualizacion/
+
+
+# Python/IDE
+__pycache__/
+*.pyc
+.vscode/
+
+
+# Dependencias grandes/temporales
+*.json.log
+.DS_Store
