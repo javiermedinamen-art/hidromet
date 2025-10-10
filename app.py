@@ -251,13 +251,7 @@ async def get_series_chart(code_internal: str):
         yaxis_title="Precipitación (mm)",
         hovermode="x unified",
         xaxis=dict(
-            rangeselector=dict(
-                buttons=list([
-                    dict(count=1, label="YTD", step="year", stepmode="todate"),
-                    dict(count=1, label="1a", step="year", stepmode="backward"),
-                    dict(step="all")
-                ])
-            ),
+            rangeselector=None,
             rangeslider=dict(visible=True),
             type="date"
         )
