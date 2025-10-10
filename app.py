@@ -1,7 +1,7 @@
 import pandas as pd
 import geopandas as gpd
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.responses import JSONResponse, Response # Usaremos Response en lugar de HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from shapely.geometry import Point
 import json
@@ -148,18 +148,31 @@ async def get_lugares():
 
 
 # 🟢 ENDPOINT CON GENERACIÓN DE BOTONES DE ZOOM
-@app.get("/api/v1/series/chart/{code_internal}", response_class=HTMLResponse, tags=["Datos"])
+# En app.py, alrededor de la línea 158:
+@app.get("/api/v1/series/chart/{code_internal}", tags=["Datos"])
 async def get_series_chart(code_internal: str):
     """Genera y devuelve el gráfico interactivo (HTML) con botones de zoom anual."""
     global df_series, gdf_estaciones
     
+    # 🚨 PUNTOS CLAVE PARA LA SEGURIDAD DEL DESPLIEGUE:
     if df_series is None or df_series.empty:
-        return HTMLResponse(content="<div>Error: Datos de series temporales no disponibles.</div>", status_code=500)
+        # Esto captura el error si la carga de datos falló en el inicio de Render
+        return Response(content="<div>Error 500: Datos de series temporales no disponibles en el servidor. (Verifique los logs de Render)</div>", status_code=500)
     
-    code_internal = str(code_internal).strip()
+    # Limpieza del código de entrada antes de la comparación
+    code_internal = str(code_internal).strip().upper() # Asegurar limpieza y formato si fuera necesario
 
+    # 🚨 EL ERROR 404 ES AQUÍ 
+    # Comprobar si la columna existe en el DataFrame cargado por Render
     if code_internal not in df_series.columns:
-        return HTMLResponse(content=f"<div>Error: Serie temporal no encontrada para el código: {code_internal}</div>", status_code=404)
+        # Intentar con el código sin '0' inicial si los nombres son floats (menos probable)
+        if str(int(code_internal)) in df_series.columns:
+             code_internal = str(int(code_internal)) # Usar el código sin el '0'
+        elif code_internal.lower() in df_series.columns: # Por si el CSV tiene códigos en minúscula (ej. '09412002')
+             code_internal = code_internal.lower()
+        else:
+             return Response(content=f"<div>Error 404: Serie temporal no encontrada para el código: {code_internal}</div>", status_code=404)
+    
     
     # 1. Preparar datos y nombre
     series_data = df_series[[code_internal]].dropna()
@@ -248,4 +261,14 @@ async def get_series_chart(code_internal: str):
     # Convertir el gráfico a HTML interactivo
     chart_html = pio.to_html(fig, full_html=False, include_plotlyjs='cdn')
     
-    return HTMLResponse(content=chart_html)
+    # 🚨 CAMBIO CLAVE: Usar Response para asegurar encabezados CORS
+    return Response(
+        content=chart_html, 
+        media_type="text/html",
+        status_code=200,
+        headers={
+            "Access-Control-Allow-Origin": "*", # Asegura que funcione desde cualquier dominio (GitHub Pages)
+            "Access-Control-Allow-Methods": "GET",
+            "Access-Control-Allow-Headers": "*"
+        }
+    )
