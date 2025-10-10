@@ -40,7 +40,7 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script>
-        // --- Lógica de Colores por Fuente (Igual que antes) ---
+        // --- Lógica de Colores por Fuente ---
         function getColorByFuente(fuente) {
             fuente = (fuente || '').toUpperCase();
             switch (fuente) {
@@ -83,7 +83,6 @@
         }).addTo(mapa);
         
         // 2b. Capa Base Satelital (Usando Esri World Imagery)
-        // Usamos Esri World Imagery porque es libre y estable. Google Maps requiere una API Key.
         const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
         });
@@ -93,7 +92,7 @@
             "Esri World Imagery (Satelital)": satelite
         };
         
-        // Añadir el control de capas (permite al usuario cambiar entre baseMaps)
+        // Añadir el control de capas 
         L.control.layers(baseMaps).addTo(mapa);
         
         // --- 3. Definición de la Leyenda ---
@@ -119,7 +118,8 @@
         // --- 4. Función para cargar los datos de la API (Puntos) ---
 
         async function cargarDatosGeoespaciales() {
-            const API_URL = 'https://hidromet.onrender.com/api/v1/lugares';
+            // !!! ASEGÚRATE DE REEMPLAZAR ESTA URL CON TU ENLACE REAL DE RENDER !!!
+            const API_URL = 'https://hidromet.onrender.com/api/v1/lugares'; 
 
             try {
                 const response = await fetch(API_URL);
@@ -176,9 +176,33 @@
 
             } catch (error) {
                 console.error("Error al obtener los datos geoespaciales:", error);
-                alert("No se pudieron cargar los datos del backend. Asegúrate de que FastAPI esté corriendo en http://127.0.0.1:8000/");
+                // Muestra la alerta de que el mapa no cargó
+                alert("No se pudieron cargar los datos del backend. Asegúrate de que tu API pública esté funcionando y que la URL en index.html sea correcta."); 
             }
         }
+        
+        // --- 5. Función Keep-Alive para Render (NUEVO CÓDIGO) ---
+
+        function keepAlive() {
+            // Usamos la URL base (sin /api/v1/lugares) para mantener el servidor activo
+            const HEALTH_CHECK_URL = 'https://hidromet.onrender.com'; 
+
+            fetch(HEALTH_CHECK_URL, { method: 'GET' })
+                .then(response => {
+                    if (response.ok) {
+                        console.log('Render Keep-Alive: OK. Servidor activo.');
+                    } else {
+                        console.warn('Render Keep-Alive: Respuesta HTTP no OK.', response.status);
+                    }
+                })
+                .catch(error => {
+                    console.error('Render Keep-Alive: Error de conexión, el servidor podría estar despertando.', error);
+                });
+        }
+
+        // Inicializa el Keep-Alive cada 10 minutos (600,000 ms)
+        // Esto mantiene el servidor de Render activo mientras el mapa esté abierto.
+        setInterval(keepAlive, 600000); 
 
         cargarDatosGeoespaciales();
     </script>
