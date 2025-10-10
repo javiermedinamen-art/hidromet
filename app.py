@@ -33,10 +33,12 @@ def cargar_estaciones():
     """Lee el CSV de estaciones y devuelve un GeoDataFrame."""
     global gdf_estaciones
     df = None
-    # Usar cp1252 o utf-8
+    
+    # 1. Lectura del CSV (separadores correctos)
     for enc in ("cp1252", "utf-8"): 
         try:
             # Tu archivo se llama 'estaciones.csv'
+            # Mantenemos sep=';' y decimal=','
             df = pd.read_csv("data/estaciones.csv", encoding=enc, sep=';', decimal=',')
             break
         except Exception:
@@ -46,19 +48,31 @@ def cargar_estaciones():
         print("Error: No se pudo leer el archivo CSV de estaciones.")
         return None
 
-    # Normalizar columnas (se asume que las columnas son 'lon', 'lat', etc.)
-    df.columns = [c.strip() for c in df.columns]
+    # Normalizar columnas (importante)
+    df.columns = [c.strip().lower() for c in df.columns]
 
-    # Forzar a numérico y limpiar
-    df['longitude'] = pd.to_numeric(df.get('longitude', df.get('lon')), errors='coerce')
-    df['latitude'] = pd.to_numeric(df.get('latitude', df.get('lat')), errors='coerce')
+    # --- CORRECCIÓN CRÍTICA DE NOMBRES DE COLUMNA ---
+    # Asignar explícitamente las coordenadas a las nuevas columnas 'longitude' y 'latitude'
+    # usando los nombres reales del CSV: 'lon' y 'lat'.
+    
+    # 2. Asignación y Conversión
+    try:
+        df['longitude'] = pd.to_numeric(df['lon'], errors='coerce')
+        df['latitude'] = pd.to_numeric(df['lat'], errors='coerce')
+    except KeyError as e:
+        print(f"Error: La columna {e} no se encuentra. Revisa tu CSV.")
+        return None # Salir si las columnas clave no están
+
+    # 3. Limpieza: Eliminar filas con coordenadas no válidas (NaN)
     df_clean = df.dropna(subset=['longitude', 'latitude']).copy()
 
     if df_clean.empty:
         print("Advertencia: No quedan estaciones con coordenadas válidas.")
-        return None
+        # Devolver una tabla vacía para evitar un error 500, aunque es un GeoDataFrame vacío
+        gdf_estaciones = gpd.GeoDataFrame(geometry=gpd.points_from_xy([], []), crs="EPSG:4326")
+        return gdf_estaciones
 
-    # Crear geometrías y GeoDataFrame
+    # 4. Crear geometrías y GeoDataFrame
     geometry = [Point(xy) for xy in zip(df_clean['longitude'], df_clean['latitude'])]
     gdf_estaciones = gpd.GeoDataFrame(df_clean, geometry=geometry, crs="EPSG:4326")
     print(f"[{len(gdf_estaciones)} Estaciones cargadas globalmente]")
