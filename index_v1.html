@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Hidrométrico Interactivo (Estático)</title>
+    <title>Dashboard Hidrométrico Interactivo</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script> <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <style>
-        /* [Los estilos CSS permanecen IGUAL] */
+        /* --- Estilos CSS --- */
         body {
             font-family: 'Roboto', sans-serif;
             color: #333;
@@ -62,6 +62,7 @@
             flex-direction: column;
         }
 
+        /* --- MAPA Y GRÁFICO (Contenedor ahora es un IFRAME) --- */
         #mapa {
             height: 100%;
             min-height: 650px;
@@ -69,17 +70,9 @@
             border: none; 
         }
 
-        /* [CONTENEDOR DEL GRÁFICO AHORA ES UN DIV] */
-        #chartContainer {
-            flex-grow: 1; 
-            width: 100%; 
-            min-height: 580px; 
-            background-color: #ffffff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        /* El contenedor del gráfico ha sido reemplazado por #chartIframe */
 
+        /* --- CONTROLES Y LEYENDA --- */
         .controls {
             margin-bottom: 15px;
             padding: 10px;
@@ -116,7 +109,7 @@
 <body>
 
     <div class="main-container">
-        <h1>Dashboard Hidrométrico Interactivo (Estático)</h1>
+        <h1>Dashboard Hidrométrico Interactivo (Estaciones y Series Temporales)</h1>
         
         <div class="dashboard-layout">
             
@@ -132,9 +125,15 @@
                         </select>
                 </div>
                 
-                <div id="chartContainer" class="plotly-graph-div">
+                <iframe 
+                    id="chartIframe" 
+                    style="flex-grow: 1; border: none; width: 100%; min-height: 580px; background-color: #ffffff;"
+                    src="" 
+                    title="Gráfico de Serie Temporal"
+                    allow="fullscreen"
+                >
                     <p id="chartStatus" style="text-align: center; color: #6c757d; padding: 100px;">Seleccione una estación en el mapa o en el selector para ver la serie de precipitación.</p>
-                </div>
+                </iframe>
             </div>
             
         </div>
@@ -143,15 +142,14 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script>
-        // --- CONFIGURACIÓN DE RUTAS ---
-        // La ruta a la carpeta de datos estáticos subidos a GitHub Pages
-        const DATA_STATIC_BASE_URL = 'data_static'; 
+        // --- VARIABLES GLOBALES PARA MANEJO DE ESTADO ---
+        // ASEGÚRATE que esta URL sea correcta.
+        const API_BASE_URL = 'https://hidromet.onrender.com/api/v1'; 
         
         let mapa = null;
         let layerControl = null;
         let estacionesLayer = null; 
-        let stationNameMap = {}; // Para guardar {code: name}
-
+        
         // --- Constantes y Estilos ---
         function getColorByFuente(fuente) {
             fuente = (fuente || '').toUpperCase().replace(/_NERC/g, ''); 
@@ -174,7 +172,7 @@
         // 1. Inicializar el mapa y controles base
         function inicializarMapa() {
             mapa = L.map('mapa').setView([-33.4489, -70.6693], 5);
-            // ... (Lógica de mapas base y leyenda permanece igual) ...
+            
             const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(mapa);
@@ -189,6 +187,7 @@
             
             layerControl = L.control.layers(baseMaps, {}).addTo(mapa);
             
+            // --- Leyenda de Fuentes ---
             const legend = L.control({position: 'bottomright'});
 
             legend.onAdd = function (map) {
@@ -206,23 +205,16 @@
             legend.addTo(mapa);
         }
         
-        // 2. Cargar Estaciones (Puntos) y llenar el selector desde el GeoJSON estático
+        // 2. Cargar Estaciones (Puntos) y llenar el selector
         async function cargarDatosGeoespaciales() {
-            const GEOJSON_URL = `${DATA_STATIC_BASE_URL}/estaciones.geojson`;
-            const NAMES_URL = `${DATA_STATIC_BASE_URL}/station_names.json`;
+            const API_URL = `${API_BASE_URL}/lugares`;
 
             try {
-                // Cargar el archivo de mapeo de nombres para usarlo en el frontend
-                const nameResponse = await fetch(NAMES_URL);
-                stationNameMap = await nameResponse.json();
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
 
-                // Cargar el GeoJSON principal
-                const geoResponse = await fetch(GEOJSON_URL);
-                if (!geoResponse.ok) throw new Error(`Error al cargar el GeoJSON: ${geoResponse.status}`);
-
-                const geojsonData = await geoResponse.json();
+                const geojsonData = await response.json();
                 
-                // ... (Lógica de dibujo de Leaflet permanece igual) ...
                 if (estacionesLayer) { mapa.removeLayer(estacionesLayer); layerControl.removeLayer(estacionesLayer); }
 
                 const stationSelect = document.getElementById('station-select');
@@ -241,6 +233,7 @@
                     },
                     onEachFeature: function (feature, layer) {
                         const props = feature.properties;
+
                         if (props) {
                             const name = props.name || 'N/A';
                             const code = props.code_internal || 'N/A';
@@ -274,110 +267,25 @@
                 
             } catch (error) {
                 console.error("Error al obtener los datos de estaciones:", error);
-                const chartDiv = document.getElementById('chartContainer');
-                chartDiv.innerHTML = `<p style="text-align: center; color: #dc3545; padding: 100px;">Error FATAL: No se pudieron cargar los datos geoespaciales desde ${GEOJSON_URL}. Verifique que los archivos estáticos estén subidos a GitHub Pages.</p>`;
+                // Si la API falla, muestra un mensaje en el área del gráfico (aunque ahora sea un iframe)
+                const iframe = document.getElementById('chartIframe');
+                iframe.srcdoc = `<p style="text-align: center; color: #dc3545; padding: 100px;">Error: No se pudieron cargar las estaciones. Asegúrese de que la API de Render esté activa.</p>`;
             }
         }
-
-        // 3. Función principal para obtener y dibujar la serie temporal (Plotly.js)
+        
+        // 3. Función principal para obtener y mostrar la serie temporal (Plotly HTML)
         async function displayTimeSeries(stationCode) {
             if (!stationCode || stationCode === 'N/A') return;
 
-            const CSV_URL = `${DATA_STATIC_BASE_URL}/${stationCode}.csv`;
-            const chartDiv = document.getElementById('chartContainer');
-            
-            // 1. Mostrar estado de carga
-            chartDiv.innerHTML = `<p style="text-align: center; color: #007bff; padding: 100px;">Cargando serie temporal para ${stationCode}...</p>`;
+            // Referencia al IFRAME
+            const chartIframe = document.getElementById('chartIframe');
+            const API_URL_CHART = `${API_BASE_URL}/series/chart/${stationCode}`; 
+
+            // Actualizar selector
             document.getElementById('station-select').value = stationCode;
-
-            try {
-                // 2. Cargar el CSV usando Papa Parse
-                const response = await fetch(CSV_URL);
-                if (!response.ok) throw new Error(`Error ${response.status}: CSV no encontrado en ${CSV_URL}`);
-                const csvText = await response.text();
-                
-                // Parsear el CSV
-                const parseResult = Papa.parse(csvText, {
-                    header: true,
-                    dynamicTyping: true, // Intenta convertir valores a números, etc.
-                    skipEmptyLines: true
-                });
-
-                if (parseResult.errors.length > 0) {
-                    console.error("Errores de parseo:", parseResult.errors);
-                    throw new Error("Error al procesar el archivo CSV.");
-                }
-
-                const data = parseResult.data;
-
-                // 3. Preparar datos para Plotly
-                const dates = data.map(row => row.Fecha);
-                const precip = data.map(row => row.Precipitacion_mm);
-                const stationName = stationNameMap[stationCode] || stationCode;
-
-                // 4. Generar botones de zoom anual
-                const uniqueYears = [...new Set(dates.map(d => new Date(d).getFullYear()))].sort();
-                
-                const buttons = [
-                    {
-                        label: "Serie Completa",
-                        method: "relayout",
-                        args: [{"xaxis.range": [null, null], "title.text": `Precipitación diaria - ${stationName}`}]
-                    }
-                ].concat(uniqueYears.map(year => ({
-                    label: String(year),
-                    method: "relayout",
-                    args: [
-                        {
-                            "xaxis.range": [`${year}-01-01`, `${year}-12-31`],
-                            "title.text": `Precipitación diaria - ${stationName} (${year})`
-                        }
-                    ]
-                })));
-
-                // 5. Definir la traza y el layout
-                const trace = {
-                    x: dates,
-                    y: precip,
-                    mode: 'lines',
-                    type: 'scatter',
-                    name: 'Precipitación',
-                    line: {color: "#000000", width: 2}
-                };
-
-                const layout = {
-                    title: {
-                        text: `Precipitación diaria - ${stationName}`,
-                        y: 0.95, x: 0.5, xanchor: 'center', yanchor: 'top'
-                    },
-                    margin: {l: 50, r: 40, t: 100, b: 40},
-                    xaxis: {
-                        title: "Fecha",
-                        rangeslider: {visible: true},
-                        type: "date"
-                    },
-                    yaxis: {
-                        title: "Precipitación (mm)"
-                    },
-                    hovermode: "x unified",
-                    updatemenus: [
-                        {
-                            type: "buttons",
-                            direction: "right",
-                            active: 0, 
-                            x: 0.0, y: 1.1, xanchor: "left", yanchor: "top",
-                            buttons: buttons
-                        }
-                    ]
-                };
-
-                // 6. Dibujar el gráfico
-                Plotly.newPlot(chartDiv, [trace], layout, {responsive: true});
-
-            } catch (error) {
-                console.error("Error al cargar o dibujar la serie temporal:", error);
-                chartDiv.innerHTML = `<p style="text-align: center; color: #dc3545; padding: 100px;">Error al cargar el gráfico: ${error.message}</p>`;
-            }
+            
+            // 🚨 SOLUCIÓN IFRAME: Simplemente apunta el SRC al endpoint del backend.
+            chartIframe.src = API_URL_CHART;
         }
         
         // --- INICIO DE LA APLICACIÓN ---
