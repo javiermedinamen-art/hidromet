@@ -118,4 +118,4 @@ def exportar_datos_estaticos():
     print(f"✅ 3. Archivo de nombres de estaciones exportado a: {os.path.join(OUTPUT_DIR, 'station_names.json')}")
 
 if __name__ == "__main__":
-    exportar_datos_estaticos()
+    exportar_datos_estaticos

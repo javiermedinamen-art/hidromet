@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Hidrométrico Interactivo (Estático)</title>
+    <title>Dashboard Interactivo de Datos Hidrometeorológicos Depurados (Estaciones y Series Temporales)</title>
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script> 
@@ -71,9 +71,8 @@
         }
 
         #chartContainer {
-            flex-grow: 1;
+            flex-grow: 1; 
             width: 100%;
-            min-height: 580px;
             background-color: #ffffff;
             display: block;
             padding: 10px;
@@ -96,7 +95,6 @@
             box-sizing: border-box;
         }
 
-        /* 🔹 Nueva barra scrollable de años */
         #yearButtonsContainer {
             display: flex;
             overflow-x: auto;
@@ -105,6 +103,7 @@
             margin-bottom: 10px;
             padding: 6px;
             scrollbar-width: thin;
+            flex-shrink: 0;
         }
 
         #yearButtonsContainer button {
@@ -136,6 +135,15 @@
             background-color: #007bff;
             border-radius: 4px;
         }
+        
+        .info {
+            padding: 6px 8px;
+            font: 14px/16px 'Roboto', sans-serif;
+            background: white;
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
 
         .legend i {
             width: 10px;
@@ -150,7 +158,7 @@
 <body>
 
     <div class="main-container">
-        <h1>Dashboard Hidrométrico Interactivo (Estaciones y Series Temporales)</h1>
+        <h1>Explorador de Datos Hidrometeorológicos Depurados en Chile</h1>
         
         <div class="dashboard-layout">
             
@@ -166,10 +174,8 @@
                     </select>
                 </div>
 
-                <!-- 🔹 Contenedor de botones de año -->
                 <div id="yearButtonsContainer"></div>
                 
-                <!-- 🔹 Gráfico -->
                 <div id="chartContainer" class="plotly-graph-div">
                     <p id="chartStatus" style="text-align: center; color: #6c757d; padding: 100px;">Seleccione una estación en el mapa o en el selector para ver la serie de precipitación.</p>
                 </div>
@@ -280,83 +286,119 @@
             }
         }
 
-        async function displayTimeSeries(stationCode) {
-            if (!stationCode) return;
+    async function displayTimeSeries(stationCode) {
+        if (!stationCode) return;
 
-            const CSV_URL = `${DATA_STATIC_BASE_URL}/${stationCode}.csv`;
-            const chartDiv = document.getElementById('chartContainer');
-            chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando serie temporal...</p>`;
-            document.getElementById('station-select').value = stationCode;
+        const CSV_URL = `${DATA_STATIC_BASE_URL}/${stationCode}.csv`;
+        const chartDiv = document.getElementById('chartContainer');
+        
+        Plotly.purge(chartDiv);
 
-            try {
-                const response = await fetch(CSV_URL);
-                if (!response.ok) throw new Error(`Error ${response.status}: CSV no encontrado`);
-                const csvText = await response.text();
-                const parseResult = Papa.parse(csvText, {header: true, dynamicTyping: true, skipEmptyLines: true});
-                const data = parseResult.data;
+        chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando serie temporal...</p>`;
+        document.getElementById('station-select').value = stationCode;
 
-                currentData = data;
-                const stationName = stationNameMap[stationCode] || stationCode;
+        try {
+            const response = await fetch(CSV_URL);
+            if (!response.ok) throw new Error(`Error ${response.status}: CSV no encontrado`);
+            const csvText = await response.text();
+            
+            const parseResult = Papa.parse(csvText, {header: true, dynamicTyping: true, skipEmptyLines: true});
+            const data = parseResult.data;
 
-                // años únicos
-                const years = [...new Set(data.map(d => new Date(d.Fecha).getFullYear()))].sort();
-                const container = document.getElementById("yearButtonsContainer");
-                container.innerHTML = "";
+            currentData = data;
+            const stationName = stationNameMap[stationCode] || stationCode;
 
-                // botón serie completa
-                const allBtn = document.createElement("button");
-                allBtn.textContent = "Serie Completa";
-                allBtn.classList.add("active");
-                allBtn.onclick = () => renderPlot(data, stationName, null, allBtn);
-                container.appendChild(allBtn);
+            const years = [...new Set(data.map(d => new Date(d.Fecha).getFullYear()))].sort();
+            const container = document.getElementById("yearButtonsContainer");
+            container.innerHTML = "";
 
-                // botones por año
-                years.forEach(y => {
-                    const btn = document.createElement("button");
-                    btn.textContent = y;
-                    btn.onclick = () => {
-                        const filtered = data.filter(d => new Date(d.Fecha).getFullYear() === y);
-                        renderPlot(filtered, stationName, y, btn);
-                    };
-                    container.appendChild(btn);
-                });
+            const allBtn = document.createElement("button");
+            allBtn.textContent = "Serie Completa";
+            allBtn.classList.add("active");
+            allBtn.onclick = () => renderPlot(data, stationName, null, allBtn);
+            container.appendChild(allBtn);
 
-                renderPlot(data, stationName, null, allBtn);
+            years.forEach(y => {
+                const btn = document.createElement("button");
+                btn.textContent = y;
+                btn.onclick = () => {
+                    const filtered = data.filter(d => new Date(d.Fecha).getFullYear() === y);
+                    renderPlot(filtered, stationName, y, btn);
+                };
+                container.appendChild(btn);
+            });
 
-            } catch (error) {
-                console.error(error);
-                chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">Error al cargar el gráfico: ${error.message}</p>`;
+            renderPlot(data, stationName, null, allBtn);
+
+        } catch (error) {
+            console.error(error);
+            const errorMessage = error.message.includes('404') ? 'Error 404: ("detail":"Not Found")' : `Error al cargar el gráfico: ${error.message}`;
+            chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${errorMessage}</p>`;
+        }
+    }
+        
+    function renderPlot(data, stationName, year, activeBtn) {
+        document.querySelectorAll("#yearButtonsContainer button").forEach(b => b.classList.remove("active"));
+        if (activeBtn) activeBtn.classList.add("active");
+
+        const x_dates = data.map(d => d.Fecha);
+        
+        const y_values = data.map(d => {
+            let value = d.Precipitacion_mm;
+            
+            // 1. Manejar valores que podrían ser cadenas vacías, NaN o texto
+            if (typeof value === 'string') {
+                value = value.trim();
+                // Si la cadena está vacía o es 'NaN', es NULL (GAP).
+                if (value === '' || value.toLowerCase() === 'nan') {
+                    return null; 
+                }
+                // Convertir la cadena restante a flotante
+                value = parseFloat(value);
             }
-        }
 
-        function renderPlot(data, stationName, year, activeBtn) {
-            document.querySelectorAll("#yearButtonsContainer button").forEach(b => b.classList.remove("active"));
-            if (activeBtn) activeBtn.classList.add("active");
+            // 2. Si el valor NO es un número finito (es NaN, Infinity), o es null/undefined,
+            // lo forzamos a ser NULL (GAP en la línea).
+            if (!isFinite(value) || isNaN(value) || value === null || value === undefined) {
+                return null; 
+            }
+            
+            // 3. Permitir que 0 sea un valor válido.
+            return value; 
+        });
 
-            const trace = {
-                x: data.map(d => d.Fecha),
-                y: data.map(d => d.Precipitacion_mm),
-                mode: 'lines',
-                type: 'scatter',
-                line: {color: "#000", width: 1.5}
-            };
-
-            const layout = {
-                title: `Precipitación diaria - ${stationName}${year ? " (" + year + ")" : ""}`,
-                margin: {l: 60, r: 30, t: 60, b: 50},
-                xaxis: {title: "Fecha", rangeslider: {visible: true}},
-                yaxis: {title: "Precipitación (mm)"},
-                hovermode: "x unified",
-                height: 500
-            };
-
-            Plotly.newPlot("chartContainer", [trace], layout, {responsive: true});
-        }
-
-        window.onload = () => {
-            inicializarMapa();
-            cargarDatosGeoespaciales();
+        const trace = {
+            x: x_dates,
+            y: y_values,
+            type: 'bar',
+            line: {color: "#000", width: 1.5},
         };
+
+        const layout = {
+            title: `Precipitación diaria - ${stationName}${year ? " (" + year + ")" : ""}`,
+            margin: {l: 60, r: 30, t: 60, b: 80}, 
+            xaxis: {
+                title: "Fecha", 
+                rangeslider: {visible: true},
+                domain: [0, 1] 
+            },
+            yaxis: {
+                title: "Precipitación (mm)",
+                // Dejamos que Plotly calcule el rango del eje Y automáticamente
+            },
+            hovermode: "x unified",
+        };
+
+        const chartDiv = document.getElementById("chartContainer");
+        Plotly.react(chartDiv, [trace], layout, {responsive: true}).then(() => {
+            Plotly.Plots.resize(chartDiv);
+        });
+    }
+
+    window.onload = () => {
+        inicializarMapa();
+        cargarDatosGeoespaciales();
+    };
     </script>
 </body>
 </html>
