@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HidroMet</title>
     
+    <link rel="icon" type="image/png" href="images/favicon3.png">
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script> 
@@ -13,7 +15,8 @@
     <style>
         body { font-family: 'Roboto', sans-serif; color: #333; background-color: #f0f2f5; margin: 0; padding: 0; }
         .main-container { width: 95%; max-width: 1400px; margin: 30px auto; background: #ffffff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); padding: 20px; }
-        h1 { color: #004d99; font-weight: 300; letter-spacing: 1px; margin: 20px auto; font-size: 32px; text-align: center; }
+        h1 { color: #004d99; display: flex; font-weight: 300; letter-spacing: 1px; margin: 20px auto; font-size: 32px; justify-content: center; align-items: center; text-align: center; }
+        .title-logo { height: 64px; margin-right: 2px; }
         .dashboard-layout { display: flex; flex-wrap: wrap; gap: 20px; min-height: 650px; }
         .map-panel { flex: 1; min-width: 45%; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); border: 1px solid #e0e0e0; }
         .data-panel { flex: 1; min-width: 45%; background-color: #ffffff; border-radius: 8px; padding: 15px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; border: 1px solid #e0e0e0; }
@@ -61,7 +64,10 @@
 </head>
 <body>
     <div class="main-container">
-        <h1><b>HidroMet:</b> Explorador de Datos Hidrometeorológicos Depurados de Chile</h1>
+        <h1>
+           <img src="images/favicon3.png" alt="Logo HidroMet" class="title-logo">
+           <b>HidroMet: </b>   Explorador de Datos Hidrometeorológicos Depurados de Chile
+        </h1>
         
         <div class="hierarchy-selector-container">
             <label for="hierarchy-select">Seleccionar Nivel de Análisis:</label>
@@ -81,7 +87,7 @@
                 </div>
                 <div id="yearButtonsContainer"></div>
                 <div id="chartContainer" class="plotly-graph-div">
-                    <p id="chartStatus" style="text-align: center; color: #6c757d; padding: 100px;">Seleccione una estación...</p>
+                    <p id="chartStatus" style="text-align: center; color: #6c757d; padding: 100px;">Seleccione una estación en el mapa o en el selector...</p>
                 </div>
             </div>
         </div>
@@ -286,6 +292,9 @@
                                 const featureId = feature.properties[config.id_property];
                                 const featureName = feature.properties[config.name_property] || '';
                                 displayBasinChart(featureId, featureName, hierarchyKey);
+                                // Envíame al sector de comparación
+                                const comparatorSection = document.querySelector('.basin-comparator-section');
+                                comparatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                             }
                         });
                     }
