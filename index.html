@@ -36,12 +36,12 @@
         #yearButtonsContainer, #basinYearButtonsContainer {
             display: flex;
             justify-content: center;
-            overflow-x: auto;      /* Habilita el scroll horizontal */
-            white-space: nowrap;   /* Evita que los botones salten de línea */
+            overflow-x: auto;      
+            white-space: nowrap;  
             gap: 6px;
             margin-bottom: 10px;
             padding: 6px;
-            scrollbar-width: thin; /* Para Firefox */
+            scrollbar-width: thin;
         }
         #yearButtonsContainer button, #basinYearButtonsContainer button {
             flex: 0 0 auto;
@@ -66,7 +66,7 @@
     <div class="main-container">
         <h1>
            <img src="images/favicon3.png" alt="Logo HidroMet" class="title-logo">
-           <b>HidroMet: </b>   Explorador de Datos Hidrometeorológicos Depurados de Chile
+           <b>HidroMet: </b> &nbsp; Explorador de Datos Hidrometeorológicos Depurados de Chile
         </h1>
         
         <div class="hierarchy-selector-container">
@@ -106,8 +106,10 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script>
-        // --- VARIABLES GLOBALES ---
+        // --- CONFIGURACIÓN Y VARIABLES GLOBALES ---
+        Plotly.setPlotConfig({locale: 'es'});
         const DATA_STATIC_BASE_URL = 'data_static'; 
+        const ZOOM_THRESHOLD = 10;
         let mapa = null;
         let layerControl = null;
         let estacionesLayer = null; 
@@ -118,17 +120,11 @@
         let currentBasinFullData = null;
         let stationColorMap = {};
 
-        const HIGH_CONTRAST_PALETTE = [
-            '#332288', '#117733', '#44AA99', '#88CCEE', '#DDCC77', 
-            '#CC6677', '#AA4499', '#882255', '#E69F00', '#56B4E9', 
-            '#009E73', '#F0E442'
-        ];
-
+        const HIGH_CONTRAST_PALETTE = ['#332288', '#117733', '#44AA99', '#88CCEE', '#DDCC77', '#CC6677', '#AA4499', '#882255', '#E69F00', '#56B4E9', '#009E73', '#F0E442'];
         const HIERARCHY_CONFIG = {
             'cuencas': { url: `${DATA_STATIC_BASE_URL}/cuencas.geojson`, id_property: 'COD_CUEN', name_property: 'NOM_CUEN', name: 'Cuenca' },
             'subcuencas': { url: `${DATA_STATIC_BASE_URL}/subcuencas.geojson`, id_property: 'COD_SUBC', name_property: 'NOM_SUBC', name: 'Subcuenca' }
         };
-
         const FUENTES_MAP = { 'DGA': '#007bff', 'CEAZAMET': '#28a745', 'CIEP': '#ffc107', 'CECS': '#dc3545', 'DMC': '#6f42c1', 'CR2': '#fd7e14', 'Otro': '#6c757d' };
         
         window.onload = () => {
@@ -155,6 +151,8 @@
                 return div;
             };
             legend.addTo(mapa);
+            
+            mapa.on('zoomend', updateLayerInteractivity);
         }
 
         function getColorByFuente(fuente) {
@@ -173,7 +171,6 @@
                 const geojsonData = await geoResponse.json();
                 
                 if (estacionesLayer) { mapa.removeLayer(estacionesLayer); layerControl.removeLayer(estacionesLayer); }
-
                 const stationSelect = document.getElementById('station-select');
                 stationSelect.innerHTML = '<option value="" selected disabled>--- Seleccione una Estación ---</option>';
 
@@ -190,8 +187,7 @@
                                     <b>Elevación:</b> ${props.elevation || 'N/A'} m.s.n.m.<br>
                                     <b>Cuenca:</b> ${props.basin || 'N/A'}<br>
                                     <b>Fuente:</b> ${props.fuente || 'N/A'}
-                                </div>
-                                <button onclick="displayTimeSeries('${props.code_internal}')" style="width: 100%; margin-top: 10px; padding: 4px; cursor: pointer;">Ver Serie</button>`;
+                                </div>`;
                             layer.bindPopup(html);
                         }
                     }
@@ -200,6 +196,8 @@
                 layerControl.addOverlay(estacionesLayer, "Estaciones");
                 const bounds = estacionesLayer.getBounds();
                 if (bounds.isValid()) mapa.fitBounds(bounds.pad(0.1));
+
+                updateLayerInteractivity();
             } catch (error) { console.error("Error al cargar datos de estaciones:", error); }
         }
 
@@ -216,7 +214,7 @@
                 const data = Papa.parse(csvText, {header: true, dynamicTyping: true, skipEmptyLines: true}).data;
                 const stationName = stationNameMap[stationCode] || stationCode;
 
-                const years = [...new Set(data.map(d => new Date(d.Fecha).getFullYear()))].sort();
+                const years = [...new Set(data.map(d => parseInt(d.Fecha.substring(0, 4), 10)))].sort();
                 const container = document.getElementById("yearButtonsContainer");
                 container.innerHTML = "";
 
@@ -229,13 +227,13 @@
                 years.forEach(y => {
                     const btn = document.createElement("button");
                     btn.textContent = y;
-                    btn.onclick = () => renderPlot(data.filter(d => new Date(d.Fecha).getFullYear() === y), stationName, y, btn);
+                    btn.onclick = () => renderPlot(data.filter(d => parseInt(d.Fecha.substring(0, 4), 10) === y), stationName, y, btn);
                     container.appendChild(btn);
                 });
                 renderPlot(data, stationName, null, allBtn);
             } catch (error) { console.error(error); chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`; }
         }
-            
+                
         function renderPlot(data, stationName, year, activeBtn) {
             document.querySelectorAll("#yearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
@@ -282,17 +280,26 @@
                     style: style,
                     pane: 'cuencasPane',
                     onEachFeature: (feature, layer) => {
+                        const props = feature.properties;
+                        const nEstaciones = props.n_estaciones || 0;
+                        
+                        const popupContent = `
+                            <div style="line-height: 1.5;">
+                                <h4 style="margin: 0 0 5px 0; color:#1a5276;">${config.name}: ${props[config.name_property] || 'N/A'}</h4>
+                                <b>Código:</b> ${props[config.id_property]}<br>
+                                <b>N° de estaciones:</b> ${nEstaciones}
+                            </div>`;
+                        
+                        layer.bindPopup(popupContent);
+
                         layer.on({
-                            mouseover: e => { if (e.target !== highlightedFeature) e.target.setStyle(highlightStyle); },
-                            mouseout: e => { if (e.target !== highlightedFeature) newLayer.resetStyle(e.target); },
                             click: e => {
-                                if (highlightedFeature) newLayer.resetStyle(highlightedFeature);
+                                if (highlightedFeature) {
+                                    newLayer.resetStyle(highlightedFeature);
+                                }
                                 highlightedFeature = e.target;
                                 e.target.setStyle(highlightStyle);
-                                const featureId = feature.properties[config.id_property];
-                                const featureName = feature.properties[config.name_property] || '';
-                                displayBasinChart(featureId, featureName, hierarchyKey);
-                                // Envíame al sector de comparación
+                                displayBasinChart(props[config.id_property], props[config.name_property] || '', hierarchyKey);
                                 const comparatorSection = document.querySelector('.basin-comparator-section');
                                 comparatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                             }
@@ -300,9 +307,60 @@
                     }
                 }).addTo(mapa);
                 
-                if (hierarchyKey === 'cuencas') { cuencasLayer = newLayer; layerControl.addOverlay(cuencasLayer, "Cuencas"); } 
-                else { subcuencasLayer = newLayer; layerControl.addOverlay(subcuencasLayer, "Subcuencas"); }
+                if (hierarchyKey === 'cuencas') { cuencasLayer = newLayer; } 
+                else { subcuencasLayer = newLayer; }
+                
+                layerControl.addOverlay(newLayer, config.name === 'Cuenca' ? "Cuencas" : "Subcuencas");
+
+                updateLayerInteractivity();
             } catch (error) { console.error(`Error al cargar ${hierarchyKey}:`, error); }
+        }
+
+        function updateLayerInteractivity() {
+            if (!mapa) return;
+            const zoom = mapa.getZoom();
+
+            const activeHierarchyLayer = document.getElementById('hierarchy-select').value === 'cuencas' ? cuencasLayer : subcuencasLayer;
+
+            if (activeHierarchyLayer) {
+                activeHierarchyLayer.eachLayer(layer => {
+                    if (zoom < ZOOM_THRESHOLD) {
+                        if (!layer.listens('mouseover')) {
+                            layer.on({
+                                mouseover: function (e) { this.openPopup(e.latlng); },
+                                mouseout: function () { this.closePopup(); },
+                                mousemove: function (e) {
+                                    if (this.isPopupOpen()) {
+                                        this.getPopup().setLatLng(e.latlng);
+                                    }
+                                }
+                            });
+                        }
+                    } else {
+                        layer.off('mouseover mouseout mousemove');
+                        layer.closePopup();
+                    }
+                });
+            }
+
+            if (estacionesLayer) {
+                estacionesLayer.eachLayer(layer => {
+                    const props = layer.feature.properties;
+                    if (zoom < ZOOM_THRESHOLD) {
+                        layer.setRadius(3);
+                        layer.off('mouseover mouseout click');
+                    } else {
+                        layer.setRadius(6);
+                        if (!layer.listens('mouseover')) {
+                            layer.on({
+                                mouseover: function () { this.openPopup(); },
+                                mouseout: function () { this.closePopup(); },
+                                click: () => { displayTimeSeries(props.code_internal); }
+                            });
+                        }
+                    }
+                });
+            }
         }
 
         async function displayBasinChart(featureId, featureName, hierarchyKey) {
@@ -327,7 +385,8 @@
                     stationColorMap[stationCode] = HIGH_CONTRAST_PALETTE[i % HIGH_CONTRAST_PALETTE.length];
                 });
                 
-                const years = [...new Set(Object.values(currentBasinFullData).flatMap(s => s.dates.map(d => new Date(d).getFullYear())))].sort();
+                const allDates = Object.values(currentBasinFullData).flatMap(s => s.dates);
+                const years = [...new Set(allDates.map(d => parseInt(d.substring(0, 4), 10)))].sort();
 
                 const allBtn = document.createElement("button");
                 allBtn.textContent = "Serie Completa";
@@ -346,7 +405,7 @@
                             let hasNonNullData = false;
                             
                             station.dates.forEach((date, i) => {
-                                if (new Date(date).getFullYear() === year) {
+                                if (parseInt(date.substring(0, 4), 10) === year) {
                                     filteredDates.push(date);
                                     filteredValues.push(station.values[i]);
                                     if (station.values[i] !== null) hasNonNullData = true;
@@ -372,6 +431,7 @@
         function renderBasinPlot(dataToPlot, year, activeBtn) {
             document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
+            
             const traces = Object.keys(dataToPlot).map(stationCode => {
                 const station = dataToPlot[stationCode];
                 const elevationText = station.elevation !== null ? `${station.elevation} msnm` : 'N/A';
@@ -386,9 +446,16 @@
                     hovertemplate: `<b>${station.name}</b><br>%{x|%B de %Y}<br>Precipitación: %{y:.1f} mm<extra></extra>`,
                 };
             });
+
+            const xAxisConfig = { title: 'Fecha' };
+            if (year) {
+                xAxisConfig.range = [`${year}-01-01`, `${year}-12-31`];
+                xAxisConfig.tickformat = '%B';
+            }
+
             const layout = {
-                title: `Precipitación Mensual Acumulada${year ? ` (${year})` : ''}`,
-                xaxis: { title: 'Fecha' },
+                title: `Precipitación Acumulada Mensual${year ? ` (${year})` : ''}`,
+                xaxis: xAxisConfig,
                 yaxis: { title: 'Precipitación (mm)' },
                 hovermode: 'closest',
                 showlegend: true,

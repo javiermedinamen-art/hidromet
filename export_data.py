@@ -14,12 +14,12 @@ OUTPUT_DIR = "data_static"
 # Ruta al shapefile de Cuencas y nombre de su columna de ID
 PATH_CUENCAS_SHP = "data/cuencas_bna/cuencas_bna.shp"
 ID_COLUMNA_CUENCA = 'COD_CUEN'
-NOMBRE_COLUMNA_CUENCA = 'NOM_CUEN' # <--- NUEVA LÍNEA (¡Ajusta el nombre!)
+NOMBRE_COLUMNA_CUENCA = 'NOM_CUEN'
 
 # Ruta al shapefile de Subcuencas y nombre de su columna de ID
 PATH_SUBCUENCAS_SHP = "data/subcuencas_bna/subcuencas_bna.shp"
 ID_COLUMNA_SUBCUENCA = 'COD_SUBC'
-NOMBRE_COLUMNA_SUBCUENCA = 'NOM_SUBC' # <--- NUEVA LÍNEA (¡Ajusta el nombre!)
+NOMBRE_COLUMNA_SUBCUENCA = 'NOM_SUBC'
 
 # --------------------------------------------------------------------------
 
@@ -111,7 +111,7 @@ def cargar_series_temporales():
 def procesar_jerarquia_geoespacial(shapefile_path, id_columna, output_prefix, gdf_estaciones, df_series):
     """
     Procesa una capa geoespacial.
-    SOLUCIONA: Asegura que la elevación se ordene numéricamente de forma robusta.
+    NUEVO: Añade la cuenta de estaciones a cada polígono.
     """
     print(f"\n--- Procesando jerarquía: '{output_prefix}' ---")
 
@@ -131,31 +131,35 @@ def procesar_jerarquia_geoespacial(shapefile_path, id_columna, output_prefix, gd
 
     gdf_estaciones_con_jerarquia = gpd.sjoin(gdf_estaciones, gdf_jerarquia, how="inner", predicate="within")
     ids_con_estaciones = gdf_estaciones_con_jerarquia[id_columna].unique()
-    gdf_filtrado = gdf_jerarquia[gdf_jerarquia[id_columna].isin(ids_con_estaciones)]
+    gdf_filtrado = gdf_jerarquia[gdf_jerarquia[id_columna].isin(ids_con_estaciones)].copy()
 
     if gdf_filtrado.empty:
         print(f"Advertencia: Ninguna estación encontrada para la jerarquía '{output_prefix}'.")
         return
 
+    # --- NUEVO: Contar estaciones por polígono y añadirlo al GeoDataFrame ---
+    station_counts = gdf_estaciones_con_jerarquia.groupby(id_columna).size()
+    station_counts.name = 'n_estaciones'
+    gdf_filtrado = gdf_filtrado.merge(station_counts, left_on=id_columna, right_index=True, how='left')
+    gdf_filtrado['n_estaciones'] = gdf_filtrado['n_estaciones'].fillna(0).astype(int)
+    print(f"✅ Se calculó el número de estaciones para {len(gdf_filtrado)} polígonos.")
+
     geojson_path = os.path.join(OUTPUT_DIR, f"{output_prefix}.geojson")
     gdf_filtrado.to_file(geojson_path, driver="GeoJSON")
-    print(f"✅ GeoJSON de '{output_prefix}' exportado a: {geojson_path}")
+    print(f"✅ GeoJSON de '{output_prefix}' con cuenta de estaciones exportado a: {geojson_path}")
 
     count_poligonos = 0
     for poly_id in ids_con_estaciones:
         estaciones_en_poligono = gdf_estaciones_con_jerarquia[gdf_estaciones_con_jerarquia[id_columna] == poly_id].copy()
         
-        # --- CORRECCIÓN CLAVE PARA EL ORDENAMIENTO (Punto 2) ---
-        # Forzamos la columna a ser numérica. 'coerce' convierte errores (texto) a NaT/NaN.
         estaciones_en_poligono['elevation'] = pd.to_numeric(estaciones_en_poligono['elevation'], errors='coerce')
         
-        # Ahora el ordenamiento funcionará correctamente como números.
         estaciones_ordenadas = estaciones_en_poligono.sort_values(by='elevation', ascending=False, na_position='last')
         
         codigos_estaciones_ordenados = estaciones_ordenadas['code_internal'].tolist()
         df_series_poligono = df_series.reindex(columns=codigos_estaciones_ordenados)
         
-        monthly_agg = df_series_poligono.resample('M').agg(['sum', 'count'])
+        monthly_agg = df_series_poligono.resample('MS').agg(['sum', 'count'])
 
         for col in codigos_estaciones_ordenados:
             if (col, 'count') in monthly_agg.columns:
@@ -170,7 +174,8 @@ def procesar_jerarquia_geoespacial(shapefile_path, id_columna, output_prefix, gd
         
         start_date = df_sum_monthly.index.min()
         end_date = df_sum_monthly.index.max()
-        complete_date_index = pd.date_range(start_date, end_date, freq='M')
+        
+        complete_date_index = pd.date_range(start_date, end_date, freq='MS')
         df_complete = df_sum_monthly.reindex(complete_date_index)
 
         output_json = {}
@@ -264,3 +269,4 @@ def exportar_datos_estaticos():
 
 if __name__ == "__main__":
     exportar_datos_estaticos()
+
