@@ -32,7 +32,7 @@
         #hierarchy-select { padding: 8px; border-radius: 4px; border: 1px solid #ced4da; min-width: 200px; }
         .basin-comparator-section { margin-top: 30px; padding: 20px; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); }
         .basin-comparator-section h2 { color: #004d99; font-weight: 300; text-align: center; margin-top: 0; margin-bottom: 20px; }
-        #basinChartContainer { width: 100%; min-height: 550px; } /* <-- ALTURA FIJA Y MAYOR */
+        #basinChartContainer { width: 100%; min-height: 550px; } 
 
         #yearButtonsContainer, #basinYearButtonsContainer {
             display: flex;
@@ -143,9 +143,29 @@
             mapa = L.map('mapa').setView([-33.4489, -70.6693], 5);
             mapa.createPane('cuencasPane');
             mapa.getPane('cuencasPane').style.zIndex = 350;
-            const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: 'Map data © OpenStreetMap contributors' }).addTo(mapa);
-            const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { attribution: 'Tiles © Esri' });
-            layerControl = L.control.layers({"Calles": osm, "Satelital": satelite}, {}).addTo(mapa);
+
+            // --- ¡MAPAS BASE ACTUALIZADOS! ---
+            const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+                attribution: '© OpenStreetMap contributors' 
+            }).addTo(mapa);
+            
+            const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { 
+                attribution: '© Esri' 
+            });
+
+            // --- ¡NUEVO MAPA TOPOGRÁFICO MÁS LIMPIO! ---
+            const topografico = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+                attribution: '© Esri'
+            });
+
+            const baseMaps = {
+                "Calles": osm, 
+                "Satelital": satelite,
+                "Topográfico": topografico 
+            };
+            
+            layerControl = L.control.layers(baseMaps, {}).addTo(mapa);
+
             const legend = L.control({position: 'bottomright'});
             legend.onAdd = function () {
                 const div = L.DomUtil.create('div', 'info legend');
@@ -456,11 +476,7 @@
             document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
 
-            // --- ¡CORRECCIÓN CLAVE PARA EL ORDEN! ---
-            // Convertir el objeto a un array y ordenarlo por elevación (descendente).
-            // Esto asegura que el orden sea siempre correcto, independientemente del motor de JS.
             const sortedStations = Object.entries(dataToPlot).sort(([, stationA], [, stationB]) => {
-                // Tratar las elevaciones nulas como las más bajas
                 const elevA = stationA.elevation === null ? -Infinity : stationA.elevation;
                 const elevB = stationB.elevation === null ? -Infinity : stationB.elevation;
                 return elevB - elevA;
@@ -493,13 +509,12 @@
                 hovermode: 'closest',
                 showlegend: true,
                 legend: { 
-                    // --- ¡CONFIGURACIÓN DE LEYENDA MEJORADA! ---
                     traceorder: 'normal',
                     title: { text: '<b>Estaciones</b><br> ', font: { size: 14 } },
                     bgcolor: 'rgba(248, 249, 250, 0.95)',
                     bordercolor: '#dee2e6', 
                     borderwidth: 1,
-                    borderRadius: 8, // Propiedad corregida
+                    borderRadius: 8,
                     x: 1.02, 
                     xanchor: 'left' 
                 },
