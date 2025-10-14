@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- La siguiente línea es crucial para mostrar correctamente tildes y la letra 'ñ' -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HidroMet</title>
@@ -18,9 +19,9 @@
         h1 { color: #004d99; display: flex; font-weight: 300; letter-spacing: 1px; margin: 20px auto; font-size: 32px; justify-content: center; align-items: center; text-align: center; }
         .title-logo { height: 64px; margin-right: 2px; }
         .dashboard-layout { display: flex; flex-wrap: wrap; gap: 20px; min-height: 650px; }
-        .map-panel { flex: 1; min-width: 45%; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); border: 1px solid #e0e0e0; }
-        .data-panel { flex: 1; min-width: 45%; background-color: #ffffff; border-radius: 8px; padding: 15px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; border: 1px solid #e0e0e0; }
-        #mapa { height: 100%; min-height: 650px; width: 100%; border: none; }
+        .map-panel { flex: 1.2; min-width: 500px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); border: 1px solid #e0e0e0; }
+        .data-panel { flex: 1; min-width: 400px; background-color: #ffffff; border-radius: 8px; padding: 15px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); display: flex; flex-direction: column; border: 1px solid #e0e0e0; }
+        #mapa { height: 100%; min-height: 500px; width: 100%; border: none; }
         #chartContainer { flex-grow: 1; width: 100%; display: block; padding: 0; box-sizing: border-box; position: relative; }
         .controls { margin-bottom: 10px; padding: 8px; background-color: #e9ecef; border-radius: 6px; }
         select { padding: 8px; border-radius: 4px; border: 1px solid #ced4da; width: 100%; box-sizing: border-box; }
@@ -31,7 +32,7 @@
         #hierarchy-select { padding: 8px; border-radius: 4px; border: 1px solid #ced4da; min-width: 200px; }
         .basin-comparator-section { margin-top: 30px; padding: 20px; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); }
         .basin-comparator-section h2 { color: #004d99; font-weight: 300; text-align: center; margin-top: 0; margin-bottom: 20px; }
-        #basinChartContainer { width: 100%; min-height: 450px; }
+        #basinChartContainer { width: 100%; min-height: 550px; } /* <-- ALTURA FIJA Y MAYOR */
 
         #yearButtonsContainer, #basinYearButtonsContainer {
             display: flex;
@@ -74,6 +75,7 @@
             <select id="hierarchy-select">
                 <option value="cuencas" selected>Cuencas</option>
                 <option value="subcuencas">Subcuencas</option>
+                <option value="subsubcuencas">Subsubcuencas</option>
             </select>
         </div>
         
@@ -116,14 +118,17 @@
         let stationNameMap = {}; 
         let cuencasLayer = null;
         let subcuencasLayer = null;
+        let subsubcuencasLayer = null;
         let highlightedFeature = null;
         let currentBasinFullData = null;
         let stationColorMap = {};
 
         const HIGH_CONTRAST_PALETTE = ['#332288', '#117733', '#44AA99', '#88CCEE', '#DDCC77', '#CC6677', '#AA4499', '#882255', '#E69F00', '#56B4E9', '#009E73', '#F0E442'];
+        
         const HIERARCHY_CONFIG = {
             'cuencas': { url: `${DATA_STATIC_BASE_URL}/cuencas.geojson`, id_property: 'COD_CUEN', name_property: 'NOM_CUEN', name: 'Cuenca' },
-            'subcuencas': { url: `${DATA_STATIC_BASE_URL}/subcuencas.geojson`, id_property: 'COD_SUBC', name_property: 'NOM_SUBC', name: 'Subcuenca' }
+            'subcuencas': { url: `${DATA_STATIC_BASE_URL}/subcuencas.geojson`, id_property: 'COD_SUBC', name_property: 'NOM_SUBC', name: 'Subcuenca' },
+            'subsubcuencas': { url: `${DATA_STATIC_BASE_URL}/subsubcuencas.geojson`, id_property: 'COD_SSUBC', name_property: 'NOM_SSUBC', name: 'Subsubcuenca' }
         };
         const FUENTES_MAP = { 'DGA': '#007bff', 'CEAZAMET': '#28a745', 'CIEP': '#ffc107', 'CECS': '#dc3545', 'DMC': '#6f42c1', 'CR2': '#fd7e14', 'Otro': '#6c757d' };
         
@@ -260,9 +265,11 @@
         async function switchHierarchyLayer(hierarchyKey) {
             if (cuencasLayer) mapa.removeLayer(cuencasLayer);
             if (subcuencasLayer) mapa.removeLayer(subcuencasLayer);
+            if (subsubcuencasLayer) mapa.removeLayer(subsubcuencasLayer);
             if (layerControl) {
                 if(cuencasLayer) layerControl.removeLayer(cuencasLayer);
                 if(subcuencasLayer) layerControl.removeLayer(subcuencasLayer);
+                if(subsubcuencasLayer) layerControl.removeLayer(subsubcuencasLayer);
             }
             highlightedFeature = null;
 
@@ -307,12 +314,21 @@
                     }
                 }).addTo(mapa);
                 
-                if (hierarchyKey === 'cuencas') { cuencasLayer = newLayer; } 
-                else { subcuencasLayer = newLayer; }
+                let layerName = "Capa";
+                if (hierarchyKey === 'cuencas') { 
+                    cuencasLayer = newLayer;
+                    layerName = "Cuencas";
+                } else if (hierarchyKey === 'subcuencas') {
+                    subcuencasLayer = newLayer;
+                    layerName = "Subcuencas";
+                } else {
+                    subsubcuencasLayer = newLayer;
+                    layerName = "Subsubcuencas";
+                }
                 
-                layerControl.addOverlay(newLayer, config.name === 'Cuenca' ? "Cuencas" : "Subcuencas");
-
+                layerControl.addOverlay(newLayer, layerName);
                 updateLayerInteractivity();
+
             } catch (error) { console.error(`Error al cargar ${hierarchyKey}:`, error); }
         }
 
@@ -320,7 +336,15 @@
             if (!mapa) return;
             const zoom = mapa.getZoom();
 
-            const activeHierarchyLayer = document.getElementById('hierarchy-select').value === 'cuencas' ? cuencasLayer : subcuencasLayer;
+            let activeHierarchyLayer;
+            const selectedHierarchy = document.getElementById('hierarchy-select').value;
+            if (selectedHierarchy === 'cuencas') {
+                activeHierarchyLayer = cuencasLayer;
+            } else if (selectedHierarchy === 'subcuencas') {
+                activeHierarchyLayer = subcuencasLayer;
+            } else {
+                activeHierarchyLayer = subsubcuencasLayer;
+            }
 
             if (activeHierarchyLayer) {
                 activeHierarchyLayer.eachLayer(layer => {
@@ -431,9 +455,18 @@
         function renderBasinPlot(dataToPlot, year, activeBtn) {
             document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
-            
-            const traces = Object.keys(dataToPlot).map(stationCode => {
-                const station = dataToPlot[stationCode];
+
+            // --- ¡CORRECCIÓN CLAVE PARA EL ORDEN! ---
+            // Convertir el objeto a un array y ordenarlo por elevación (descendente).
+            // Esto asegura que el orden sea siempre correcto, independientemente del motor de JS.
+            const sortedStations = Object.entries(dataToPlot).sort(([, stationA], [, stationB]) => {
+                // Tratar las elevaciones nulas como las más bajas
+                const elevA = stationA.elevation === null ? -Infinity : stationA.elevation;
+                const elevB = stationB.elevation === null ? -Infinity : stationB.elevation;
+                return elevB - elevA;
+            });
+
+            const traces = sortedStations.map(([stationCode, station]) => {
                 const elevationText = station.elevation !== null ? `${station.elevation} msnm` : 'N/A';
                 return { 
                     x: station.dates, 
@@ -460,17 +493,22 @@
                 hovermode: 'closest',
                 showlegend: true,
                 legend: { 
-                    title: { text: '<b>Estaciones</b>', font: { size: 13 } }, 
-                    bgcolor: 'rgba(255,255,255,0.8)', 
-                    bordercolor: '#E2E2E2', 
-                    borderwidth: 1, 
+                    // --- ¡CONFIGURACIÓN DE LEYENDA MEJORADA! ---
+                    traceorder: 'normal',
+                    title: { text: '<b>Estaciones</b><br> ', font: { size: 14 } },
+                    bgcolor: 'rgba(248, 249, 250, 0.95)',
+                    bordercolor: '#dee2e6', 
+                    borderwidth: 1,
+                    borderRadius: 8, // Propiedad corregida
                     x: 1.02, 
                     xanchor: 'left' 
                 },
                 margin: { r: 250 }
             };
-            Plotly.react('basinChartContainer', traces, layout, {responsive: true});
+            
+            Plotly.newPlot('basinChartContainer', traces, layout, {responsive: true});
         }
     </script>
 </body>
 </html>
+

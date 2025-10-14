@@ -21,6 +21,13 @@ PATH_SUBCUENCAS_SHP = "data/subcuencas_bna/subcuencas_bna.shp"
 ID_COLUMNA_SUBCUENCA = 'COD_SUBC'
 NOMBRE_COLUMNA_SUBCUENCA = 'NOM_SUBC'
 
+# --- ¡NUEVA SECCIÓN! ---
+# Ruta al shapefile de Subsubcuencas y nombres de sus columnas
+# --- (¡Ajusta la ruta y nombres según tu archivo!) ---
+PATH_SUBSUBCUENCAS_SHP = "data/subsubcuencas_bna/subsubcuencas_bna.shp" 
+ID_COLUMNA_SUBSUBCUENCA = 'COD_SSUBC' 
+NOMBRE_COLUMNA_SUBSUBCUENCA = 'NOM_SSUBC'
+
 # --------------------------------------------------------------------------
 
 def cargar_estaciones():
@@ -111,7 +118,7 @@ def cargar_series_temporales():
 def procesar_jerarquia_geoespacial(shapefile_path, id_columna, output_prefix, gdf_estaciones, df_series):
     """
     Procesa una capa geoespacial.
-    NUEVO: Añade la cuenta de estaciones a cada polígono.
+    Añade la cuenta de estaciones a cada polígono.
     """
     print(f"\n--- Procesando jerarquía: '{output_prefix}' ---")
 
@@ -137,7 +144,7 @@ def procesar_jerarquia_geoespacial(shapefile_path, id_columna, output_prefix, gd
         print(f"Advertencia: Ninguna estación encontrada para la jerarquía '{output_prefix}'.")
         return
 
-    # --- NUEVO: Contar estaciones por polígono y añadirlo al GeoDataFrame ---
+    # Contar estaciones por polígono y añadirlo al GeoDataFrame
     station_counts = gdf_estaciones_con_jerarquia.groupby(id_columna).size()
     station_counts.name = 'n_estaciones'
     gdf_filtrado = gdf_filtrado.merge(station_counts, left_on=id_columna, right_index=True, how='left')
@@ -260,6 +267,15 @@ def exportar_datos_estaticos():
         shapefile_path=PATH_SUBCUENCAS_SHP,
         id_columna=ID_COLUMNA_SUBCUENCA,
         output_prefix='subcuencas',
+        gdf_estaciones=gdf_estaciones,
+        df_series=df_series
+    )
+
+    # --- ¡NUEVO! 3.3 Procesar Subsubcuencas ---
+    procesar_jerarquia_geoespacial(
+        shapefile_path=PATH_SUBSUBCUENCAS_SHP,
+        id_columna=ID_COLUMNA_SUBSUBCUENCA,
+        output_prefix='subsubcuencas',
         gdf_estaciones=gdf_estaciones,
         df_series=df_series
     )
