@@ -21,9 +21,7 @@ PATH_SUBCUENCAS_SHP = "data/subcuencas_bna/subcuencas_bna.shp"
 ID_COLUMNA_SUBCUENCA = 'COD_SUBC'
 NOMBRE_COLUMNA_SUBCUENCA = 'NOM_SUBC'
 
-# --- ¡NUEVA SECCIÓN! ---
 # Ruta al shapefile de Subsubcuencas y nombres de sus columnas
-# --- (¡Ajusta la ruta y nombres según tu archivo!) ---
 PATH_SUBSUBCUENCAS_SHP = "data/subsubcuencas_bna/subsubcuencas_bna.shp" 
 ID_COLUMNA_SUBSUBCUENCA = 'COD_SSUBC' 
 NOMBRE_COLUMNA_SUBSUBCUENCA = 'NOM_SSUBC'
@@ -205,6 +203,86 @@ def procesar_jerarquia_geoespacial(shapefile_path, id_columna, output_prefix, gd
         json_path = os.path.join(OUTPUT_DIR, f"{output_prefix}_{poly_id}.json")
         with open(json_path, 'w', encoding='utf-8') as f:
             json.dump(output_json, f, ensure_ascii=False)
+
+        # --- INICIO DEL NUEVO CÓDIGO PARA CÁLCULO ANUAL ROBUSTO ---
+        # 1. Calcular el perfil climatológico y los Meses Hidrológicamente Significativos (MHS) para cada estación
+        hsm_por_estacion = {}
+        for station_code in df_sum_monthly.columns:
+            # Agrupar por mes y calcular la media a largo plazo para esta estación
+            climatologia_mensual = df_sum_monthly[station_code].groupby(df_sum_monthly.index.month).mean()
+            
+            # Ordenar los meses por su contribución de mayor a menor
+            climatologia_ordenada = climatologia_mensual.sort_values(ascending=False)
+            
+            # Calcular el umbral del 75% de la precipitación total anual promedio
+            umbral_precipitacion = climatologia_mensual.sum() * 0.75
+            
+            # Encontrar los meses que superan este umbral acumulado
+            suma_acumulada = climatologia_ordenada.cumsum()
+            meses_significativos = suma_acumulada[suma_acumulada <= umbral_precipitacion].index.tolist()
+            
+            # Aseguramos que al menos el mes más lluvioso esté, incluso si por sí solo supera el 75%
+            if not meses_significativos and not climatologia_ordenada.empty:
+                meses_significativos = [climatologia_ordenada.index[0]]
+                
+            hsm_por_estacion[station_code] = meses_significativos
+
+        # 2. Verificar la validez de cada año para cada estación según las nuevas reglas
+        df_annual = df_sum_monthly.resample('YS').sum(min_count=1) # Suma anual preliminar
+        monthly_counts = df_sum_monthly.resample('YS').count() # Conteo de meses válidos por año
+
+        for station_code in df_annual.columns:
+            # Iterar sobre cada año en el índice del DataFrame anual
+            for year_start_date in df_annual.index:
+                year = year_start_date.year
+                
+                # Condición A: Verificar si el año tiene al menos 9 meses válidos
+                try:
+                    num_meses_validos = monthly_counts.loc[year_start_date, station_code]
+                except KeyError:
+                    num_meses_validos = 0
+                    
+                if num_meses_validos < 9:
+                    df_annual.loc[year_start_date, station_code] = None # Anular si no cumple
+                    continue # Pasar al siguiente año para esta estación
+
+                # Condición B: Verificar si TODOS los MHS están presentes en ese año
+                meses_clave = hsm_por_estacion.get(station_code, [])
+                if not meses_clave: # Si no hay meses clave, continuar
+                    continue
+                
+                # Extraer los datos mensuales solo para el año actual y la estación actual
+                datos_del_ano = df_sum_monthly.loc[str(year), station_code]
+                
+                # Verificar si alguno de los meses clave es NULO en ese año
+                for mes_clave in meses_clave:
+                    if mes_clave not in datos_del_ano.index.month or pd.isna(datos_del_ano[datos_del_ano.index.month == mes_clave].iloc[0]):
+                        df_annual.loc[year_start_date, station_code] = None # Anular si falta un mes clave
+                        break # No es necesario seguir revisando otros meses clave para este año
+
+        if not df_annual.empty:
+            output_annual_json = {}
+            for station_code in codigos_estaciones_ordenados:
+                if station_code not in df_annual.columns:
+                    continue
+
+                station_info = estaciones_ordenadas.set_index('code_internal').loc[station_code]
+                
+                values_with_nulls = [None if pd.isna(val) else round(val, 1) for val in df_annual[station_code]]
+                elevation_value = None if pd.isna(station_info['elevation']) else station_info['elevation']
+
+                output_annual_json[station_code] = {
+                    'name': station_info['name'],
+                    'elevation': elevation_value,
+                    'years': df_annual.index.year.tolist(),
+                    'values': values_with_nulls
+                }
+            
+            annual_json_path = os.path.join(OUTPUT_DIR, f"{output_prefix}_{poly_id}_annual.json")
+            with open(annual_json_path, 'w', encoding='utf-8') as f:
+                json.dump(output_annual_json, f, ensure_ascii=False)
+        # --- FIN DEL NUEVO CÓDIGO ---
+        
         count_poligonos += 1
 
     print(f"✅ Exportados {count_poligonos} archivos JSON de datos para '{output_prefix}'.")
@@ -271,7 +349,7 @@ def exportar_datos_estaticos():
         df_series=df_series
     )
 
-    # --- ¡NUEVO! 3.3 Procesar Subsubcuencas ---
+    # 3.3 Procesar Subsubcuencas
     procesar_jerarquia_geoespacial(
         shapefile_path=PATH_SUBSUBCUENCAS_SHP,
         id_columna=ID_COLUMNA_SUBSUBCUENCA,
@@ -285,4 +363,3 @@ def exportar_datos_estaticos():
 
 if __name__ == "__main__":
     exportar_datos_estaticos()
-

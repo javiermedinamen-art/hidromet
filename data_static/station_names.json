@@ -8,7 +8,6 @@
   "0430009": "La Laguna",
   "04311005": "La Ortiga",
   "04300001": "Cerro Olivares",
-  "05414004": "Resguardo Los Patos",
   "05415004": "Jahuel",
   "05404001": "Canal Colorado en Bocatoma",
   "05410002": "Rio Aconcagua en Chacabuquito",
@@ -22,10 +21,7 @@
   "05706002": "Glaciar Olivares Gamma",
   "05706005": "Glaciar Olivares Alfa",
   "05706003": "Valle Olivares",
-  "05721017": "Estero Yerba Loca en Piedra Carvajal",
   "05721016": "Rio San Francisco antes Junta Estero Yerba Loca",
-  "cerro3puntas": "Cerro3Puntas",
-  "05722001": "Estero Arrayan en La Montosa",
   "05721001": "Estero Yerba Loca antes Junta San Francisco",
   "05720001": "Rio Molina antes Junta San Francisco",
   "05706001": "Rio Olivares antes Junta Rio Colorado",
@@ -62,5 +58,6 @@
   "11533001": "Estancia Valle Chacabuco",
   "11532001": "Rio Nef antes Junta Estero El Rebalse",
   "11540000": "Lago Cachet 2 en Glaciar Colonia ",
-  "1150002": "Tortel"
+  "1150002": "Tortel",
+  "riotranquilo_nerc": "RioTranquilo_NERC"
 }

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <!-- La siguiente línea es crucial para mostrar correctamente tildes y la letra 'ñ' -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HidroMet</title>
@@ -61,13 +60,42 @@
         }
         ::-webkit-scrollbar { height: 6px; }
         ::-webkit-scrollbar-thumb { background-color: #007bff; border-radius: 4px; }
+
+        /* --- ¡NUEVO ESTILO PARA LA CAJA METODOLÓGICA! --- */
+        .methodology-box {
+            margin-top: 25px;
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #495057;
+        }
+        .methodology-box h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #004d99;
+            font-weight: 500;
+        }
+        .methodology-box p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        .methodology-box ul {
+            margin-top: 5px;
+            margin-bottom: 10px;
+            padding-left: 20px;
+        }
+        .methodology-box li {
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="main-container">
         <h1>
-           <img src="images/favicon3.png" alt="Logo HidroMet" class="title-logo">
-           <b>HidroMet: </b> &nbsp; Explorador de Datos Hidrometeorológicos Depurados de Chile
+            <img src="images/favicon3.png" alt="Logo HidroMet" class="title-logo">
+            <b>HidroMet: </b> &nbsp; Explorador de Datos Hidrometeorológicos Depurados de Chile
         </h1>
         
         <div class="hierarchy-selector-container">
@@ -101,6 +129,21 @@
                 <p id="basinChartStatus" style="text-align: center; color: #6c757d; padding: 100px;">
                     Seleccione un nivel de análisis y haga clic en un polígono del mapa para comparar.
                 </p>
+            </div>
+
+            <div class="methodology-box">
+                <h4>Nota Metodológica 📝</h4>
+                <p>
+                    <strong>Acumulado Mensual:</strong> Un mes se muestra en el gráfico solo si contiene más del <strong>80%</strong> de los días con datos de precipitación.
+                </p>
+                <p>
+                    <strong>Acumulado Anual:</strong> Un año se considera válido y se muestra en el gráfico si cumple <strong>ambas</strong> condiciones:
+                    <ul>
+                        <li>Tiene al menos <strong>9 meses</strong> que cumplen el criterio del 80% de datos diarios.</li>
+                        <li>Contiene datos para todos sus <strong>"meses hidrológicamente significativos"</strong> (aquellos que históricamente aportan el 75% del total anual de precipitación para esa estación).</li>
+                    </ul>
+                </p>
+                <p>Este doble criterio asegura que los totales anuales sean representativos y no subestimen la precipitación por la ausencia de datos durante los meses más importantes.</p>
             </div>
         </div>
     </div>
@@ -144,7 +187,6 @@
             mapa.createPane('cuencasPane');
             mapa.getPane('cuencasPane').style.zIndex = 350;
 
-            // --- ¡MAPAS BASE ACTUALIZADOS! ---
             const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
                 attribution: '© OpenStreetMap contributors' 
             }).addTo(mapa);
@@ -153,7 +195,6 @@
                 attribution: '© Esri' 
             });
 
-            // --- ¡NUEVO MAPA TOPOGRÁFICO MÁS LIMPIO! ---
             const topografico = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
                 attribution: '© Esri'
             });
@@ -464,6 +505,12 @@
                     };
                     buttonContainer.appendChild(btn);
                 });
+
+                const annualBtn = document.createElement("button");
+                annualBtn.textContent = "Acumulación Anual";
+                annualBtn.onclick = () => renderBasinAnnualPlot(featureId, hierarchyKey, annualBtn);
+                buttonContainer.appendChild(annualBtn);
+                
                 renderBasinPlot(currentBasinFullData, null, allBtn);
             } catch (error) {
                 console.error(error);
@@ -523,7 +570,65 @@
             
             Plotly.newPlot('basinChartContainer', traces, layout, {responsive: true});
         }
+        
+        async function renderBasinAnnualPlot(featureId, hierarchyKey, activeBtn) {
+            document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
+            if (activeBtn) activeBtn.classList.add("active");
+
+            const chartDiv = document.getElementById('basinChartContainer');
+            chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando datos de acumulación anual...</p>`;
+
+            try {
+                const response = await fetch(`${DATA_STATIC_BASE_URL}/${hierarchyKey}_${featureId}_annual.json`);
+                if (!response.ok) throw new Error(`No se encontraron datos de acumulación anual.`);
+                const annualData = await response.json();
+
+                const sortedStations = Object.entries(annualData).sort(([, stationA], [, stationB]) => {
+                    const elevA = stationA.elevation === null ? -Infinity : stationA.elevation;
+                    const elevB = stationB.elevation === null ? -Infinity : stationB.elevation;
+                    return elevB - elevA;
+                });
+
+                const traces = sortedStations.map(([stationCode, station]) => {
+                    const elevationText = station.elevation !== null ? `${station.elevation} msnm` : 'N/A';
+                    return {
+                        x: station.years,
+                        y: station.values,
+                        name: `${station.name} (${elevationText})`,
+                        type: 'scatter',
+                        mode: 'lines+markers',
+                        line: { color: stationColorMap[stationCode] || '#333' },
+                        marker: { color: stationColorMap[stationCode] || '#333' },
+                        hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>Precipitación: %{y:.1f} mm<extra></extra>`,
+                    };
+                });
+
+                const layout = {
+                    // --- TÍTULO ACTUALIZADO ---
+                    title: 'Precipitación Acumulada Anual (Años Hidrológicamente Válidos)',
+                    xaxis: { title: 'Año', type: 'category' },
+                    yaxis: { title: 'Precipitación Acumulada (mm)' },
+                    hovermode: 'closest',
+                    legend: {
+                        traceorder: 'normal',
+                        title: { text: '<b>Estaciones</b><br> ', font: { size: 14 } },
+                        bgcolor: 'rgba(248, 249, 250, 0.95)',
+                        bordercolor: '#dee2e6',
+                        borderwidth: 1,
+                        borderRadius: 8,
+                        x: 1.02,
+                        xanchor: 'left'
+                    },
+                    margin: { r: 250 }
+                };
+
+                Plotly.newPlot('basinChartContainer', traces, layout, {responsive: true});
+
+            } catch (error) {
+                console.error(error);
+                chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`;
+            }
+        }
     </script>
 </body>
 </html>
-
