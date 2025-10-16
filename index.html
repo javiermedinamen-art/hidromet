@@ -61,7 +61,6 @@
         ::-webkit-scrollbar { height: 6px; }
         ::-webkit-scrollbar-thumb { background-color: #007bff; border-radius: 4px; }
 
-        /* --- ¡NUEVO ESTILO PARA LA CAJA METODOLÓGICA! --- */
         .methodology-box {
             margin-top: 25px;
             padding: 15px 20px;
@@ -226,6 +225,7 @@
             return FUENTES_MAP[fuente] || '#6c757d';
         }
 
+        // --- ¡LÓGICA DE ORDENAMIENTO CORREGIDA! ---
         async function cargarDatosGeoespaciales() {
             try {
                 const [nameResponse, geoResponse] = await Promise.all([
@@ -236,16 +236,61 @@
                 if (!geoResponse.ok) throw new Error(`Error al cargar GeoJSON de estaciones: ${geoResponse.status}`);
                 const geojsonData = await geoResponse.json();
                 
-                if (estacionesLayer) { mapa.removeLayer(estacionesLayer); layerControl.removeLayer(estacionesLayer); }
+                if (estacionesLayer) { 
+                    mapa.removeLayer(estacionesLayer); 
+                    layerControl.removeLayer(estacionesLayer); 
+                }
+
                 const stationSelect = document.getElementById('station-select');
                 stationSelect.innerHTML = '<option value="" selected disabled>--- Seleccione una Estación ---</option>';
+
+                const basinData = {}; // Objeto temporal para agrupar
+
+                geojsonData.features.forEach(feature => {
+                    const props = feature.properties;
+                    if (!props.code_internal || !props.basin) return;
+
+                    const basinName = props.basin.replace(/\s*\([^)]*\)$/, ''); // Nombre de cuenca sin código
+                    const basinCode = String(props.code_internal).substring(0, 3); // Código de cuenca de 3 dígitos
+
+                    if (!basinData[basinName]) {
+                        basinData[basinName] = {
+                            name: basinName,
+                            code: basinCode,
+                            stations: []
+                        };
+                    }
+                    basinData[basinName].stations.push(props);
+                });
+
+                // Convertir el objeto a un array para poder ordenarlo
+                const sortedBasins = Object.values(basinData).sort((a, b) => {
+                    // Ordenar numéricamente por código de cuenca
+                    return parseInt(a.code, 10) - parseInt(b.code, 10);
+                });
+
+                // Poblar el selector con los grupos ya ordenados
+                sortedBasins.forEach(basin => {
+                    const optgroup = document.createElement('optgroup');
+                    optgroup.label = `${basin.name} (${basin.code})`;
+
+                    // Ordenar las estaciones dentro de cada cuenca por su código numérico
+                    basin.stations.sort((a, b) => 
+                        parseInt(a.code_internal, 10) - parseInt(b.code_internal, 10)
+                    );
+
+                    basin.stations.forEach(props => {
+                        const option = new Option(`${props.name || 'N/A'} (${props.code_internal})`, props.code_internal);
+                        optgroup.appendChild(option);
+                    });
+                    stationSelect.appendChild(optgroup);
+                });
 
                 estacionesLayer = L.geoJSON(geojsonData, {
                     pointToLayer: (feature, latlng) => L.circleMarker(latlng, {radius: 6, fillColor: getColorByFuente(feature.properties.fuente), color: "#000", weight: 1, fillOpacity: 0.8}),
                     onEachFeature: (feature, layer) => {
                         const props = feature.properties;
                         if (props && props.code_internal) {
-                            stationSelect.appendChild(new Option(`${props.name || 'N/A'} (${props.code_internal})`, props.code_internal));
                             const html = `
                                 <div style="line-height: 1.5;">
                                     <h4 style="margin: 0 0 5px 0; color:${getColorByFuente(props.fuente)};">${props.name || 'N/A'}</h4>
@@ -604,8 +649,7 @@
                 });
 
                 const layout = {
-                    // --- TÍTULO ACTUALIZADO ---
-                    title: 'Precipitación Acumulada Anual',
+                    title: 'Precipitación Acumulada Anual (Años Hidrológicamente Válidos)',
                     xaxis: { title: 'Año', type: 'category' },
                     yaxis: { title: 'Precipitación Acumulada (mm)' },
                     hovermode: 'closest',
