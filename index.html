@@ -131,7 +131,7 @@
                 <select id="variable-select">
                     <option value="ppt" selected>Precipitación</option>
                     <option value="sd">Altura de Nieve</option>
-                </select>
+                    <option value="at">Temperatura</option> </select>
             </div>
         </div>
         
@@ -162,27 +162,33 @@
             <div class="methodology-box" id="methodology-ppt">
                 <h4>Nota Metodológica (Precipitación) 📝</h4>
                  <p>
-                    <strong>Acumulado Mensual:</strong> Un mes se muestra en el gráfico solo si contiene más del <strong>80%</strong> de los días con datos de precipitación.
+                    <strong>Acumulado Mensual:</strong> Un mes se muestra si contiene > <strong>80%</strong> de días con datos.
                 </p>
                 <p>
-                    <strong>Acumulado Anual:</strong> Un año se considera válido y se muestra en el gráfico si cumple <strong>ambas</strong> condiciones:
-                    <ul>
-                        <li>Tiene al menos <strong>9 meses</strong> que cumplen el criterio del 80% de datos diarios.</li>
-                        <li>Contiene datos para todos sus <strong>"meses hidrológicamente significativos"</strong> (aquellos que históricamente aportan el 75% del total anual de precipitación para esa estación).</li>
-                    </ul>
+                    <strong>Acumulado Anual:</strong> Un año es válido si tiene ≥ <strong>9 meses</strong> válidos Y datos para todos sus <strong>meses hidrológicamente significativos</strong> (75% del total anual).
                 </p>
-                <p>Este doble criterio asegura que los totales anuales sean representativos y no subestimen la precipitación por la ausencia de datos durante los meses más importantes.</p>
             </div>
             
             <div class="methodology-box" id="methodology-sd" style="display:none;">
                 <h4>Nota Metodológica (Altura de Nieve) 📝</h4>
                 <p>
-                    <strong>Promedio Mensual:</strong> Un mes se muestra en el gráfico solo si contiene más del <strong>50%</strong> de los días con datos de altura de nieve.
+                    <strong>Promedio Mensual:</strong> Un mes se muestra si contiene > <strong>50%</strong> de días con datos.
                 </p>
-                <p>
-                    El análisis de "Acumulado Anual Robusto" no se aplica a la altura de nieve, ya que esta variable representa un estado (stock) y no un flujo acumulable como la precipitación.
+                 <p>
+                    <strong>Máximo Anual:</strong> Se muestra el valor máximo de los promedios mensuales para cada año que tenga al menos <strong>9 meses</strong> válidos.
                 </p>
             </div>
+
+            <div class="methodology-box" id="methodology-at" style="display:none;">
+                <h4>Nota Metodológica (Temperatura) 📝</h4>
+                <p>
+                    <strong>Promedio Mensual:</strong> Un mes se muestra si contiene > <strong>80%</strong> de días con datos.
+                </p>
+                 <p>
+                    <strong>Extremos Anuales:</strong> Se muestra el valor máximo y mínimo de los promedios mensuales para cada año que tenga al menos <strong>9 meses</strong> válidos.
+                </p>
+            </div>
+
         </div>
     </div>
 
@@ -210,10 +216,32 @@
 
         const HIGH_CONTRAST_PALETTE = ['#332288', '#117733', '#44AA99', '#88CCEE', '#DDCC77', '#CC6677', '#AA4499', '#882255', '#E69F00', '#56B4E9', '#009E73', '#F0E442'];
         
+        // --- ¡CONFIGURACIÓN UI ACTUALIZADA! ---
         const VARIABLE_UI_CONFIG = {
-            'ppt': { name: "Precipitación", unit: "mm", data_col: "Precipitacion_mm", agg_monthly_desc: "Acumulado Mensual", run_annual: true },
-            'sd': { name: "Altura de Nieve", unit: "cm", data_col: "Altura_de_Nieve_cm", agg_monthly_desc: "Promedio Mensual", run_annual: false }
+            'ppt': { 
+                name: "Precipitación", 
+                unit: "mm", 
+                data_col: "Precipitacion_mm", // Debe coincidir con backend
+                agg_monthly_desc: "Acumulado Mensual", 
+                annual_analysis_type: 'ppt_robust' // Tipo de análisis anual
+            },
+            'sd': { 
+                name: "Altura de Nieve", 
+                unit: "cm", 
+                data_col: "Altura_de_Nieve_cm", // Debe coincidir con backend
+                agg_monthly_desc: "Promedio Mensual", 
+                annual_analysis_type: 'sd_max' // Tipo de análisis anual
+            },
+            'at': { 
+                name: "Temperatura", 
+                unit: "C", 
+                data_col: "Temperatura_°C", // ¡NUEVO! Debe coincidir con backend
+                agg_monthly_desc: "Promedio Mensual", 
+                annual_analysis_type: 'at_stats' // Tipo de análisis anual
+            }
         };
+        // --- FIN ACTUALIZACIÓN ---
+
 
         const HIERARCHY_CONFIG = {
             'cuencas': { id_property: 'COD_CUEN', name_property: 'NOM_CUEN', name: 'Cuenca' },
@@ -237,32 +265,42 @@
 
         function onVariableChange() {
             console.log(`Cambiando a variable: ${currentVariable}`);
-            switchHierarchyLayer(currentHierarchy); // Llama a switchHierarchyLayer PRIMERO
-            filterStationsOnMap();
-            updateMethodologyBox();
-            filterStationDropdown();
-
+            
+            // 1. Limpia los gráficos y RESTAURA los mensajes iniciales
             Plotly.purge('chartContainer');
-            // Muestra el mensaje 'chartStatus' en lugar de intentar ocultarlo
             const chartStatus = document.getElementById('chartStatus');
-            if (chartStatus) { // Verifica si aún existe (debería existir inicialmente)
-                 chartStatus.style.display = 'block';
-                 chartStatus.innerText = 'Seleccione una estación en el mapa o en el selector...';
+            if (!chartStatus) {
+                document.getElementById('chartContainer').innerHTML = '<p id="chartStatus" style="text-align: center; color: #6c757d; padding: 100px;"></p>';
             }
-            document.getElementById('yearButtonsContainer').innerHTML = '';
+            document.getElementById('chartStatus').innerText = 'Seleccione una estación en el mapa o en el selector...';
+            document.getElementById('chartStatus').style.display = 'block'; 
+            document.getElementById('yearButtonsContainer').innerHTML = ''; 
 
             Plotly.purge('basinChartContainer');
-             // Muestra el mensaje 'basinChartStatus' en lugar de intentar ocultarlo
             const basinChartStatus = document.getElementById('basinChartStatus');
-            if (basinChartStatus) { // Verifica si aún existe
-                 basinChartStatus.style.display = 'block';
-                 basinChartStatus.innerText = 'Seleccione un polígono en el mapa para comparar.';
+            if (!basinChartStatus) {
+                 document.getElementById('basinChartContainer').innerHTML = '<p id="basinChartStatus" style="text-align: center; color: #6c757d; padding: 100px;"></p>';
             }
-            document.getElementById('basinYearButtonsContainer').innerHTML = '';
+            document.getElementById('basinChartStatus').innerText = 'Seleccione un polígono en el mapa para comparar.';
+            document.getElementById('basinChartStatus').style.display = 'block'; 
+            document.getElementById('basinYearButtonsContainer').innerHTML = ''; 
+            document.getElementById('comparator-title').innerText = 'Análisis Comparativo por Cuenca/Subcuenca'; 
+            
+            // 2. Recarga la capa de polígonos
+            switchHierarchyLayer(currentHierarchy); 
+
+            // 3. Filtra marcadores y dropdown
+            filterStationsOnMap();
+            filterStationDropdown(); 
+
+            // 4. Actualiza la nota metodológica
+            updateMethodologyBox();
+            
+            console.log("Paneles reseteados por cambio de variable.");
         }
 
         function filterStationsOnMap() {
-            // ... (sin cambios) ...
+             // ... (sin cambios) ...
              if (!estacionesLayer) return;
             estacionesLayer.eachLayer(layer => {
                 const props = layer.feature.properties;
@@ -283,7 +321,7 @@
         
         function filterStationDropdown() {
              // ... (sin cambios) ...
-            if (!globalGeojsonData) return; 
+             if (!globalGeojsonData) return; 
 
             const stationSelect = document.getElementById('station-select');
             const previouslySelected = stationSelect.value; 
@@ -323,20 +361,26 @@
             }
         }
         
+        // --- ¡FUNCIÓN ACTUALIZADA! ---
         function updateMethodologyBox() {
-             // ... (sin cambios) ...
+            document.getElementById('methodology-ppt').style.display = 'none';
+            document.getElementById('methodology-sd').style.display = 'none';
+            document.getElementById('methodology-at').style.display = 'none'; 
+
             if (currentVariable === 'ppt') {
                 document.getElementById('methodology-ppt').style.display = 'block';
-                document.getElementById('methodology-sd').style.display = 'none';
             } else if (currentVariable === 'sd') {
-                document.getElementById('methodology-ppt').style.display = 'none';
                 document.getElementById('methodology-sd').style.display = 'block';
+            } else if (currentVariable === 'at') { 
+                document.getElementById('methodology-at').style.display = 'block';
             }
         }
+        // --- FIN ACTUALIZACIÓN ---
+
 
         function inicializarMapa() {
              // ... (sin cambios) ...
-            mapa = L.map('mapa').setView([-33.4489, -70.6693], 5);
+             mapa = L.map('mapa').setView([-33.4489, -70.6693], 5);
             mapa.createPane('cuencasPane');
             mapa.getPane('cuencasPane').style.zIndex = 350;
 
@@ -369,12 +413,12 @@
 
         function getColorByFuente(fuente) {
              // ... (sin cambios) ...
-            fuente = (fuente || '').toUpperCase().replace(/_NERC/g, ''); 
+             fuente = (fuente || '').toUpperCase().replace(/_NERC/g, ''); 
             return FUENTES_MAP[fuente] || '#6c757d';
         }
 
         async function cargarDatosGeoespaciales() {
-             // ... (sin cambios, mantiene logs de depuración) ...
+             // ... (sin cambios) ...
              try {
                 const [nameResponse, geoResponse] = await Promise.all([
                     fetch(`${DATA_STATIC_BASE_URL}/station_names.json`),
@@ -447,7 +491,7 @@
 
         function populateStationDropdown(features) {
              // ... (sin cambios) ...
-            const stationSelect = document.getElementById('station-select');
+             const stationSelect = document.getElementById('station-select');
             stationSelect.innerHTML = '<option value="" selected disabled>--- Seleccione una Estación ---</option>';
             
             const basinData = {};
@@ -485,13 +529,13 @@
         }
 
         async function displayTimeSeries(stationCode) {
+            // --- ¡CORRECCIÓN APLICADA! (Línea style.display eliminada) ---
             if (!stationCode) return;
             const chartDiv = document.getElementById('chartContainer');
-            Plotly.purge(chartDiv); // Elimina contenido anterior, incluyendo #chartStatus si existía
+            Plotly.purge(chartDiv); 
             chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando serie temporal para ${stationCode}...</p>`; 
             document.getElementById('station-select').value = stationCode;
-            // No intentes ocultar #chartStatus aquí porque ya no existe
-
+            
             const csvUrl = `${DATA_STATIC_BASE_URL}/${stationCode}_${currentVariable}.csv`;
             console.log("Intentando cargar CSV:", csvUrl); 
 
@@ -512,20 +556,13 @@
                 const parseResult = Papa.parse(csvText, {header: true, dynamicTyping: true, skipEmptyLines: true});
                 const data = parseResult.data;
                 
-                if (parseResult.errors.length > 0) {
-                     console.warn(`Errores de PapaParse para ${csvUrl}:`, parseResult.errors);
-                }
-                if (data.length === 0) {
-                     console.warn(`PapaParse no encontró datos en ${csvUrl}. ¿El archivo está vacío o mal formateado?`);
-                     throw new Error(`No se encontraron datos en el archivo CSV para ${stationCode}.`);
-                }
+                if (parseResult.errors.length > 0) { console.warn(`Errores de PapaParse para ${csvUrl}:`, parseResult.errors); }
+                if (data.length === 0) { console.warn(`PapaParse no encontró datos en ${csvUrl}.`); throw new Error(`No se encontraron datos en el archivo CSV para ${stationCode}.`); }
                  
                 const stationName = stationNameMap[stationCode] || stationCode; 
-                 if (!stationNameMap[stationCode]) {
-                     console.warn(`No se encontró el nombre para la estación ${stationCode} en stationNameMap.`);
-                 }
+                 if (!stationNameMap[stationCode]) { console.warn(`No se encontró el nombre para ${stationCode}.`); }
 
-                const years = [...new Set(data.map(d => parseInt(d.Fecha.substring(0, 4), 10)))].sort();
+                const years = [...new Set(data.map(d => parseInt(d.Fecha.substring(0, 4), 10)))].sort((a,b) => a-b); // Asegura orden numérico
                 const container = document.getElementById("yearButtonsContainer");
                 container.innerHTML = "";
 
@@ -548,8 +585,8 @@
             }
         }
                 
+        // --- ¡FUNCIÓN ACTUALIZADA! ---
         function renderPlot(data, stationName, year, activeBtn) {
-             // ... (sin cambios) ...
             document.querySelectorAll("#yearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
             
@@ -557,31 +594,34 @@
             const dataColumnName = config.data_col; 
             
             if (data.length > 0 && !(dataColumnName in data[0])) {
-                 console.error(`La columna '${dataColumnName}' esperada no se encontró en los datos CSV. Columnas disponibles:`, Object.keys(data[0]));
-                 document.getElementById('chartContainer').innerHTML = `<p style="text-align:center;color:red;padding:50px;">Error: La columna de datos '${dataColumnName}' no se encontró en el archivo CSV.</p>`;
+                 console.error(`Columna '${dataColumnName}' no encontrada. Disponibles:`, Object.keys(data[0]));
+                 document.getElementById('chartContainer').innerHTML = `<p style="text-align:center;color:red;padding:50px;">Error: Columna '${dataColumnName}' no encontrada.</p>`;
                  return; 
             }
 
-            let trace = { 
+            let trace = {
                 x: data.map(d => d.Fecha), 
                 y: data.map(d => {
                     let v = d[dataColumnName]; 
                     if(typeof v === 'string') v = parseFloat(v.trim().replace(',', '.')); 
-                    return isFinite(v) ? v : null;
-                }), 
-                type: 'bar', 
-                marker: { color: "#007bff" } 
+                    return isFinite(v) ? v : null; 
+                })
             };
 
-            // Define el tipo de gráfico según la variable
-            if (currentVariable === 'sd') { // Altura de Nieve
+            // Define tipo y color según la variable
+            if (currentVariable === 'sd') { // Nieve
                  trace.type = 'scatter';
-                 trace.mode = 'lines+markers'; // Líneas con puntos
-                 trace.line = { color: "#007bff" }; // Color de la línea
-                 trace.marker = { color: "#007bff", size: 4 }; // Color y tamaño de los puntos
-            } else { // Precipitación (u otras variables futuras)
+                 trace.mode = 'lines+markers'; 
+                 trace.line = { color: "#88CCEE" }; // Azul claro (cyan)
+                 trace.marker = { color: "#88CCEE", size: 4 }; 
+            } else if (currentVariable === 'at') { // Temperatura
+                trace.type = 'scatter';
+                 trace.mode = 'lines+markers'; 
+                 trace.line = { color: "#CC6677" }; // Rojo coral
+                 trace.marker = { color: "#CC6677", size: 4 };
+            } else { // Precipitación (default)
                  trace.type = 'bar';
-                 trace.marker = { color: "#007bff" }; // Color de las barras
+                 trace.marker = { color: "#007bff" }; // Azul
             }
             
             const layout = {
@@ -589,15 +629,18 @@
                 margin: { l: 50, r: 50, t: 60, b: 50 }, 
                 xaxis: { title: "Fecha", rangeslider: {visible: false} },
                 yaxis: { title: `${config.name} (${config.unit})` }, 
-                hovermode: "x unified",
+                hovermode: "x unified", 
             };
+
             Plotly.react("chartContainer", [trace], layout, {responsive: true});
-             console.log(`Gráfico renderizado para ${stationName} (${year || 'Completo'})`); 
+             console.log(`Gráfico renderizado para ${stationName} (${year || 'Completo'}) - Tipo: ${trace.type}`); 
         }
+        // --- FIN ACTUALIZACIÓN ---
+
 
         async function switchHierarchyLayer(hierarchyKey) {
-             // ... (sin cambios en la lógica principal, pero se mantienen logs) ...
-            currentHierarchy = hierarchyKey; 
+             // ... (sin cambios, mantiene corrección y logs) ...
+             currentHierarchy = hierarchyKey; 
             console.log(`Cambiando a jerarquía: ${hierarchyKey}`); 
             
             let removedCuencas = false, removedSub = false, removedSubSub = false;
@@ -677,8 +720,8 @@
         }
 
         function updateLayerInteractivity() {
-             // ... (sin cambios, mantiene logs) ...
-            if (!mapa) return;
+             // ... (sin cambios) ...
+             if (!mapa) return;
             const zoom = mapa.getZoom();
 
             let activeHierarchyLayer;
@@ -715,7 +758,6 @@
                         layer.setRadius(6);
                         if (hasData) {
                             if (!layer.listens('click')) { 
-                                // console.log(`Adjuntando listeners a ${props.code_internal} (Zoom ${zoom})`); 
                                 layer.on({
                                     mouseover: function () { this.openPopup(); },
                                     mouseout: function () { this.closePopup(); },
@@ -724,7 +766,6 @@
                             }
                         } else {
                              if (layer.listens('click')) { 
-                                 // console.log(`Quitando listeners de ${props.code_internal} (Zoom ${zoom})`); 
                                  layer.off('mouseover mouseout click');
                              }
                         }
@@ -735,12 +776,13 @@
             }
         }
 
+        // --- ¡FUNCIÓN ACTUALIZADA! ---
         async function displayBasinChart(featureId, featureName, hierarchyKey) {
             const chartDiv = document.getElementById('basinChartContainer');
             const buttonContainer = document.getElementById('basinYearButtonsContainer');
-            Plotly.purge(chartDiv); // Elimina contenido anterior, incluyendo #basinChartStatus
+            Plotly.purge(chartDiv); 
             buttonContainer.innerHTML = '';
-            // No intentes ocultar #basinChartStatus aquí porque ya no existe
+            // No intentes ocultar #basinChartStatus
 
             const hierarchyConfig = HIERARCHY_CONFIG[hierarchyKey];
             const locationTitle = `${hierarchyConfig.name} ${featureName} (${featureId})`;
@@ -777,8 +819,9 @@
                      renderBasinPlot({}, null, null); 
                      return;
                 }
-                const years = [...new Set(allDates.map(d => parseInt(d.substring(0, 4), 10)))].sort();
+                const years = [...new Set(allDates.map(d => parseInt(d.substring(0, 4), 10)))].sort((a,b)=>a-b);
 
+                // --- Botones de Año ---
                 const allBtn = document.createElement("button");
                 allBtn.textContent = "Serie Completa";
                 allBtn.classList.add("active");
@@ -788,7 +831,7 @@
                 years.forEach(year => {
                     const btn = document.createElement("button");
                     btn.textContent = year;
-                    btn.onclick = () => {
+                    btn.onclick = () => { /* ... (lógica de filtro sin cambios) ... */ 
                         const filteredData = {};
                         for (const stationCode in currentBasinFullData) {
                             const station = currentBasinFullData[stationCode];
@@ -796,38 +839,58 @@
                             let hasNonNullData = false;
                             station.dates.forEach((date, i) => {
                                 if (parseInt(date.substring(0, 4), 10) === year) {
-                                    filteredDates.push(date);
-                                    filteredValues.push(station.values[i]);
+                                    filteredDates.push(date); filteredValues.push(station.values[i]);
                                     if (station.values[i] !== null) hasNonNullData = true;
                                 }
                             });
-                            if (hasNonNullData) {
-                                filteredData[stationCode] = { ...station, dates: filteredDates, values: filteredValues };
-                            }
+                            if (hasNonNullData) { filteredData[stationCode] = { ...station, dates: filteredDates, values: filteredValues }; }
                         }
                         renderBasinPlot(filteredData, year, btn);
                     };
                     buttonContainer.appendChild(btn);
                 });
+                // --- Fin Botones de Año ---
 
-                const config = VARIABLE_UI_CONFIG[currentVariable];
-                if (config.run_annual) { 
-                    const annualBtn = document.createElement("button");
-                    annualBtn.textContent = "Acumulación Anual";
-                    annualBtn.onclick = () => renderBasinAnnualPlot(featureId, hierarchyKey, annualBtn);
-                    buttonContainer.appendChild(annualBtn);
+                // --- BOTÓN DE ANÁLISIS ANUAL (DINÁMICO) ---
+                const annualConfig = VARIABLE_UI_CONFIG[currentVariable];
+                const analysisType = annualConfig.annual_analysis_type;
+
+                if (analysisType) { // Si hay algún tipo de análisis anual definido
+                     const annualBtn = document.createElement("button");
+                     let buttonText = "Análisis Anual"; // Texto por defecto
+                     let clickHandler = null;
+
+                     if (analysisType === 'ppt_robust') {
+                          buttonText = "Acumulación Anual";
+                          clickHandler = () => renderBasinAnnualPlot(featureId, hierarchyKey, annualBtn);
+                     } else if (analysisType === 'sd_max') {
+                          buttonText = "Máximo Anual";
+                          clickHandler = () => renderBasinAnnualMaxPlot(featureId, hierarchyKey, annualBtn);
+                     } else if (analysisType === 'at_stats') {
+                          buttonText = "Extremos Anuales";
+                          clickHandler = () => renderBasinAnnualStatsPlot(featureId, hierarchyKey, annualBtn);
+                     }
+                     
+                     if(clickHandler) {
+                         annualBtn.textContent = buttonText;
+                         annualBtn.onclick = clickHandler;
+                         buttonContainer.appendChild(annualBtn);
+                     }
                 }
+                // --- FIN BOTÓN ANÁLISIS ANUAL ---
                 
-                renderBasinPlot(currentBasinFullData, null, allBtn);
+                renderBasinPlot(currentBasinFullData, null, allBtn); // Muestra el gráfico mensual por defecto
             } catch (error) {
                 console.error("Error en displayBasinChart:", error); 
                 chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`;
                 currentBasinFullData = null;
             }
         }
+        // --- FIN ACTUALIZACIÓN ---
+
 
         function renderBasinPlot(dataToPlot, year, activeBtn) {
-             // ... (sin cambios, mantiene logs) ...
+             // ... (sin cambios) ...
             document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
 
@@ -883,31 +946,23 @@
         }
         
         async function renderBasinAnnualPlot(featureId, hierarchyKey, activeBtn) {
-             // ... (sin cambios, mantiene logs) ...
-            document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
+             // ... (sin cambios, específica para PPT) ...
+             document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
 
             const chartDiv = document.getElementById('basinChartContainer');
             chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando datos de acumulación anual...</p>`;
 
-            const annualUrl = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${featureId}_${currentVariable}_annual.json`;
-            console.log("Intentando cargar JSON anual:", annualUrl); 
+            const annualUrl = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${featureId}_${currentVariable}_annual.json`; // _ppt_annual.json
+            console.log("Intentando cargar JSON anual PPT:", annualUrl); 
 
             try {
                 const response = await fetch(annualUrl);
-                
-                if (!response.ok) {
-                     console.error(`Error ${response.status} al cargar ${annualUrl}`); 
-                     throw new Error(`No se encontraron datos de acumulación anual.`);
-                }
+                if (!response.ok) { console.error(`Error ${response.status} al cargar ${annualUrl}`); throw new Error(`No se encontraron datos de acumulación anual.`); }
                  console.log(`JSON anual ${annualUrl} cargado OK.`); 
                 const annualData = await response.json();
 
-                 if (Object.keys(annualData).length === 0) {
-                     console.warn("renderBasinAnnualPlot: No hay datos anuales para graficar.");
-                     Plotly.newPlot('basinChartContainer', [], {title: 'No hay datos anuales disponibles'});
-                     return;
-                 }
+                 if (Object.keys(annualData).length === 0) { console.warn("renderBasinAnnualPlot: No hay datos anuales PPT."); Plotly.newPlot('basinChartContainer', [], {title: 'No hay datos anuales disponibles'}); return; }
 
                 const sortedStations = Object.entries(annualData).sort(([, stationA], [, stationB]) => {
                     const elevA = stationA.elevation === null ? -Infinity : stationA.elevation;
@@ -915,7 +970,7 @@
                     return elevB - elevA;
                 });
 
-                const config = VARIABLE_UI_CONFIG[currentVariable];
+                const config = VARIABLE_UI_CONFIG[currentVariable]; // Será PPT aquí
                 const yAxisTitle = `Acumulado Anual (${config.unit})`;
                 const hoverUnit = config.unit;
                 const hoverName = config.name;
@@ -923,34 +978,167 @@
                 const traces = sortedStations.map(([stationCode, station]) => {
                     const elevationText = station.elevation !== null ? `${station.elevation} msnm` : 'N/A';
                     return {
-                        x: station.years,
-                        y: station.values,
-                        name: `${station.name} (${elevationText})`,
-                        type: 'scatter',
-                        mode: 'lines+markers',
-                        line: { color: stationColorMap[stationCode] || '#333' },
-                        marker: { color: stationColorMap[stationCode] || '#333' },
+                        x: station.years, y: station.values, name: `${station.name} (${elevationText})`,
+                        type: 'scatter', mode: 'lines+markers',
+                        line: { color: stationColorMap[stationCode] || '#333' }, marker: { color: stationColorMap[stationCode] || '#333' },
                         hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>${hoverName}: %{y:.1f} ${hoverUnit}<extra></extra>`,
                     };
                 });
 
                 const layout = {
-                    title: 'Precipitación Acumulada Anual (Años Hidrológicamente Válidos)',
-                    xaxis: { title: 'Año', type: 'category' },
-                    yaxis: { title: yAxisTitle }, 
+                    title: 'Precipitación Acumulada Anual (Años Válidos)',
+                    xaxis: { title: 'Año', type: 'category' }, yaxis: { title: yAxisTitle }, 
                     hovermode: 'closest',
                     legend: { traceorder: 'normal', title: { text: '<b>Estaciones</b><br> ', font: { size: 14 } }, bgcolor: 'rgba(248, 249, 250, 0.95)', bordercolor: '#dee2e6', borderwidth: 1, borderRadius: 8, x: 1.02, xanchor: 'left' },
                     margin: { r: 250 }
                 };
-
                 Plotly.newPlot('basinChartContainer', traces, layout, {responsive: true});
-                 console.log("Gráfico anual renderizado."); 
+                 console.log("Gráfico anual PPT renderizado."); 
 
-            } catch (error) {
-                console.error("Error en renderBasinAnnualPlot:", error); 
-                chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`;
-            }
+            } catch (error) { console.error("Error en renderBasinAnnualPlot:", error); chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`; }
         }
+
+        // --- ¡NUEVA FUNCIÓN para SD Max Anual! ---
+        async function renderBasinAnnualMaxPlot(featureId, hierarchyKey, activeBtn) {
+            document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
+            if (activeBtn) activeBtn.classList.add("active");
+
+            const chartDiv = document.getElementById('basinChartContainer');
+            chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando máximos anuales de nieve...</p>`;
+
+            // Construye la URL del nuevo archivo JSON
+            const annualUrl = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${featureId}_sd_annual_max.json`; 
+            console.log("Intentando cargar JSON anual SD Max:", annualUrl); 
+
+            try {
+                const response = await fetch(annualUrl);
+                if (!response.ok) { console.error(`Error ${response.status} al cargar ${annualUrl}`); throw new Error(`No se encontraron datos de máximo anual de nieve.`); }
+                 console.log(`JSON anual ${annualUrl} cargado OK.`); 
+                const annualData = await response.json();
+
+                 if (Object.keys(annualData).length === 0) { console.warn("renderBasinAnnualMaxPlot: No hay datos anuales SD max."); Plotly.newPlot('basinChartContainer', [], {title: 'No hay datos de máximo anual de nieve disponibles'}); return; }
+
+                const sortedStations = Object.entries(annualData).sort(([, stationA], [, stationB]) => {
+                    const elevA = stationA.elevation === null ? -Infinity : stationA.elevation;
+                    const elevB = stationB.elevation === null ? -Infinity : stationB.elevation;
+                    return elevB - elevA;
+                });
+
+                const config = VARIABLE_UI_CONFIG['sd']; // Usa config de SD
+                const yAxisTitle = `Máximo Mensual Anual (${config.unit})`;
+                const hoverUnit = config.unit;
+                const hoverName = config.name;
+
+                const traces = sortedStations.map(([stationCode, station]) => {
+                    const elevationText = station.elevation !== null ? `${station.elevation} msnm` : 'N/A';
+                    return {
+                        x: station.years, 
+                        y: station.values, // 'values' contiene los máximos anuales
+                        name: `${station.name} (${elevationText})`,
+                        type: 'scatter', mode: 'lines+markers',
+                        line: { color: stationColorMap[stationCode] || '#333' }, 
+                        marker: { color: stationColorMap[stationCode] || '#333' },
+                        hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>Máx. ${hoverName}: %{y:.1f} ${hoverUnit}<extra></extra>`, // Texto hover ajustado
+                    };
+                });
+
+                const layout = {
+                    title: 'Altura de Nieve Máxima Mensual por Año (Años Válidos)', // Título ajustado
+                    xaxis: { title: 'Año', type: 'category' }, yaxis: { title: yAxisTitle }, 
+                    hovermode: 'closest',
+                    legend: { traceorder: 'normal', title: { text: '<b>Estaciones</b><br> ', font: { size: 14 } }, bgcolor: 'rgba(248, 249, 250, 0.95)', bordercolor: '#dee2e6', borderwidth: 1, borderRadius: 8, x: 1.02, xanchor: 'left' },
+                    margin: { r: 250 }
+                };
+                Plotly.newPlot('basinChartContainer', traces, layout, {responsive: true});
+                 console.log("Gráfico anual SD Max renderizado."); 
+
+            } catch (error) { console.error("Error en renderBasinAnnualMaxPlot:", error); chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`; }
+        }
+
+        // --- ¡NUEVA FUNCIÓN para AT Max/Min Anual! ---
+        async function renderBasinAnnualStatsPlot(featureId, hierarchyKey, activeBtn) {
+            document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
+            if (activeBtn) activeBtn.classList.add("active");
+
+            const chartDiv = document.getElementById('basinChartContainer');
+            chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando extremos anuales de temperatura...</p>`;
+
+            // Construye la URL del nuevo archivo JSON
+            const annualUrl = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${featureId}_at_annual_stats.json`; 
+            console.log("Intentando cargar JSON anual AT Stats:", annualUrl); 
+
+            try {
+                const response = await fetch(annualUrl);
+                if (!response.ok) { console.error(`Error ${response.status} al cargar ${annualUrl}`); throw new Error(`No se encontraron datos de extremos anuales de temperatura.`); }
+                 console.log(`JSON anual ${annualUrl} cargado OK.`); 
+                const annualData = await response.json();
+
+                 if (Object.keys(annualData).length === 0) { console.warn("renderBasinAnnualStatsPlot: No hay datos anuales AT stats."); Plotly.newPlot('basinChartContainer', [], {title: 'No hay datos de extremos anuales de temperatura disponibles'}); return; }
+
+                const sortedStations = Object.entries(annualData).sort(([, stationA], [, stationB]) => {
+                    const elevA = stationA.elevation === null ? -Infinity : stationA.elevation;
+                    const elevB = stationB.elevation === null ? -Infinity : stationB.elevation;
+                    return elevB - elevA;
+                });
+
+                const config = VARIABLE_UI_CONFIG['at']; // Usa config de AT
+                const yAxisTitle = `Temperatura (${config.unit})`;
+                const hoverUnit = config.unit;
+
+                const traces = []; // Array para acumular todas las trazas (max y min)
+
+                sortedStations.forEach(([stationCode, station]) => {
+                    const elevationText = station.elevation !== null ? `${station.elevation} msnm` : 'N/A';
+                    const stationColor = stationColorMap[stationCode] || '#333'; // Color base
+
+                    // Traza para Máximos (triángulo hacia arriba)
+                    traces.push({
+                        x: station.years, 
+                        y: station.max_values, // Usa max_values
+                        name: `${station.name} (${elevationText}) - Máx`, // Leyenda indica Máx
+                        legendgroup: stationCode, // Agrupa leyenda de max y min
+                        type: 'scatter', mode: 'lines+markers',
+                        line: { color: stationColor }, // Mismo color
+                        marker: { 
+                            color: stationColor, 
+                            symbol: 'triangle-up', // Símbolo Max
+                            size: 7
+                        }, 
+                        hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>Temp. Máx: %{y:.1f} ${hoverUnit}<extra></extra>`,
+                    });
+
+                     // Traza para Mínimos (triángulo hacia abajo)
+                    traces.push({
+                        x: station.years, 
+                        y: station.min_values, // Usa min_values
+                        name: `${station.name} (${elevationText}) - Mín`, // Leyenda indica Mín
+                        legendgroup: stationCode, // Agrupa leyenda
+                        showlegend: false, // Opcional: Oculta la segunda entrada de leyenda para limpieza
+                        type: 'scatter', mode: 'lines+markers',
+                        line: { color: stationColor, dash: 'dot' }, // Mismo color, línea punteada opcional
+                        marker: { 
+                            color: stationColor, 
+                            symbol: 'triangle-down', // Símbolo Min
+                            size: 7 
+                        }, 
+                        hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>Temp. Mín: %{y:.1f} ${hoverUnit}<extra></extra>`,
+                    });
+                });
+
+                const layout = {
+                    title: 'Temperatura Máxima y Mínima Mensual por Año (Años Válidos)', // Título ajustado
+                    xaxis: { title: 'Año', type: 'category' }, yaxis: { title: yAxisTitle }, 
+                    hovermode: 'closest', // 'closest' funciona mejor con múltiples trazas
+                    legend: { traceorder: 'grouped', title: { text: '<b>Estaciones (Máx/Mín)</b><br> ', font: { size: 14 } }, bgcolor: 'rgba(248, 249, 250, 0.95)', bordercolor: '#dee2e6', borderwidth: 1, borderRadius: 8, x: 1.02, xanchor: 'left' },
+                    margin: { r: 250 }
+                };
+                Plotly.newPlot('basinChartContainer', traces, layout, {responsive: true});
+                 console.log("Gráfico anual AT Stats renderizado."); 
+
+            } catch (error) { console.error("Error en renderBasinAnnualStatsPlot:", error); chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`; }
+        }
+        // --- FIN NUEVAS FUNCIONES ---
+
     </script>
 </body>
 </html>

@@ -1,0 +1,30 @@
+{
+  "1150003": {
+    "name": "Rio Tranquilo",
+    "elevation": 1250.0,
+    "years": [
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null
+    ]
+  },
+  "11503002": {
+    "name": "Portezuelo Iba ez",
+    "elevation": 1080.0,
+    "years": [
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      81.0,
+      56.3
+    ]
+  }
+}

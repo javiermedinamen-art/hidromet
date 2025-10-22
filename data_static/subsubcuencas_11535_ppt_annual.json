@@ -1,1 +1,16 @@
-{"11533001": {"name": "Estancia Valle Chacabuco", "elevation": 343.0, "years": [2022, 2023, 2024], "values": [325.9, 378.9, 247.0]}}
+{
+  "11533001": {
+    "name": "Estancia Valle Chacabuco",
+    "elevation": 343.0,
+    "years": [
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      325.9,
+      378.9,
+      247.0
+    ]
+  }
+}

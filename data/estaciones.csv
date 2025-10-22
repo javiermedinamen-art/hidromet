@@ -2,6 +2,8 @@ code_internal,name,lat,lon,elevation,basin,fuente,nom_cuen
 04302001,Rio Toro antes Junta Rio La Laguna,-29.97278,-70.09194,2165,Rio Elqui,DGA,Rio Elqui
 04302014,Juntas,-29.97667,-70.09417,2150,Rio Elqui,DGA,Rio Elqui
 04313003,Cochiguaz,-30.1425,-70.40667,1560,Rio Elqui,DGA,Rio Elqui
+0430005,El Tapado 2,-30.15400,-69.89600,4250,Rio Elqui,CEAZAMET,Rio Elqui
+0430006,Estero Derecho,-30.38400,-70.41300,3020,Rio Elqui,CEAZAMET,Rio Elqui
 04300004,Glaciar Tapado en Los Corrales,-30.1554,-69.88275,4060,Rio Elqui,DGA,Rio Elqui
 0430004,Tapado (TPF),-30.1583,-69.90818,4306,Rio Elqui,CEAZAMET,Rio Elqui
 04301005,Embalse La Laguna,-30.20222,-70.04139,3160,Rio Elqui,DGA,Rio Elqui
@@ -16,10 +18,18 @@ code_internal,name,lat,lon,elevation,basin,fuente,nom_cuen
 05403002,Rio Aconcagua en Rio Blanco,-32.91028,-70.30722,1420,Rio Aconcagua,DGA,Rio Aconcagua
 05411001,Estero Pocuro en El Sifon,-32.92056,-70.54333,1000,Rio Aconcagua,DGA,Rio Aconcagua
 05403006,Riecillos,-32.9225,-70.35722,1290,Rio Aconcagua,DGA,Rio Aconcagua
+05400005,Glaciar Monos de Agua,-32.99361,-70.02833,4350,Rio Aconcagua,DGA,Rio Aconcagua
 05733007,Caleu,-33.00556,-70.99361,1120,Rio Maipo,DGA,Rio Maipo
 05706004,Glaciar Juncal Sur,-33.1175,-70.1119,4035,Rio Maipo,DGA,Rio Maipo
 05706002,Glaciar Olivares Gamma,-33.15639,-70.15278,3628,Rio Maipo,DGA,Rio Maipo
 05706005,Glaciar Olivares Alfa,-33.1786,-70.21806,4230,Rio Maipo,DGA,Rio Maipo
+05721017,Estero Yerba Loca en Piedra Carvajal,-33.22194,-70.27361,3250,Rio Maipo,DGA,Rio Maipo
+cerro3puntas,Cerro3Puntas,-33.32000,-70.23194,3685,Rio Maipo,CR2,Rio Maipo
+05722001,Estero Arrayan en La Montosa,-33.32889,-70.45944,880,Rio Maipo,DGA,Rio Maipo
+vallenevado_meteo,ValleNevado_METEO,-33.35157,-70.24680,3042, Rio Maipo,UdeChile,Rio Maipo
+vallenevado_spa,ValleNevado_SPA,-33.35157,-70.24680,3042,Rio Maipo,UdeChile,Rio Maipo
+05705004,Glaciar Tupungatito Bajo,-33.38667,-69.84972,4425,Rio Maipo,DGA,Rio Maipo
+05705003,Glaciar Tupungatito Alto,-33.39389,-69.81250,5575,Rio Maipo,DGA,Rio Maipo
 05706003,Valle Olivares,-33.19099,-70.11405,2787,Rio Maipo,DGA,Rio Maipo
 05721016,Rio San Francisco antes Junta Estero Yerba Loca,-33.30861,-70.35722,1535,Rio Maipo,DGA,Rio Maipo
 05721001,Estero Yerba Loca antes Junta San Francisco,-33.34444,-70.36389,1350,Rio Maipo,DGA,Rio Maipo
@@ -27,7 +37,9 @@ code_internal,name,lat,lon,elevation,basin,fuente,nom_cuen
 05706001,Rio Olivares antes Junta Rio Colorado,-33.49306,-70.1375,1580,Rio Maipo,DGA,Rio Maipo
 05705001,Rio Colorado Antes Junta Rio Olivares,-33.495,-70.13722,1550,Rio Maipo,DGA,Rio Maipo
 05707003,Maitenes,-33.53111,-70.26194,1143,Rio Maipo,DGA,Rio Maipo
+05703013,Portezuelo Echaurren,-33.57583,-70.12833,3840,Rio Maipo,DGA,Rio Maipo
 05703014,Termas Del Plomo,-33.6133,-69.9058,3000,Rio Maipo,DGA,Rio Maipo
+05703018,Glaciar Piramide (EMAM),-33.58944,-69.89056,3448,Rio Maipo,DGA,Rio Maipo
 05703008,El Yeso Embalse,-33.67583,-70.08861,2475,Rio Maipo,DGA,Rio Maipo
 05704004,San Gabriel,-33.7825,-70.23944,1266,Rio Maipo,DGA,Rio Maipo
 05702011,Glaciar San Francisco en Aguas Panimavida,-33.80583,-70.07,2220,Rio Maipo,DGA,Rio Maipo
@@ -65,6 +77,7 @@ riotranquilo_nerc,RioTranquilo_NERC,-46.65384,-72.76430,,Rio Baker,CIEP_NERC,Rio
 0430003,El Jote,-30.405266,-70.279483,3660,Elqui,CEAZAMET,Elqui
 0430012,Llano de Las Liebres,-30.254000,-69.934000,3565,Elqui,CEAZAMET,Elqui
 0430014,Los Corrales,-30.161408,-69.875994,3982,Elqui,CEAZAMET,Elqui
+0430015,Paso Agua Negra,-30.19100,-69.82600,4774,Elqui,CEAZAMET,Elqui
 0430016,Casa del Canto,-31.417337,-70.589000,3570,Limari,CEAZAMET,Limari
 0430017,Tascadero,-31.262951,-70.539993,3427,Limari,CEAZAMET,Limari
 04511004,Cerro Vega Negra,-30.903333,-70.515833,3600,Limari,DGA,Limari
@@ -72,6 +85,7 @@ riotranquilo_nerc,RioTranquilo_NERC,-46.65384,-72.76430,,Rio Baker,CIEP_NERC,Rio
 04700002,El Soldado,-32.006667,-70.321389,3290,Choapa,DGA,Choapa
 05100003,Nacimiento Del Sobrante,-32.188889,-70.483056,3380,Petorca,DGA,Petorca
 05401007,Portillo,-32.844444,-70.110833,3000,Aconcagua,DGA,Aconcagua
+05414004,Resguardo Los Patos,-32.50139,-70.58167,1220,Aconcagua,DGA,Aconcagua
 05701011,Las Hualtatas,-34.067762,-70.108742,2020,Maipo,DGA,Maipo
 05703009,Laguna Negra,-33.665833,-70.107778,2780,Maipo,DGA,Maipo
 06000004,Laguna El Yeso,-34.411111,-70.210277,2140,Rapel,DGA,Rapel
