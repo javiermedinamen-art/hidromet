@@ -234,7 +234,7 @@
             },
             'at': { 
                 name: "Temperatura", 
-                unit: "C", 
+                unit: "°C", 
                 data_col: "Temperatura_°C", // ¡NUEVO! Debe coincidir con backend
                 agg_monthly_desc: "Promedio Mensual", 
                 annual_analysis_type: 'at_stats' // Tipo de análisis anual
@@ -611,11 +611,13 @@
             // Define tipo y color según la variable
             if (currentVariable === 'sd') { // Nieve
                  trace.type = 'scatter';
+                 trace.connectgaps = false;
                  trace.mode = 'lines+markers'; 
                  trace.line = { color: "#88CCEE" }; // Azul claro (cyan)
                  trace.marker = { color: "#88CCEE", size: 4 }; 
             } else if (currentVariable === 'at') { // Temperatura
-                trace.type = 'scatter';
+                 trace.type = 'scatter';
+                 trace.connectgaps = false;
                  trace.mode = 'lines+markers'; 
                  trace.line = { color: "#CC6677" }; // Rojo coral
                  trace.marker = { color: "#CC6677", size: 4 };
@@ -918,7 +920,7 @@
                     y: station.values, 
                     mode: 'lines+markers', 
                     name: `${station.name} (${elevationText})`, 
-                    type: 'scatter',
+                    type: 'scatter', connectgaps: false,
                     line: { color: stationColorMap[stationCode] || '#ccc' }, 
                     marker: { color: stationColorMap[stationCode] || '#ccc'},
                     hovertemplate: `<b>${station.name}</b><br>%{x|%B de %Y}<br>${config.name}: %{y:.1f} ${hoverUnit}<extra></extra>`, 
@@ -979,7 +981,7 @@
                     const elevationText = station.elevation !== null ? `${station.elevation} msnm` : 'N/A';
                     return {
                         x: station.years, y: station.values, name: `${station.name} (${elevationText})`,
-                        type: 'scatter', mode: 'lines+markers',
+                        type: 'scatter', mode: 'lines+markers', connectgaps: false,
                         line: { color: stationColorMap[stationCode] || '#333' }, marker: { color: stationColorMap[stationCode] || '#333' },
                         hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>${hoverName}: %{y:.1f} ${hoverUnit}<extra></extra>`,
                     };
@@ -1035,7 +1037,7 @@
                         x: station.years, 
                         y: station.values, // 'values' contiene los máximos anuales
                         name: `${station.name} (${elevationText})`,
-                        type: 'scatter', mode: 'lines+markers',
+                        type: 'scatter', mode: 'lines+markers', connectgaps: false,
                         line: { color: stationColorMap[stationCode] || '#333' }, 
                         marker: { color: stationColorMap[stationCode] || '#333' },
                         hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>Máx. ${hoverName}: %{y:.1f} ${hoverUnit}<extra></extra>`, // Texto hover ajustado
@@ -1097,7 +1099,7 @@
                         y: station.max_values, // Usa max_values
                         name: `${station.name} (${elevationText}) - Máx`, // Leyenda indica Máx
                         legendgroup: stationCode, // Agrupa leyenda de max y min
-                        type: 'scatter', mode: 'lines+markers',
+                        type: 'scatter', mode: 'lines+markers',connectgaps: false,
                         line: { color: stationColor }, // Mismo color
                         marker: { 
                             color: stationColor, 
@@ -1114,7 +1116,7 @@
                         name: `${station.name} (${elevationText}) - Mín`, // Leyenda indica Mín
                         legendgroup: stationCode, // Agrupa leyenda
                         showlegend: false, // Opcional: Oculta la segunda entrada de leyenda para limpieza
-                        type: 'scatter', mode: 'lines+markers',
+                        type: 'scatter', mode: 'lines+markers', connectgaps: false, 
                         line: { color: stationColor, dash: 'dot' }, // Mismo color, línea punteada opcional
                         marker: { 
                             color: stationColor, 
