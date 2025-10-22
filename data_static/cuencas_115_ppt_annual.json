@@ -1,0 +1,422 @@
+{
+  "11503002": {
+    "name": "Portezuelo Iba ez",
+    "elevation": 1080.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      1759.2,
+      1341.9
+    ]
+  },
+  "11540000": {
+    "name": "Lago Cachet 2 en Glaciar Colonia ",
+    "elevation": 427.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      1155.8,
+      1287.0,
+      1242.2,
+      1046.5,
+      1031.7,
+      1303.0,
+      945.2
+    ]
+  },
+  "11503001": {
+    "name": "Villa Cerro Castillo",
+    "elevation": 345.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      629.2,
+      783.3,
+      964.7,
+      576.5
+    ]
+  },
+  "11533001": {
+    "name": "Estancia Valle Chacabuco",
+    "elevation": 343.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      325.9,
+      378.9,
+      247.0
+    ]
+  },
+  "11532001": {
+    "name": "Rio Nef antes Junta Estero El Rebalse",
+    "elevation": 280.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      1028.7,
+      1094.9,
+      1305.9,
+      992.2
+    ]
+  },
+  "11513001": {
+    "name": "Bahia Murta",
+    "elevation": 240.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      1058.2,
+      611.3
+    ]
+  },
+  "11505001": {
+    "name": "Rio Iba ez en Desembocadura",
+    "elevation": 220.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      608.4,
+      468.9,
+      315.1,
+      643.4,
+      null,
+      426.8,
+      428.0,
+      410.9,
+      null,
+      467.4,
+      360.7
+    ]
+  },
+  "11521002": {
+    "name": "Chile Chico",
+    "elevation": 215.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      297.2,
+      168.9,
+      180.7,
+      295.4,
+      209.0
+    ]
+  },
+  "11517002": {
+    "name": "Lago General Carrera en Desag e",
+    "elevation": 210.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      1066.0,
+      753.5,
+      1361.6,
+      916.8,
+      1075.0,
+      null,
+      1166.7,
+      1190.4,
+      1545.3,
+      1003.9
+    ]
+  },
+  "11523002": {
+    "name": "Lago General Carrera en Puerto Guadal",
+    "elevation": 205.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      526.0,
+      954.0,
+      596.2,
+      747.1,
+      753.6,
+      532.3,
+      721.6,
+      null,
+      254.7
+    ]
+  },
+  "11521005": {
+    "name": "Lago General Carrera Fachinal",
+    "elevation": 18.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      327.0,
+      652.3,
+      427.4,
+      374.6,
+      441.8,
+      392.6,
+      473.1,
+      null,
+      395.5
+    ]
+  },
+  "1150001": {
+    "name": "Rio Tranquilo",
+    "elevation": null,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      3955.8
+    ]
+  },
+  "1150002": {
+    "name": "Tortel",
+    "elevation": null,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      2091.0,
+      2222.2,
+      null
+    ]
+  },
+  "riotranquilo_nerc": {
+    "name": "RioTranquilo_NERC",
+    "elevation": null,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  }
+}

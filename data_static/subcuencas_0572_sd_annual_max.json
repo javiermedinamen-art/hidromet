@@ -1,0 +1,178 @@
+{
+  "piuquenes10": {
+    "name": "Piuquenes 10",
+    "elevation": 3570.0,
+    "years": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "values": [
+      null,
+      50.0,
+      11.6,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "piuquenes6": {
+    "name": "Piuquenes 6",
+    "elevation": 3556.0,
+    "years": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "values": [
+      null,
+      111.7,
+      58.0,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "piuquenes7": {
+    "name": "Piuquenes 7",
+    "elevation": 3483.0,
+    "years": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "values": [
+      null,
+      46.1,
+      15.3,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "amtc13": {
+    "name": "Molina en Cepo",
+    "elevation": 3380.0,
+    "years": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "piuquenes14": {
+    "name": "Piuquenes 14",
+    "elevation": 3380.0,
+    "years": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "values": [
+      null,
+      105.7,
+      null,
+      87.9,
+      6.8,
+      48.1,
+      178.4
+    ]
+  },
+  "amtc10": {
+    "name": "Yerba Loca Alto",
+    "elevation": 3340.0,
+    "years": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "amtc8": {
+    "name": "Yerba Loca Medio",
+    "elevation": 2520.0,
+    "years": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "values": [
+      25.4,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "amtc12": {
+    "name": "Molina Medio",
+    "elevation": 2200.0,
+    "years": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  }
+}
