@@ -11,7 +11,7 @@ code_internal,name,lat,lon,elevation,basin,fuente,nom_cuen
 05415004,Jahuel,-32.68722,-70.59639,1020,Rio Aconcagua,DGA,Rio Aconcagua
 05404001,Canal Colorado en Bocatoma,-32.83833,-70.35528,1391,Rio Aconcagua,DGA,Rio Aconcagua
 05410002,Rio Aconcagua en Chacabuquito,-32.85056,-70.50944,950,Rio Aconcagua,DGA,Rio Aconcagua
-05410006,Vilcuya,-32.86028,-70.47167,1100,Rio Aconcagua,DGA,Rio Aconcagua
+05410006,Vilcuya,-32.86028,-70.47167,1100,Aconcagua,DGA,Rio Aconcagua
 05401003,Rio Juncal en Juncal,-32.87028,-70.14722,2200,Rio Aconcagua,DGA,Rio Aconcagua
 05403002,Rio Aconcagua en Rio Blanco,-32.91028,-70.30722,1420,Rio Aconcagua,DGA,Rio Aconcagua
 05411001,Estero Pocuro en El Sifon,-32.92056,-70.54333,1000,Rio Aconcagua,DGA,Rio Aconcagua
@@ -60,3 +60,45 @@ code_internal,name,lat,lon,elevation,basin,fuente,nom_cuen
 11540000,Lago Cachet 2 en Glaciar Colonia ,-47.19889,-73.25,427,Rio Baker,DGA,Rio Baker
 1150002,Tortel,-47.7949,-73.5316,,Rio Baker,CIEP,Rio Baker
 riotranquilo_nerc,RioTranquilo_NERC,-46.65384,-72.76430,,Rio Baker,CIEP_NERC,Rio Baker
+01220,Paso de Agua Negra,-30.189444,-69.801445,4459,San Juan,ainigla?,San Juan
+02325,La Hoya,-42.832964,-71.253820,1530,Chubut,ainigla?,Chubut
+0430003,El Jote,-30.405266,-70.279483,3660,Elqui,CEAZAMET,Elqui
+0430012,Llano de Las Liebres,-30.254000,-69.934000,3565,Elqui,CEAZAMET,Elqui
+0430014,Los Corrales,-30.161408,-69.875994,3982,Elqui,CEAZAMET,Elqui
+0430016,Casa del Canto,-31.417337,-70.589000,3570,Limari,CEAZAMET,Limari
+0430017,Tascadero,-31.262951,-70.539993,3427,Limari,CEAZAMET,Limari
+04511004,Cerro Vega Negra,-30.903333,-70.515833,3600,Limari,DGA,Limari
+04520006,Quebrada Larga Cota 3500,-30.725278,-70.291667,3500,Limari,DGA,Limari
+04700002,El Soldado,-32.006667,-70.321389,3290,Choapa,DGA,Choapa
+05100003,Nacimiento Del Sobrante,-32.188889,-70.483056,3380,Petorca,DGA,Petorca
+05401007,Portillo,-32.844444,-70.110833,3000,Aconcagua,DGA,Aconcagua
+05701011,Las Hualtatas,-34.067762,-70.108742,2020,Maipo,DGA,Maipo
+05703009,Laguna Negra,-33.665833,-70.107778,2780,Maipo,DGA,Maipo
+06000004,Laguna El Yeso,-34.411111,-70.210277,2140,Rapel,DGA,Rapel
+06020001,Termas Del Flaco,-34.891667,-70.329722,2650,Rapel,DGA,Rapel
+07100006,Paso Vergara,-35.195284,-70.511469,2602,Mataquito,DGA,Mataquito
+07301000,Lo Aguirre,-35.970278,-70.571944,2000,Maule,DGA,Maule
+07301001,Los Condores,-36.009722,-70.547778,2441,Maule,DGA,Maule
+07301002,NUEVA LO AGUIRRE,-35.971394,-70.570011,1997,Maule,DGA,Maule
+07350008,Nevado Longavi,-36.234170,-71.143339,1974,Maule,DGA,Maule
+08130009,Nevado Chillan,-36.847291,-71.415957,2610,Itata,DGA,Itata 
+08301001,Liucura,-38.645114,-71.091007,1152,Biobio,DGA,Biobio
+08372001,Alto Mallines,-37.159067,-71.242754,1900,Biobio,DGA,Biobio
+08374001,Volcan Chillan,-36.893900,-71.411944,2393,Itata,DGA,Itata
+09104,Laguna Atuel,-34.511094,-70.045911,3420,Mendoza,ainigla?,Mendoza
+09120,Paso Pehuenche,-35.979944,-70.394028,2555,Mendoza,ainigla?,Mendoza
+09121,Valle Hermoso,-35.142250,-70.201556,2250,Mendoza,ainigla?,Mendoza
+09131,Laguna Diamante,-34.198889,-69.698139,3300,Mendoza,ainigla?,Mendoza
+09145,Toscas,-33.164167,-69.888611,3000,Mendoza,ainigla?,Mendoza
+09160,Las Leñas,-35.139556,-70.091753,2545,Mendoza,ainigla?,Mendoza
+09250,Cerro Negro,-29.890611,-69.558083,4172,San Juan,ainigla?,San Juan
+09300,Lago Gaucho,-43.828894,-71.405436,1165,Chubut,ainigla?,Chubut
+1150003,Rio Tranquilo,-46.653841,-72.764295,1250,Baker,CIEP - NERC,Baker
+amtc10,Yerba Loca Alto,-33.209000,-70.277000,3340,Maipo,UdeChile,Maipo
+amtc12,Molina Medio,-33.375434,-70.241487,2200,Maipo,UdeChile,Maipo
+amtc13,Molina en Cepo,-33.290967,-70.217264,3380,Maipo,UdeChile,Maipo
+amtc8,Yerba Loca Medio,-33.273000,-70.300000,2520,Maipo,UdeChile,Maipo
+piuquenes10,Piuquenes 10,-33.31321,-70.24766,3570,Maipo,UdeChile,Maipo
+piuquenes14,Piuquenes 14,-33.31764,-70.25167,3380,Maipo,UdeChile,Maipo
+piuquenes6,Piuquenes 6,-33.3165,-70.26112,3556,Maipo,UdeChile,Maipo
+piuquenes7,Piuquenes 7,-33.31332,-70.25608,3483,Maipo,UdeChile,Maipo
