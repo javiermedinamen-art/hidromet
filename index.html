@@ -57,6 +57,31 @@
             width: auto;
         }
 
+        .at-stats-selector {
+            justify-content: center;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            
+            max-width: 300px; /* Más angosto que antes */
+            margin: 5px auto 15px auto; /* Menos margen superior */
+            padding: 8px 15px; /* Menos padding vertical, más horizontal */
+            gap: 8px; /* Espacio reducido */
+        }
+
+        .at-stats-selector label {
+            font-weight: 400; /* Menos grueso */
+            font-size: 14px; /* Más pequeño */
+        }
+
+        .at-stats-selector select {
+            padding: 6px 10px; /* Padding más pequeño */
+            font-size: 14px; /* Fuente más pequeña */
+            width: auto; /* ¡Importante! Ancho automático */
+            min-width: 180px;
+            /* Hereda el resto de estilos de 'select' */
+        }
+
         .basin-comparator-section { margin-top: 30px; padding: 20px; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); }
         .basin-comparator-section h2 { color: #004d99; font-weight: 300; text-align: center; margin-top: 0; margin-bottom: 20px; }
         #basinChartContainer { width: 100%; min-height: 550px; } 
@@ -153,6 +178,16 @@
         <div class="basin-comparator-section">
             <h2 id="comparator-title">Análisis Comparativo por Cuenca/Subcuenca</h2>
             <div id="basinYearButtonsContainer"></div>
+            
+            <div id="at-stats-selector-container" style="display: none;">
+                <div class="selector-group at-stats-selector">
+                    <label for="at-stats-select">Mostrar Extremo:</label>
+                    <select id="at-stats-select">
+                        <option value="max" selected>Máximos Anuales</option>
+                        <option value="min">Mínimos Anuales</option>
+                    </select>
+                </div>
+            </div>
             <div id="basinChartContainer" class="plotly-graph-div">
                 <p id="basinChartStatus" style="text-align: center; color: #6c757d; padding: 100px;">
                     Seleccione un nivel de análisis y haga clic en un polígono del mapa para comparar.
@@ -296,27 +331,30 @@
             // 4. Actualiza la nota metodológica
             updateMethodologyBox();
             
+            // 5. [NUEVO] Oculta el selector de AT
+            document.getElementById('at-stats-selector-container').style.display = 'none';
+            
             console.log("Paneles reseteados por cambio de variable.");
         }
 
         function filterStationsOnMap() {
              // ... (sin cambios) ...
              if (!estacionesLayer) return;
-            estacionesLayer.eachLayer(layer => {
-                const props = layer.feature.properties;
-                const variables = (props.variables_disponibles || "").split('|'); 
-                
-                if (!variables.includes(currentVariable.toUpperCase())) {
-                    layer.setStyle({ fillColor: '#999', color: '#999', weight: 0.5, fillOpacity: 0.3 });
-                } else {
-                    layer.setStyle({ 
-                        fillColor: getColorByFuente(props.fuente), 
-                        color: "#000", 
-                        weight: 1, 
-                        fillOpacity: 0.8 
-                    });
-                }
-            });
+             estacionesLayer.eachLayer(layer => {
+                 const props = layer.feature.properties;
+                 const variables = (props.variables_disponibles || "").split('|'); 
+                 
+                 if (!variables.includes(currentVariable.toUpperCase())) {
+                     layer.setStyle({ fillColor: '#999', color: '#999', weight: 0.5, fillOpacity: 0.3 });
+                 } else {
+                     layer.setStyle({ 
+                         fillColor: getColorByFuente(props.fuente), 
+                         color: "#000", 
+                         weight: 1, 
+                         fillOpacity: 0.8 
+                     });
+                 }
+             });
         }
         
         function filterStationDropdown() {
@@ -338,13 +376,13 @@
                     if (feature) {
                          const variables = (feature.properties.variables_disponibles || "").split('|');
                          if (variables.includes(currentVariable.toUpperCase())) {
-                            option.style.display = 'block'; 
-                            hasVisibleOptions = true;
-                            if (!firstVisibleStationCode) {
-                                firstVisibleStationCode = stationCode; 
-                            }
+                             option.style.display = 'block'; 
+                             hasVisibleOptions = true;
+                             if (!firstVisibleStationCode) {
+                                 firstVisibleStationCode = stationCode; 
+                             }
                          } else {
-                            option.style.display = 'none'; 
+                             option.style.display = 'none'; 
                          }
                     } else {
                          option.style.display = 'none';
@@ -381,34 +419,34 @@
         function inicializarMapa() {
              // ... (sin cambios) ...
              mapa = L.map('mapa').setView([-33.4489, -70.6693], 5);
-            mapa.createPane('cuencasPane');
-            mapa.getPane('cuencasPane').style.zIndex = 350;
+             mapa.createPane('cuencasPane');
+             mapa.getPane('cuencasPane').style.zIndex = 350;
 
-            const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
-                attribution: '© OpenStreetMap contributors' 
-            }).addTo(mapa);
-            const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { 
-                attribution: '© Esri' 
-            });
-            const topografico = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
-                attribution: '© Esri'
-            });
+             const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
+                 attribution: '© OpenStreetMap contributors' 
+             }).addTo(mapa);
+             const satelite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { 
+                 attribution: '© Esri' 
+             });
+             const topografico = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+                 attribution: '© Esri'
+             });
 
-            const baseMaps = {"Calles": osm, "Satelital": satelite, "Topográfico": topografico };
-            layerControl = L.control.layers(baseMaps, {}).addTo(mapa);
+             const baseMaps = {"Calles": osm, "Satelital": satelite, "Topográfico": topografico };
+             layerControl = L.control.layers(baseMaps, {}).addTo(mapa);
 
-            const legend = L.control({position: 'bottomright'});
-            legend.onAdd = function () {
-                const div = L.DomUtil.create('div', 'info legend');
-                let legendHtml = '<b>Fuentes</b>';
-                const items = Object.keys(FUENTES_MAP).map(key => `<i style="background:${FUENTES_MAP[key]}"></i> ${key}`);
-                legendHtml += `<div style="margin-top: 4px;">${items.join('<br>')}</div>`;
-                div.innerHTML = legendHtml;
-                return div;
-            };
-            legend.addTo(mapa);
-            
-            mapa.on('zoomend', updateLayerInteractivity);
+             const legend = L.control({position: 'bottomright'});
+             legend.onAdd = function () {
+                 const div = L.DomUtil.create('div', 'info legend');
+                 let legendHtml = '<b>Fuentes</b>';
+                 const items = Object.keys(FUENTES_MAP).map(key => `<i style="background:${FUENTES_MAP[key]}"></i> ${key}`);
+                 legendHtml += `<div style="margin-top: 4px;">${items.join('<br>')}</div>`;
+                 div.innerHTML = legendHtml;
+                 return div;
+             };
+             legend.addTo(mapa);
+             
+             mapa.on('zoomend', updateLayerInteractivity);
         }
 
         function getColorByFuente(fuente) {
@@ -420,73 +458,73 @@
         async function cargarDatosGeoespaciales() {
              // ... (sin cambios) ...
              try {
-                const [nameResponse, geoResponse] = await Promise.all([
-                    fetch(`${DATA_STATIC_BASE_URL}/station_names.json`),
-                    fetch(`${DATA_STATIC_BASE_URL}/estaciones.geojson`) 
-                ]);
-                
-                if (!nameResponse.ok) {
-                    console.error("¡ERROR! No se pudo cargar station_names.json. Status:", nameResponse.status);
-                    stationNameMap = {}; 
-                } else {
-                    try {
-                        stationNameMap = await nameResponse.json();
-                        console.log("station_names.json cargado OK.");
-                    } catch (e) {
-                         console.error("Error al parsear station_names.json:", e);
-                         stationNameMap = {};
-                    }
-                }
+                 const [nameResponse, geoResponse] = await Promise.all([
+                     fetch(`${DATA_STATIC_BASE_URL}/station_names.json`),
+                     fetch(`${DATA_STATIC_BASE_URL}/estaciones.geojson`) 
+                 ]);
+                 
+                 if (!nameResponse.ok) {
+                     console.error("¡ERROR! No se pudo cargar station_names.json. Status:", nameResponse.status);
+                     stationNameMap = {}; 
+                 } else {
+                     try {
+                         stationNameMap = await nameResponse.json();
+                         console.log("station_names.json cargado OK.");
+                     } catch (e) {
+                          console.error("Error al parsear station_names.json:", e);
+                          stationNameMap = {};
+                     }
+                 }
 
-                if (!geoResponse.ok) {
-                    console.error("¡ERROR CRÍTICO! No se encontró 'estaciones.geojson'. Status:", geoResponse.status);
-                    console.error("Por favor, ejecuta el script de backend (exportar_datos_estaticos.py) y asegúrate de que no haya errores.");
-                    document.body.innerHTML = "<h1 style='color:red;'>Error Crítico: Falta estaciones.geojson. Revisa la consola (F12) y ejecuta el backend.</h1>"; 
-                    return; 
-                }
-                globalGeojsonData = await geoResponse.json(); 
-                console.log("estaciones.geojson cargado OK.");
-                
-                if (estacionesLayer) { 
-                    mapa.removeLayer(estacionesLayer); 
-                    layerControl.removeLayer(estacionesLayer); 
-                }
+                 if (!geoResponse.ok) {
+                     console.error("¡ERROR CRÍTICO! No se encontró 'estaciones.geojson'. Status:", geoResponse.status);
+                     console.error("Por favor, ejecuta el script de backend (exportar_datos_estaticos.py) y asegúrate de que no haya errores.");
+                     document.body.innerHTML = "<h1 style='color:red;'>Error Crítico: Falta estaciones.geojson. Revisa la consola (F12) y ejecuta el backend.</h1>"; 
+                     return; 
+                 }
+                 globalGeojsonData = await geoResponse.json(); 
+                 console.log("estaciones.geojson cargado OK.");
+                 
+                 if (estacionesLayer) { 
+                     mapa.removeLayer(estacionesLayer); 
+                     layerControl.removeLayer(estacionesLayer); 
+                 }
 
-                populateStationDropdown(globalGeojsonData.features);
+                 populateStationDropdown(globalGeojsonData.features);
 
-                estacionesLayer = L.geoJSON(globalGeojsonData, {
-                    pointToLayer: (feature, latlng) => L.circleMarker(latlng, {radius: 6, fillColor: getColorByFuente(feature.properties.fuente), color: "#000", weight: 1, fillOpacity: 0.8}),
-                    onEachFeature: (feature, layer) => {
-                        const props = feature.properties;
-                        if (props && props.code_internal) {
-                            
-                            const variables = props.variables_disponibles || ""; 
-                            const vars_display = variables.replace(/\|/g, ', ') || 'N/A'; 
+                 estacionesLayer = L.geoJSON(globalGeojsonData, {
+                     pointToLayer: (feature, latlng) => L.circleMarker(latlng, {radius: 6, fillColor: getColorByFuente(feature.properties.fuente), color: "#000", weight: 1, fillOpacity: 0.8}),
+                     onEachFeature: (feature, layer) => {
+                         const props = feature.properties;
+                         if (props && props.code_internal) {
+                             
+                             const variables = props.variables_disponibles || ""; 
+                             const vars_display = variables.replace(/\|/g, ', ') || 'N/A'; 
 
-                            const html = `
-                                <div style="line-height: 1.5;">
-                                    <h4 style="margin: 0 0 5px 0; color:${getColorByFuente(props.fuente)};">${props.name || 'N/A'}</h4>
-                                    <b>Código:</b> ${props.code_internal}<br>
-                                    <b>Elevación:</b> ${props.elevation || 'N/A'} m.s.n.m.<br>
-                                    <b>Fuente:</b> ${props.fuente || 'N/A'}<br>
-                                    <b>Variables:</b> ${vars_display}
-                                </div>`;
-                            layer.bindPopup(html);
-                        }
-                    }
-                }).addTo(mapa);
-                
-                layerControl.addOverlay(estacionesLayer, "Estaciones");
-                const bounds = estacionesLayer.getBounds();
-                if (bounds.isValid()) mapa.fitBounds(bounds.pad(0.1));
+                             const html = `
+                                 <div style="line-height: 1.5;">
+                                     <h4 style="margin: 0 0 5px 0; color:${getColorByFuente(props.fuente)};">${props.name || 'N/A'}</h4>
+                                     <b>Código:</b> ${props.code_internal}<br>
+                                     <b>Elevación:</b> ${props.elevation || 'N/A'} m.s.n.m.<br>
+                                     <b>Fuente:</b> ${props.fuente || 'N/A'}<br>
+                                     <b>Variables:</b> ${vars_display}
+                                 </div>`;
+                             layer.bindPopup(html);
+                         }
+                     }
+                 }).addTo(mapa);
+                 
+                 layerControl.addOverlay(estacionesLayer, "Estaciones");
+                 const bounds = estacionesLayer.getBounds();
+                 if (bounds.isValid()) mapa.fitBounds(bounds.pad(0.1));
 
-                updateLayerInteractivity();
-                filterStationsOnMap(); 
-                filterStationDropdown(); 
-            } catch (error) { 
-                console.error("Error MUY GRAVE al cargar datos geoespaciales:", error); 
+                 updateLayerInteractivity();
+                 filterStationsOnMap(); 
+                 filterStationDropdown(); 
+             } catch (error) { 
+                 console.error("Error MUY GRAVE al cargar datos geoespaciales:", error); 
                  document.body.innerHTML = `<h1 style='color:red;'>Error Inesperado: ${error.message}. Revisa la consola (F12).</h1>`;
-            }
+             }
         }
 
         function populateStationDropdown(features) {
@@ -584,7 +622,7 @@
                 chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`; 
             }
         }
-                
+
         // --- ¡FUNCIÓN ACTUALIZADA! ---
         function renderPlot(data, stationName, year, activeBtn) {
             document.querySelectorAll("#yearButtonsContainer button").forEach(b => b.classList.remove("active"));
@@ -643,82 +681,82 @@
         async function switchHierarchyLayer(hierarchyKey) {
              // ... (sin cambios, mantiene corrección y logs) ...
              currentHierarchy = hierarchyKey; 
-            console.log(`Cambiando a jerarquía: ${hierarchyKey}`); 
-            
-            let removedCuencas = false, removedSub = false, removedSubSub = false;
-            if (cuencasLayer) { try { mapa.removeLayer(cuencasLayer); layerControl.removeLayer(cuencasLayer); removedCuencas = true; } catch(e) { console.warn("Error quitando cuencasLayer:", e); } }
-            if (subcuencasLayer) { try { mapa.removeLayer(subcuencasLayer); layerControl.removeLayer(subcuencasLayer); removedSub = true; } catch(e) { console.warn("Error quitando subcuencasLayer:", e); } }
-            if (subsubcuencasLayer) { try { mapa.removeLayer(subsubcuencasLayer); layerControl.removeLayer(subsubcuencasLayer); removedSubSub = true; } catch(e) { console.warn("Error quitando subsubcuencasLayer:", e); } }
-            console.log(`Capas antiguas removidas: Cuencas=${removedCuencas}, Sub=${removedSub}, SubSub=${removedSubSub}`);
-            
-            highlightedFeature = null; 
+             console.log(`Cambiando a jerarquía: ${hierarchyKey}`); 
+             
+             let removedCuencas = false, removedSub = false, removedSubSub = false;
+             if (cuencasLayer) { try { mapa.removeLayer(cuencasLayer); layerControl.removeLayer(cuencasLayer); removedCuencas = true; } catch(e) { console.warn("Error quitando cuencasLayer:", e); } }
+             if (subcuencasLayer) { try { mapa.removeLayer(subcuencasLayer); layerControl.removeLayer(subcuencasLayer); removedSub = true; } catch(e) { console.warn("Error quitando subcuencasLayer:", e); } }
+             if (subsubcuencasLayer) { try { mapa.removeLayer(subsubcuencasLayer); layerControl.removeLayer(subsubcuencasLayer); removedSubSub = true; } catch(e) { console.warn("Error quitando subsubcuencasLayer:", e); } }
+             console.log(`Capas antiguas removidas: Cuencas=${removedCuencas}, Sub=${removedSub}, SubSub=${removedSubSub}`);
+             
+             highlightedFeature = null; 
 
-            const config = HIERARCHY_CONFIG[hierarchyKey];
-            if (!config) return;
+             const config = HIERARCHY_CONFIG[hierarchyKey];
+             if (!config) return;
 
-             const url = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${currentVariable}.geojson`;
-             console.log("Intentando cargar GeoJSON de jerarquía:", url); 
+               const url = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${currentVariable}.geojson`;
+               console.log("Intentando cargar GeoJSON de jerarquía:", url); 
 
-            try {
-                const response = await fetch(url);
+             try {
+                 const response = await fetch(url);
 
-                if (!response.ok) {
-                    console.error(`No se pudo cargar ${url}. Status: ${response.status}. ¿Ejecutaste el backend correctamente?`);
-                    throw new Error(`No se pudo cargar ${url}.`);
-                }
-                console.log(`GeoJSON ${url} cargado OK.`); 
+                 if (!response.ok) {
+                     console.error(`No se pudo cargar ${url}. Status: ${response.status}. ¿Ejecutaste el backend correctamente?`);
+                     throw new Error(`No se pudo cargar ${url}.`);
+                 }
+                 console.log(`GeoJSON ${url} cargado OK.`); 
 
-                const geojsonData = await response.json();
-                const style = { color: "#1a5276", weight: 1.5, opacity: 0.6, fillOpacity: 0.2 };
-                const highlightStyle = { weight: 3, color: '#e74c3c', fillOpacity: 0.4 };
+                 const geojsonData = await response.json();
+                 const style = { color: "#1a5276", weight: 1.5, opacity: 0.6, fillOpacity: 0.2 };
+                 const highlightStyle = { weight: 3, color: '#e74c3c', fillOpacity: 0.4 };
 
-                let newLayer = L.geoJSON(geojsonData, { 
-                    style: style,
-                    pane: 'cuencasPane',
-                    onEachFeature: (feature, layer) => {
-                        const props = feature.properties;
-                        const nEstaciones = props.n_estaciones || 0; 
-                        const popupContent = `
-                            <div style="line-height: 1.5;">
-                                <h4 style="margin: 0 0 5px 0; color:#1a5276;">${config.name}: ${props[config.name_property] || 'N/A'}</h4>
-                                <b>Código:</b> ${props[config.id_property]}<br>
-                                <b>N° de estaciones:</b> ${nEstaciones}
-                            </div>`;
-                        layer.bindPopup(popupContent);
-                        layer.on({
-                            click: e => {
-                                console.log(`Clic en polígono ${props[config.id_property]}. HighlightedFeature:`, highlightedFeature ? 'existe' : 'null'); 
-                                if (highlightedFeature) {
-                                    try {
-                                        newLayer.resetStyle(highlightedFeature); 
-                                        console.log("Estilo reseteado para polígono anterior."); 
-                                    } catch(err) {
-                                        console.warn("No se pudo resetear el estilo del polígono anterior (puede ser normal si cambió la capa):", err);
-                                    }
-                                }
-                                highlightedFeature = e.target; 
-                                e.target.setStyle(highlightStyle);
-                                console.log("Nuevo polígono resaltado:", highlightedFeature); 
-                                
-                                displayBasinChart(props[config.id_property], props[config.name_property] || '', hierarchyKey);
-                                
-                                const comparatorSection = document.querySelector('.basin-comparator-section');
-                                comparatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            }
-                        });
-                    }
-                }).addTo(mapa);
-                
-                let layerName = "Capa";
-                if (hierarchyKey === 'cuencas') { cuencasLayer = newLayer; layerName = "Cuencas"; }
-                else if (hierarchyKey === 'subcuencas') { subcuencasLayer = newLayer; layerName = "Subcuencas"; }
-                else { subsubcuencasLayer = newLayer; layerName = "Subsubcuencas"; }
-                
-                layerControl.addOverlay(newLayer, layerName);
-                updateLayerInteractivity();
-                console.log(`Capa ${layerName} (${currentVariable}) añadida al mapa.`); 
+                 let newLayer = L.geoJSON(geojsonData, { 
+                     style: style,
+                     pane: 'cuencasPane',
+                     onEachFeature: (feature, layer) => {
+                         const props = feature.properties;
+                         const nEstaciones = props.n_estaciones || 0; 
+                         const popupContent = `
+                             <div style="line-height: 1.5;">
+                                 <h4 style="margin: 0 0 5px 0; color:#1a5276;">${config.name}: ${props[config.name_property] || 'N/A'}</h4>
+                                 <b>Código:</b> ${props[config.id_property]}<br>
+                                 <b>N° de estaciones:</b> ${nEstaciones}
+                             </div>`;
+                         layer.bindPopup(popupContent);
+                         layer.on({
+                             click: e => {
+                                 console.log(`Clic en polígono ${props[config.id_property]}. HighlightedFeature:`, highlightedFeature ? 'existe' : 'null'); 
+                                 if (highlightedFeature) {
+                                     try {
+                                         newLayer.resetStyle(highlightedFeature); 
+                                         console.log("Estilo reseteado para polígono anterior."); 
+                                     } catch(err) {
+                                         console.warn("No se pudo resetear el estilo del polígono anterior (puede ser normal si cambió la capa):", err);
+                                     }
+                                 }
+                                 highlightedFeature = e.target; 
+                                 e.target.setStyle(highlightStyle);
+                                 console.log("Nuevo polígono resaltado:", highlightedFeature); 
+                                 
+                                 displayBasinChart(props[config.id_property], props[config.name_property] || '', hierarchyKey);
+                                 
+                                 const comparatorSection = document.querySelector('.basin-comparator-section');
+                                 comparatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                             }
+                         });
+                     }
+                 }).addTo(mapa);
+                 
+                 let layerName = "Capa";
+                 if (hierarchyKey === 'cuencas') { cuencasLayer = newLayer; layerName = "Cuencas"; }
+                 else if (hierarchyKey === 'subcuencas') { subcuencasLayer = newLayer; layerName = "Subcuencas"; }
+                 else { subsubcuencasLayer = newLayer; layerName = "Subsubcuencas"; }
+                 
+                 layerControl.addOverlay(newLayer, layerName);
+                 updateLayerInteractivity();
+                 console.log(`Capa ${layerName} (${currentVariable}) añadida al mapa.`); 
 
-            } catch (error) { console.error(`Error FATAL en switchHierarchyLayer (${hierarchyKey}, ${currentVariable}):`, error); }
+             } catch (error) { console.error(`Error FATAL en switchHierarchyLayer (${hierarchyKey}, ${currentVariable}):`, error); }
         }
 
         function updateLayerInteractivity() {
@@ -784,6 +822,7 @@
             const buttonContainer = document.getElementById('basinYearButtonsContainer');
             Plotly.purge(chartDiv); 
             buttonContainer.innerHTML = '';
+            document.getElementById('at-stats-selector-container').style.display = 'none'; // <-- CORRECCIÓN AÑADIDA
             // No intentes ocultar #basinChartStatus
 
             const hierarchyConfig = HIERARCHY_CONFIG[hierarchyKey];
@@ -863,14 +902,14 @@
                      let clickHandler = null;
 
                      if (analysisType === 'ppt_robust') {
-                          buttonText = "Acumulación Anual";
-                          clickHandler = () => renderBasinAnnualPlot(featureId, hierarchyKey, annualBtn);
+                         buttonText = "Acumulación Anual";
+                         clickHandler = () => renderBasinAnnualPlot(featureId, hierarchyKey, annualBtn);
                      } else if (analysisType === 'sd_max') {
-                          buttonText = "Máximo Anual";
-                          clickHandler = () => renderBasinAnnualMaxPlot(featureId, hierarchyKey, annualBtn);
+                         buttonText = "Máximo Anual";
+                         clickHandler = () => renderBasinAnnualMaxPlot(featureId, hierarchyKey, annualBtn);
                      } else if (analysisType === 'at_stats') {
-                          buttonText = "Extremos Anuales";
-                          clickHandler = () => renderBasinAnnualStatsPlot(featureId, hierarchyKey, annualBtn);
+                         buttonText = "Extremos Anuales";
+                         clickHandler = () => renderBasinAnnualStatsPlot(featureId, hierarchyKey, annualBtn);
                      }
                      
                      if(clickHandler) {
@@ -892,8 +931,8 @@
 
 
         function renderBasinPlot(dataToPlot, year, activeBtn) {
-             // ... (sin cambios) ...
-            document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
+             document.getElementById('at-stats-selector-container').style.display = 'none'; // <-- CORRECCIÓN AÑADIDA
+             document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
 
              if (Object.keys(dataToPlot).length === 0) {
@@ -946,9 +985,9 @@
             Plotly.newPlot('basinChartContainer', traces, layout, {responsive: true});
              console.log(`Gráfico de cuenca renderizado (${year || 'Completo'})`); 
         }
-        
+
         async function renderBasinAnnualPlot(featureId, hierarchyKey, activeBtn) {
-             // ... (sin cambios, específica para PPT) ...
+             document.getElementById('at-stats-selector-container').style.display = 'none'; // <-- CORRECCIÓN AÑADIDA
              document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
 
@@ -1002,6 +1041,7 @@
 
         // --- ¡NUEVA FUNCIÓN para SD Max Anual! ---
         async function renderBasinAnnualMaxPlot(featureId, hierarchyKey, activeBtn) {
+            document.getElementById('at-stats-selector-container').style.display = 'none'; // <-- CORRECCIÓN AÑADIDA
             document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
 
@@ -1057,15 +1097,26 @@
             } catch (error) { console.error("Error en renderBasinAnnualMaxPlot:", error); chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`; }
         }
 
-        // --- ¡NUEVA FUNCIÓN para AT Max/Min Anual! ---
+        // --- ¡FUNCIÓN ACTUALIZADA para AT Max/Min Anual! ---
         async function renderBasinAnnualStatsPlot(featureId, hierarchyKey, activeBtn) {
             document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
 
+            // --- ¡NUEVO! Mostrar y configurar selector ---
+            const selectorContainer = document.getElementById('at-stats-selector-container');
+            selectorContainer.style.display = 'block'; // Mostrarlo
+            
+            const selector = document.getElementById('at-stats-select');
+            // Asigna el evento onchange para que vuelva a llamar a esta misma función
+            selector.onchange = () => {
+                // featureId, hierarchyKey, y activeBtn están disponibles en este scope
+                renderBasinAnnualStatsPlot(featureId, hierarchyKey, activeBtn); 
+            };
+            // --- Fin Configuración Selector ---
+
             const chartDiv = document.getElementById('basinChartContainer');
             chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando extremos anuales de temperatura...</p>`;
 
-            // Construye la URL del nuevo archivo JSON
             const annualUrl = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${featureId}_at_annual_stats.json`; 
             console.log("Intentando cargar JSON anual AT Stats:", annualUrl); 
 
@@ -1083,61 +1134,82 @@
                     return elevB - elevA;
                 });
 
-                const config = VARIABLE_UI_CONFIG['at']; // Usa config de AT
+                // --- ¡NUEVO! Leer valor del selector ---
+                const statToShow = document.getElementById('at-stats-select').value; // 'max' o 'min'
+
+                const config = VARIABLE_UI_CONFIG['at']; 
                 const yAxisTitle = `Temperatura (${config.unit})`;
                 const hoverUnit = config.unit;
 
-                const traces = []; // Array para acumular todas las trazas (max y min)
+                const traces = []; 
 
                 sortedStations.forEach(([stationCode, station]) => {
                     const elevationText = station.elevation !== null ? `${station.elevation} msnm` : 'N/A';
-                    const stationColor = stationColorMap[stationCode] || '#333'; // Color base
+                    const stationColor = stationColorMap[stationCode] || '#333'; 
 
-                    // Traza para Máximos (triángulo hacia arriba)
-                    traces.push({
-                        x: station.years, 
-                        y: station.max_values, // Usa max_values
-                        name: `${station.name} (${elevationText}) - Máx`, // Leyenda indica Máx
-                        legendgroup: stationCode, // Agrupa leyenda de max y min
-                        type: 'scatter', mode: 'lines+markers',connectgaps: false,
-                        line: { color: stationColor }, // Mismo color
-                        marker: { 
-                            color: stationColor, 
-                            symbol: 'triangle-up', // Símbolo Max
-                            size: 7
-                        }, 
-                        hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>Temp. Máx: %{y:.1f} ${hoverUnit}<extra></extra>`,
-                    });
+                    // Requerimiento 2: Nombre de leyenda simplificado
+                    const traceName = `${station.name} (${elevationText})`;
 
-                     // Traza para Mínimos (triángulo hacia abajo)
-                    traces.push({
-                        x: station.years, 
-                        y: station.min_values, // Usa min_values
-                        name: `${station.name} (${elevationText}) - Mín`, // Leyenda indica Mín
-                        legendgroup: stationCode, // Agrupa leyenda
-                        showlegend: false, // Opcional: Oculta la segunda entrada de leyenda para limpieza
-                        type: 'scatter', mode: 'lines+markers', connectgaps: false, 
-                        line: { color: stationColor, dash: 'dot' }, // Mismo color, línea punteada opcional
-                        marker: { 
-                            color: stationColor, 
-                            symbol: 'triangle-down', // Símbolo Min
-                            size: 7 
-                        }, 
-                        hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>Temp. Mín: %{y:.1f} ${hoverUnit}<extra></extra>`,
-                    });
+                    // Requerimiento 1: Mostrar solo la traza seleccionada
+                    if (statToShow === 'max') {
+                        // Traza para Máximos (triángulo hacia arriba)
+                        traces.push({
+                            x: station.years, 
+                            y: station.max_values, // Usa max_values
+                            name: traceName, // Nombre simplificado
+                            legendgroup: stationCode,
+                            type: 'scatter', mode: 'lines+markers',connectgaps: false,
+                            line: { color: stationColor },
+                            marker: { 
+                                color: stationColor, 
+                                symbol: 'triangle-up', 
+                                size: 7
+                            }, 
+                            hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>Temp. Máx: %{y:.1f} ${hoverUnit}<extra></extra>`,
+                        });
+                    } else { // statToShow === 'min'
+                        // Traza para Mínimos (triángulo hacia abajo)
+                        traces.push({
+                            x: station.years, 
+                            y: station.min_values, // Usa min_values
+                            name: traceName, // Nombre simplificado
+                            legendgroup: stationCode,
+                            type: 'scatter', mode: 'lines+markers', connectgaps: false, 
+                            line: { color: stationColor, dash: 'dot' }, // Línea punteada
+                            marker: { 
+                                color: stationColor, 
+                                symbol: 'triangle-down', 
+                                size: 7 
+                            }, 
+                            hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>Temp. Mín: %{y:.1f} ${hoverUnit}<extra></extra>`,
+                        });
+                    }
                 });
 
+                // Requerimiento 2: Título dinámico
+                const plotTitle = (statToShow === 'max') ? 
+                    'Temperatura Máxima Mensual por Año (Años Válidos)' : 
+                    'Temperatura Mínima Mensual por Año (Años Válidos)';
+
                 const layout = {
-                    title: 'Temperatura Máxima y Mínima Mensual por Año (Años Válidos)', // Título ajustado
+                    title: plotTitle, // Título actualizado
                     xaxis: { title: 'Año', type: 'category' }, yaxis: { title: yAxisTitle }, 
-                    hovermode: 'closest', // 'closest' funciona mejor con múltiples trazas
-                    legend: { traceorder: 'grouped', title: { text: '<b>Estaciones (Máx/Mín)</b><br> ', font: { size: 14 } }, bgcolor: 'rgba(248, 249, 250, 0.95)', bordercolor: '#dee2e6', borderwidth: 1, borderRadius: 8, x: 1.02, xanchor: 'left' },
+                    hovermode: 'closest',
+                    legend: { 
+                        traceorder: 'normal', // 'normal' es mejor ahora
+                        title: { text: '<b>Estaciones</b><br> ', font: { size: 14 } }, // Título de leyenda simple
+                        bgcolor: 'rgba(248, 249, 250, 0.95)', bordercolor: '#dee2e6', borderwidth: 1, borderRadius: 8, x: 1.02, xanchor: 'left' 
+                    },
                     margin: { r: 250 }
                 };
                 Plotly.newPlot('basinChartContainer', traces, layout, {responsive: true});
-                 console.log("Gráfico anual AT Stats renderizado."); 
+                 console.log(`Gráfico anual AT Stats renderizado (Modo: ${statToShow}).`); 
 
-            } catch (error) { console.error("Error en renderBasinAnnualStatsPlot:", error); chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`; }
+            } catch (error) { 
+                console.error("Error en renderBasinAnnualStatsPlot:", error); 
+                chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`;
+                document.getElementById('at-stats-selector-container').style.display = 'none'; // Oculta el selector si hay error
+            }
         }
         // --- FIN NUEVAS FUNCIONES ---
 
