@@ -942,10 +942,18 @@
              }
 
             const sortedStations = Object.entries(dataToPlot).sort(([, stationA], [, stationB]) => {
-                const elevA = stationA.elevation === null ? -Infinity : stationA.elevation;
-                const elevB = stationB.elevation === null ? -Infinity : stationB.elevation;
-                return elevB - elevA;
-            });
+                // Trata nulls como +Infinity para que siempre vayan al fondo de la lista
+                const elevA = stationA.elevation === null ? Infinity : stationA.elevation;
+                const elevB = stationB.elevation === null ? Infinity : stationB.elevation;
+
+                if (currentVariable === 'at') {
+                    // ASCENDENTE para Temperatura (Menor elevación primero)
+                    return elevA - elevB; 
+                } else {
+                    // DESCENDENTE para PPT y Nieve (Mayor elevación primero)
+                    return elevB - elevA;
+                }
+            });
 
             const config = VARIABLE_UI_CONFIG[currentVariable];
             const yAxisTitle = `${config.name} (${config.unit})`;
@@ -1128,11 +1136,13 @@
 
                  if (Object.keys(annualData).length === 0) { console.warn("renderBasinAnnualStatsPlot: No hay datos anuales AT stats."); Plotly.newPlot('basinChartContainer', [], {title: 'No hay datos de extremos anuales de temperatura disponibles'}); return; }
 
-                const sortedStations = Object.entries(annualData).sort(([, stationA], [, stationB]) => {
-                    const elevA = stationA.elevation === null ? -Infinity : stationA.elevation;
-                    const elevB = stationB.elevation === null ? -Infinity : stationB.elevation;
-                    return elevB - elevA;
-                });
+                const sortedStations = Object.entries(annualData).sort(([, stationA], [, stationB]) => {
+                    // Trata nulls como +Infinity para que siempre vayan al fondo de la lista
+                    const elevA = stationA.elevation === null ? Infinity : stationA.elevation;
+                    const elevB = stationB.elevation === null ? Infinity : stationB.elevation;
+                    // ASCENDENTE para Temperatura (Menor elevación primero)
+                    return elevA - elevB;
+                });
 
                 // --- ¡NUEVO! Leer valor del selector ---
                 const statToShow = document.getElementById('at-stats-select').value; // 'max' o 'min'
