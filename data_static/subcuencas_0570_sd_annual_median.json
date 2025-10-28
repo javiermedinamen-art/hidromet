@@ -1,0 +1,258 @@
+{
+  "05706005": {
+    "name": "Glaciar Olivares Alfa",
+    "elevation": 4230.0,
+    "years": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "05706004": {
+    "name": "Glaciar Juncal Sur",
+    "elevation": 4035.0,
+    "years": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      0.0,
+      0.0,
+      14.3,
+      3.7
+    ]
+  },
+  "05706002": {
+    "name": "Glaciar Olivares Gamma",
+    "elevation": 3628.0,
+    "years": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      4.2,
+      6.4,
+      null,
+      null,
+      null,
+      null,
+      25.1,
+      48.9
+    ]
+  },
+  "05701010": {
+    "name": "Las Melosas Ruta de Nieve",
+    "elevation": 3320.0,
+    "years": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      12.7,
+      117.8,
+      8.0,
+      null,
+      null,
+      75.6,
+      116.2,
+      227.6
+    ]
+  },
+  "05703014": {
+    "name": "Termas Del Plomo",
+    "elevation": 3000.0,
+    "years": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      34.6,
+      null,
+      25.4,
+      null,
+      null,
+      55.9,
+      null,
+      null
+    ]
+  },
+  "05706003": {
+    "name": "Valle Olivares",
+    "elevation": 2787.0,
+    "years": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      14.7,
+      null,
+      0.0,
+      null,
+      null,
+      6.5,
+      null,
+      25.9
+    ]
+  },
+  "05703009": {
+    "name": "Laguna Negra",
+    "elevation": 2780.0,
+    "years": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      47.1,
+      68.4,
+      null,
+      52.6,
+      28.3,
+      12.4,
+      30.8,
+      null,
+      27.3,
+      30.9,
+      null
+    ]
+  },
+  "05701011": {
+    "name": "Las Hualtatas",
+    "elevation": 2020.0,
+    "years": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      0.0,
+      0.0,
+      null
+    ]
+  }
+}

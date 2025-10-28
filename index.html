@@ -13,6 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <style>
+        /* [Tu CSS de la Parte 1 no ha cambiado] */
         body { font-family: 'Roboto', sans-serif; color: #333; background-color: #f0f2f5; margin: 0; padding: 0; }
         .main-container { width: 95%; max-width: 1400px; margin: 30px auto; background: #ffffff; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); padding: 20px; }
         h1 { color: #004d99; display: flex; font-weight: 300; letter-spacing: 1px; margin: 20px auto; font-size: 32px; justify-content: center; align-items: center; text-align: center; }
@@ -26,109 +27,23 @@
         select { padding: 8px; border-radius: 4px; border: 1px solid #ced4da; width: 100%; box-sizing: border-box; }
         .info { padding: 6px 8px; font: 14px/16px 'Roboto', sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; }
         .legend i { width: 10px; height: 10px; float: left; margin-right: 8px; border-radius: 50%; border: 1px solid #000; }
-        
-        .hierarchy-selector-container { 
-            background-color: #f8f9fa; 
-            padding: 12px 20px; 
-            border-radius: 8px; 
-            margin-bottom: 20px; 
-            border: 1px solid #dee2e6; 
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            align-items: center;
-            gap: 20px;
-        }
-        .selector-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .selector-group label { 
-            font-weight: 500; 
-            color: #495057; 
-            margin: 0;
-        }
-        #hierarchy-select, #variable-select { 
-            padding: 8px; 
-            border-radius: 4px; 
-            border: 1px solid #ced4da; 
-            min-width: 200px;
-            width: auto;
-        }
-
-        .at-stats-selector {
-            justify-content: center;
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 6px;
-            
-            max-width: 300px; /* Más angosto que antes */
-            margin: 5px auto 15px auto; /* Menos margen superior */
-            padding: 8px 15px; /* Menos padding vertical, más horizontal */
-            gap: 8px; /* Espacio reducido */
-        }
-
-        .at-stats-selector label {
-            font-weight: 400; /* Menos grueso */
-            font-size: 14px; /* Más pequeño */
-        }
-
-        .at-stats-selector select {
-            padding: 6px 10px; /* Padding más pequeño */
-            font-size: 14px; /* Fuente más pequeña */
-            width: auto; /* ¡Importante! Ancho automático */
-            min-width: 180px;
-            /* Hereda el resto de estilos de 'select' */
-        }
-
+        .hierarchy-selector-container { background-color: #f8f9fa; padding: 12px 20px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #dee2e6; display: flex; flex-wrap: wrap; justify-content: space-around; align-items: center; gap: 20px; }
+        .selector-group { display: flex; align-items: center; gap: 10px; }
+        .selector-group label { font-weight: 500; color: #495057; margin: 0; }
+        #hierarchy-select, #variable-select { padding: 8px; border-radius: 4px; border: 1px solid #ced4da; min-width: 200px; width: auto; }
+        .at-stats-selector { justify-content: center; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; max-width: 300px; margin: 5px auto 15px auto; padding: 8px 15px; gap: 8px; }
+        .at-stats-selector label { font-weight: 400; font-size: 14px; }
+        .at-stats-selector select { padding: 6px 10px; font-size: 14px; width: auto; min-width: 180px; }
         .basin-comparator-section { margin-top: 30px; padding: 20px; background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); }
         .basin-comparator-section h2 { color: #004d99; font-weight: 300; text-align: center; margin-top: 0; margin-bottom: 20px; }
         #basinChartContainer { width: 100%; min-height: 550px; } 
-
-        #yearButtonsContainer, #basinYearButtonsContainer {
-            display: flex;
-            justify-content: center;
-            overflow-x: auto;      
-            white-space: nowrap;   
-            gap: 6px;
-            margin-bottom: 10px;
-            padding: 6px;
-            scrollbar-width: thin;
-        }
-        #yearButtonsContainer button, #basinYearButtonsContainer button {
-            flex: 0 0 auto;
-            background-color: #e9ecef;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            padding: 5px 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 13px;
-        }
-        #yearButtonsContainer button:hover, #basinYearButtonsContainer button:hover,
-        #yearButtonsContainer button.active, #basinYearButtonsContainer button.active {
-            background-color: #007bff;
-            color: white;
-        }
+        #yearButtonsContainer, #basinYearButtonsContainer { display: flex; justify-content: center; overflow-x: auto; white-space: nowrap; gap: 6px; margin-bottom: 10px; padding: 6px; scrollbar-width: thin; }
+        #yearButtonsContainer button, #basinYearButtonsContainer button { flex: 0 0 auto; background-color: #e9ecef; border: 1px solid #ccc; border-radius: 8px; padding: 5px 10px; cursor: pointer; transition: all 0.2s ease; font-size: 13px; }
+        #yearButtonsContainer button:hover, #basinYearButtonsContainer button:hover, #yearButtonsContainer button.active, #basinYearButtonsContainer button.active { background-color: #007bff; color: white; }
         ::-webkit-scrollbar { height: 6px; }
         ::-webkit-scrollbar-thumb { background-color: #007bff; border-radius: 4px; }
-
-        .methodology-box {
-            margin-top: 25px;
-            padding: 15px 20px;
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            font-size: 14px;
-            color: #495057;
-        }
-        .methodology-box h4 {
-            margin-top: 0;
-            margin-bottom: 10px;
-            color: #004d99;
-            font-weight: 500;
-        }
+        .methodology-box { margin-top: 25px; padding: 15px 20px; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 8px; font-size: 14px; color: #495057; }
+        .methodology-box h4 { margin-top: 0; margin-bottom: 10px; color: #004d99; font-weight: 500; }
         .methodology-box p { margin-bottom: 10px; line-height: 1.6; }
         .methodology-box ul { margin-top: 5px; margin-bottom: 10px; padding-left: 20px; }
         .methodology-box li { margin-bottom: 5px; }
@@ -157,6 +72,7 @@
                     <option value="ppt" selected>Precipitación</option>
                     <option value="sd">Altura de Nieve</option>
                     <option value="at">Temperatura</option> </select>
+                </select>
             </div>
         </div>
         
@@ -197,30 +113,30 @@
             <div class="methodology-box" id="methodology-ppt">
                 <h4>Nota Metodológica (Precipitación) 📝</h4>
                  <p>
-                    <strong>Acumulado Mensual:</strong> Un mes se muestra si contiene > <strong>80%</strong> de días con datos.
+                    <strong>Acumulado Mensual:</strong> Un mes se muestra si contiene > <strong>70%</strong> de días con datos.
                 </p>
                 <p>
-                    <strong>Acumulado Anual:</strong> Un año es válido si tiene ≥ <strong>9 meses</strong> válidos Y datos para todos sus <strong>meses hidrológicamente significativos</strong> (75% del total anual).
+                    <strong>Acumulado Anual:</strong> Un año es válido si tiene datos para <strong>todos</strong> los meses entre <strong>Mayo y Octubre</strong>, y cada uno de esos meses cumple la regla de validez del 70%.
                 </p>
             </div>
             
             <div class="methodology-box" id="methodology-sd" style="display:none;">
                 <h4>Nota Metodológica (Altura de Nieve) 📝</h4>
                 <p>
-                    <strong>Promedio Mensual:</strong> Un mes se muestra si contiene > <strong>50%</strong> de días con datos.
+                    <strong>Mediana Mensual:</strong> Un mes se muestra si contiene > <strong>70%</strong> de días con datos.
                 </p>
                  <p>
-                    <strong>Máximo Anual:</strong> Se muestra el valor máximo de los promedios mensuales para cada año que tenga al menos <strong>6 meses</strong> válidos.
+                    <strong>Mediana Anual (May-Oct):</strong> Un año es válido si tiene datos para <strong>todos</strong> los meses entre <strong>Mayo y Octubre</strong>, y cada uno de esos meses cumple la regla validez del 70%. El valor mostrado es la <strong>mediana</strong> de todos los datos diarios de ese período (May-01 a Oct-31).
                 </p>
             </div>
 
             <div class="methodology-box" id="methodology-at" style="display:none;">
                 <h4>Nota Metodológica (Temperatura) 📝</h4>
-                <p>
-                    <strong>Promedio Mensual:</strong> Un mes se muestra si contiene > <strong>80%</strong> de días con datos.
+                 <p>
+                    <strong>Mediana Mensual:</strong> Un mes se muestra si contiene > <strong>70%</strong> de días con datos.
                 </p>
                  <p>
-                    <strong>Extremos Anuales:</strong> Se muestra el valor máximo y mínimo de los promedios mensuales para cada año que tenga al menos <strong>9 meses</strong> válidos.
+                    <strong>Mediana Anual (May-Oct):</strong> Un año es válido si tiene datos para <strong>todos</strong> los meses entre <strong>Mayo y Octubre</strong>, y cada uno de esos meses cumple la regla de validez del 70%. El valor mostrado es la <strong>mediana</strong> de todos los datos diarios de ese período (May-01 a Oct-31).
                 </p>
             </div>
 
@@ -251,31 +167,31 @@
 
         const HIGH_CONTRAST_PALETTE = ['#332288', '#117733', '#44AA99', '#88CCEE', '#DDCC77', '#CC6677', '#AA4499', '#882255', '#E69F00', '#56B4E9', '#009E73', '#F0E442'];
         
-        // --- ¡CONFIGURACIÓN UI ACTUALIZADA! ---
+        // --- CORRECCIÓN: Configuración de UI alineada con el backend ---
         const VARIABLE_UI_CONFIG = {
             'ppt': { 
                 name: "Precipitación", 
                 unit: "mm", 
-                data_col: "Precipitacion_mm", // Debe coincidir con backend
+                data_col: "Precipitacion_mm", // Coincide con backend
                 agg_monthly_desc: "Acumulado Mensual", 
-                annual_analysis_type: 'ppt_robust' // Tipo de análisis anual
+                annual_analysis_type: 'ppt_annual' // Tipo de análisis anual
             },
             'sd': { 
                 name: "Altura de Nieve", 
                 unit: "cm", 
-                data_col: "Altura_de_Nieve_cm", // Debe coincidir con backend
-                agg_monthly_desc: "Promedio Mensual", 
-                annual_analysis_type: 'sd_max' // Tipo de análisis anual
+                data_col: "Altura_de_Nieve_cm", // Coincide con backend
+                agg_monthly_desc: "Mediana Mensual", // CAMBIADO de Promedio a Mediana
+                annual_analysis_type: 'sd_median' // CAMBIADO de 'sd_max' a 'sd_median'
             },
             'at': { 
                 name: "Temperatura", 
                 unit: "°C", 
-                data_col: "Temperatura_°C", // ¡NUEVO! Debe coincidir con backend
-                agg_monthly_desc: "Promedio Mensual", 
-                annual_analysis_type: 'at_stats' // Tipo de análisis anual
+                data_col: "Temperatura_°C", // Coincide con backend
+                agg_monthly_desc: "Mediana Mensual", // CAMBIADO de Promedio a Mediana
+                annual_analysis_type: 'at_median' // CAMBIADO de 'at_stats' a 'at_median'
             }
         };
-        // --- FIN ACTUALIZACIÓN ---
+        // --- FIN CORRECCIÓN ---
 
 
         const HIERARCHY_CONFIG = {
@@ -298,6 +214,7 @@
             });
         };
 
+        // --- (Función onVariableChange SIN CAMBIOS, ya era correcta) ---
         function onVariableChange() {
             console.log(`Cambiando a variable: ${currentVariable}`);
             
@@ -331,14 +248,14 @@
             // 4. Actualiza la nota metodológica
             updateMethodologyBox();
             
-            // 5. [NUEVO] Oculta el selector de AT
+            // 5. Oculta el selector de AT (ya era correcto)
             document.getElementById('at-stats-selector-container').style.display = 'none';
             
             console.log("Paneles reseteados por cambio de variable.");
         }
 
+        // --- (Funciones filterStationsOnMap y filterStationDropdown SIN CAMBIOS) ---
         function filterStationsOnMap() {
-             // ... (sin cambios) ...
              if (!estacionesLayer) return;
              estacionesLayer.eachLayer(layer => {
                  const props = layer.feature.properties;
@@ -356,9 +273,7 @@
                  }
              });
         }
-        
         function filterStationDropdown() {
-             // ... (sin cambios) ...
              if (!globalGeojsonData) return; 
 
             const stationSelect = document.getElementById('station-select');
@@ -368,12 +283,12 @@
             let firstVisibleStationCode = null; 
 
             for (const optgroup of stationSelect.querySelectorAll('optgroup')) {
-                let hasVisibleOptions = false;
-                for (const option of optgroup.querySelectorAll('option')) {
-                    const stationCode = option.value;
-                    const feature = globalGeojsonData.features.find(f => f.properties.code_internal === stationCode);
-                    
-                    if (feature) {
+                 let hasVisibleOptions = false;
+                 for (const option of optgroup.querySelectorAll('option')) {
+                     const stationCode = option.value;
+                     const feature = globalGeojsonData.features.find(f => f.properties.code_internal === stationCode);
+                     
+                     if (feature) {
                          const variables = (feature.properties.variables_disponibles || "").split('|');
                          if (variables.includes(currentVariable.toUpperCase())) {
                              option.style.display = 'block'; 
@@ -384,22 +299,22 @@
                          } else {
                              option.style.display = 'none'; 
                          }
-                    } else {
+                     } else {
                          option.style.display = 'none';
-                    }
-                }
-                optgroup.style.display = hasVisibleOptions ? 'block' : 'none';
+                     }
+                 }
+                 optgroup.style.display = hasVisibleOptions ? 'block' : 'none';
             }
 
             const optionToReselect = stationSelect.querySelector(`option[value="${previouslySelected}"]`);
             if (optionToReselect && optionToReselect.style.display !== 'none') {
-                stationSelect.value = previouslySelected;
+                 stationSelect.value = previouslySelected;
             } else {
                  stationSelect.value = ""; 
             }
         }
         
-        // --- ¡FUNCIÓN ACTUALIZADA! ---
+        // --- (Función updateMethodologyBox SIN CAMBIOS, ya era correcta) ---
         function updateMethodologyBox() {
             document.getElementById('methodology-ppt').style.display = 'none';
             document.getElementById('methodology-sd').style.display = 'none';
@@ -413,11 +328,9 @@
                 document.getElementById('methodology-at').style.display = 'block';
             }
         }
-        // --- FIN ACTUALIZACIÓN ---
-
-
+        
+        // --- (Función inicializarMapa SIN CAMBIOS) ---
         function inicializarMapa() {
-             // ... (sin cambios) ...
              mapa = L.map('mapa').setView([-33.4489, -70.6693], 5);
              mapa.createPane('cuencasPane');
              mapa.getPane('cuencasPane').style.zIndex = 350;
@@ -449,86 +362,88 @@
              mapa.on('zoomend', updateLayerInteractivity);
         }
 
+        // --- (Función getColorByFuente SIN CAMBIOS) ---
         function getColorByFuente(fuente) {
-             // ... (sin cambios) ...
              fuente = (fuente || '').toUpperCase().replace(/_NERC/g, ''); 
             return FUENTES_MAP[fuente] || '#6c757d';
         }
 
         async function cargarDatosGeoespaciales() {
-             // ... (sin cambios) ...
-             try {
-                 const [nameResponse, geoResponse] = await Promise.all([
-                     fetch(`${DATA_STATIC_BASE_URL}/station_names.json`),
-                     fetch(`${DATA_STATIC_BASE_URL}/estaciones.geojson`) 
-                 ]);
-                 
-                 if (!nameResponse.ok) {
-                     console.error("¡ERROR! No se pudo cargar station_names.json. Status:", nameResponse.status);
-                     stationNameMap = {}; 
-                 } else {
-                     try {
-                         stationNameMap = await nameResponse.json();
-                         console.log("station_names.json cargado OK.");
-                     } catch (e) {
-                          console.error("Error al parsear station_names.json:", e);
-                          stationNameMap = {};
-                     }
-                 }
+            try {
+                // --- CORRECCIÓN 1 (Cache-Busting): Añadido `?v=${Date.now()}` ---
+                const cacheBuster = `?v=${Date.now()}`;
+                const [nameResponse, geoResponse] = await Promise.all([
+                    fetch(`${DATA_STATIC_BASE_URL}/station_names.json${cacheBuster}`),
+                    fetch(`${DATA_STATIC_BASE_URL}/estaciones.geojson${cacheBuster}`) 
+                ]);
+                // --- FIN CORRECCIÓN ---
+                
+                if (!nameResponse.ok) {
+                    console.error("¡ERROR! No se pudo cargar station_names.json. Status:", nameResponse.status);
+                    stationNameMap = {}; 
+                } else {
+                    try {
+                        stationNameMap = await nameResponse.json();
+                        console.log("station_names.json cargado OK.");
+                    } catch (e) {
+                         console.error("Error al parsear station_names.json:", e);
+                         stationNameMap = {};
+                    }
+                }
 
-                 if (!geoResponse.ok) {
-                     console.error("¡ERROR CRÍTICO! No se encontró 'estaciones.geojson'. Status:", geoResponse.status);
-                     console.error("Por favor, ejecuta el script de backend (exportar_datos_estaticos.py) y asegúrate de que no haya errores.");
-                     document.body.innerHTML = "<h1 style='color:red;'>Error Crítico: Falta estaciones.geojson. Revisa la consola (F12) y ejecuta el backend.</h1>"; 
-                     return; 
-                 }
-                 globalGeojsonData = await geoResponse.json(); 
-                 console.log("estaciones.geojson cargado OK.");
-                 
-                 if (estacionesLayer) { 
-                     mapa.removeLayer(estacionesLayer); 
-                     layerControl.removeLayer(estacionesLayer); 
-                 }
+                if (!geoResponse.ok) {
+                    console.error("¡ERROR CRÍTICO! No se encontró 'estaciones.geojson'. Status:", geoResponse.status);
+                    console.error("Por favor, ejecuta el script de backend (exportar_datos_estaticos.py) y asegúrate de que no haya errores.");
+                    document.body.innerHTML = "<h1 style='color:red;'>Error Crítico: Falta estaciones.geojson. Revisa la consola (F12) y ejecuta el backend.</h1>"; 
+                    return; 
+                }
+                globalGeojsonData = await geoResponse.json(); 
+                console.log("estaciones.geojson cargado OK.");
+                
+                if (estacionesLayer) { 
+                    mapa.removeLayer(estacionesLayer); 
+                    layerControl.removeLayer(estacionesLayer); 
+                }
 
-                 populateStationDropdown(globalGeojsonData.features);
+                populateStationDropdown(globalGeojsonData.features);
 
-                 estacionesLayer = L.geoJSON(globalGeojsonData, {
-                     pointToLayer: (feature, latlng) => L.circleMarker(latlng, {radius: 6, fillColor: getColorByFuente(feature.properties.fuente), color: "#000", weight: 1, fillOpacity: 0.8}),
-                     onEachFeature: (feature, layer) => {
-                         const props = feature.properties;
-                         if (props && props.code_internal) {
-                             
-                             const variables = props.variables_disponibles || ""; 
-                             const vars_display = variables.replace(/\|/g, ', ') || 'N/A'; 
+                estacionesLayer = L.geoJSON(globalGeojsonData, {
+                    pointToLayer: (feature, latlng) => L.circleMarker(latlng, {radius: 6, fillColor: getColorByFuente(feature.properties.fuente), color: "#000", weight: 1, fillOpacity: 0.8}),
+                    onEachFeature: (feature, layer) => {
+                        const props = feature.properties;
+                        if (props && props.code_internal) {
+                            
+                            const variables = props.variables_disponibles || ""; 
+                            const vars_display = variables.replace(/\|/g, ', ') || 'N/A'; 
 
-                             const html = `
-                                 <div style="line-height: 1.5;">
-                                     <h4 style="margin: 0 0 5px 0; color:${getColorByFuente(props.fuente)};">${props.name || 'N/A'}</h4>
-                                     <b>Código:</b> ${props.code_internal}<br>
-                                     <b>Elevación:</b> ${props.elevation || 'N/A'} m.s.n.m.<br>
-                                     <b>Fuente:</b> ${props.fuente || 'N/A'}<br>
-                                     <b>Variables:</b> ${vars_display}
-                                 </div>`;
-                             layer.bindPopup(html);
-                         }
-                     }
-                 }).addTo(mapa);
-                 
-                 layerControl.addOverlay(estacionesLayer, "Estaciones");
-                 const bounds = estacionesLayer.getBounds();
-                 if (bounds.isValid()) mapa.fitBounds(bounds.pad(0.1));
+                            const html = `
+                                <div style="line-height: 1.5;">
+                                    <h4 style="margin: 0 0 5px 0; color:${getColorByFuente(props.fuente)};">${props.name || 'N/A'}</h4>
+                                    <b>Código:</b> ${props.code_internal}<br>
+                                    <b>Elevación:</b> ${props.elevation || 'N/A'} m.s.n.m.<br>
+                                    <b>Fuente:</b> ${props.fuente || 'N/A'}<br>
+                                    <b>Variables:</b> ${vars_display}
+                                </div>`;
+                            layer.bindPopup(html);
+                        }
+                    }
+                }).addTo(mapa);
+                
+                layerControl.addOverlay(estacionesLayer, "Estaciones");
+                const bounds = estacionesLayer.getBounds();
+                if (bounds.isValid()) mapa.fitBounds(bounds.pad(0.1));
 
-                 updateLayerInteractivity();
-                 filterStationsOnMap(); 
-                 filterStationDropdown(); 
-             } catch (error) { 
-                 console.error("Error MUY GRAVE al cargar datos geoespaciales:", error); 
-                 document.body.innerHTML = `<h1 style='color:red;'>Error Inesperado: ${error.message}. Revisa la consola (F12).</h1>`;
-             }
+                updateLayerInteractivity();
+                filterStationsOnMap(); 
+                filterStationDropdown(); 
+            } catch (error) { 
+                console.error("Error MUY GRAVE al cargar datos geoespaciales:", error); 
+                document.body.innerHTML = `<h1 style='color:red;'>Error Inesperado: ${error.message}. Revisa la consola (F12).</h1>`;
+            }
         }
 
+        // --- (Función populateStationDropdown SIN CAMBIOS) ---
         function populateStationDropdown(features) {
-             // ... (sin cambios) ...
              const stationSelect = document.getElementById('station-select');
             stationSelect.innerHTML = '<option value="" selected disabled>--- Seleccione una Estación ---</option>';
             
@@ -567,14 +482,14 @@
         }
 
         async function displayTimeSeries(stationCode) {
-            // --- ¡CORRECCIÓN APLICADA! (Línea style.display eliminada) ---
             if (!stationCode) return;
             const chartDiv = document.getElementById('chartContainer');
             Plotly.purge(chartDiv); 
             chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando serie temporal para ${stationCode}...</p>`; 
             document.getElementById('station-select').value = stationCode;
             
-            const csvUrl = `${DATA_STATIC_BASE_URL}/${stationCode}_${currentVariable}.csv`;
+            // --- CORRECCIÓN 2 (Cache-Busting): Añadido `?v=${Date.now()}` ---
+            const csvUrl = `${DATA_STATIC_BASE_URL}/${stationCode}_${currentVariable}.csv?v=${Date.now()}`;
             console.log("Intentando cargar CSV:", csvUrl); 
 
             try {
@@ -600,7 +515,7 @@
                 const stationName = stationNameMap[stationCode] || stationCode; 
                  if (!stationNameMap[stationCode]) { console.warn(`No se encontró el nombre para ${stationCode}.`); }
 
-                const years = [...new Set(data.map(d => parseInt(d.Fecha.substring(0, 4), 10)))].sort((a,b) => a-b); // Asegura orden numérico
+                const years = [...new Set(data.map(d => parseInt(d.Fecha.substring(0, 4), 10)))].sort((a,b) => a-b); 
                 const container = document.getElementById("yearButtonsContainer");
                 container.innerHTML = "";
 
@@ -623,7 +538,7 @@
             }
         }
 
-        // --- ¡FUNCIÓN ACTUALIZADA! ---
+        // --- (Función renderPlot SIN CAMBIOS, ya era correcta) ---
         function renderPlot(data, stationName, year, activeBtn) {
             document.querySelectorAll("#yearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
@@ -675,92 +590,90 @@
             Plotly.react("chartContainer", [trace], layout, {responsive: true});
              console.log(`Gráfico renderizado para ${stationName} (${year || 'Completo'}) - Tipo: ${trace.type}`); 
         }
-        // --- FIN ACTUALIZACIÓN ---
-
 
         async function switchHierarchyLayer(hierarchyKey) {
-             // ... (sin cambios, mantiene corrección y logs) ...
-             currentHierarchy = hierarchyKey; 
-             console.log(`Cambiando a jerarquía: ${hierarchyKey}`); 
-             
-             let removedCuencas = false, removedSub = false, removedSubSub = false;
-             if (cuencasLayer) { try { mapa.removeLayer(cuencasLayer); layerControl.removeLayer(cuencasLayer); removedCuencas = true; } catch(e) { console.warn("Error quitando cuencasLayer:", e); } }
-             if (subcuencasLayer) { try { mapa.removeLayer(subcuencasLayer); layerControl.removeLayer(subcuencasLayer); removedSub = true; } catch(e) { console.warn("Error quitando subcuencasLayer:", e); } }
-             if (subsubcuencasLayer) { try { mapa.removeLayer(subsubcuencasLayer); layerControl.removeLayer(subsubcuencasLayer); removedSubSub = true; } catch(e) { console.warn("Error quitando subsubcuencasLayer:", e); } }
-             console.log(`Capas antiguas removidas: Cuencas=${removedCuencas}, Sub=${removedSub}, SubSub=${removedSubSub}`);
-             
-             highlightedFeature = null; 
+            currentHierarchy = hierarchyKey; 
+            console.log(`Cambiando a jerarquía: ${hierarchyKey}`); 
+            
+            let removedCuencas = false, removedSub = false, removedSubSub = false;
+            if (cuencasLayer) { try { mapa.removeLayer(cuencasLayer); layerControl.removeLayer(cuencasLayer); removedCuencas = true; } catch(e) { console.warn("Error quitando cuencasLayer:", e); } }
+            if (subcuencasLayer) { try { mapa.removeLayer(subcuencasLayer); layerControl.removeLayer(subcuencasLayer); removedSub = true; } catch(e) { console.warn("Error quitando subcuencasLayer:", e); } }
+            if (subsubcuencasLayer) { try { mapa.removeLayer(subsubcuencasLayer); layerControl.removeLayer(subsubcuencasLayer); removedSubSub = true; } catch(e) { console.warn("Error quitando subsubcuencasLayer:", e); } }
+            console.log(`Capas antiguas removidas: Cuencas=${removedCuencas}, Sub=${removedSub}, SubSub=${removedSubSub}`);
+            
+            highlightedFeature = null; 
 
-             const config = HIERARCHY_CONFIG[hierarchyKey];
-             if (!config) return;
+            const config = HIERARCHY_CONFIG[hierarchyKey];
+            if (!config) return;
 
-               const url = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${currentVariable}.geojson`;
-               console.log("Intentando cargar GeoJSON de jerarquía:", url); 
+            // --- CORRECCIÓN 3 (Cache-Busting): Añadido `?v=${Date.now()}` ---
+            const url = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${currentVariable}.geojson?v=${Date.now()}`;
+            console.log("Intentando cargar GeoJSON de jerarquía:", url); 
 
-             try {
-                 const response = await fetch(url);
+            try {
+                const response = await fetch(url);
 
-                 if (!response.ok) {
-                     console.error(`No se pudo cargar ${url}. Status: ${response.status}. ¿Ejecutaste el backend correctamente?`);
-                     throw new Error(`No se pudo cargar ${url}.`);
-                 }
-                 console.log(`GeoJSON ${url} cargado OK.`); 
+                if (!response.ok) {
+                    console.error(`No se pudo cargar ${url}. Status: ${response.status}. ¿Ejecutaste el backend correctamente?`);
+                    throw new Error(`No se pudo cargar ${url}.`);
+                }
+                console.log(`GeoJSON ${url} cargado OK.`); 
 
-                 const geojsonData = await response.json();
-                 const style = { color: "#1a5276", weight: 1.5, opacity: 0.6, fillOpacity: 0.2 };
-                 const highlightStyle = { weight: 3, color: '#e74c3c', fillOpacity: 0.4 };
+                const geojsonData = await response.json();
+                const style = { color: "#1a5276", weight: 1.5, opacity: 0.6, fillOpacity: 0.2 };
+                const highlightStyle = { weight: 3, color: '#e74c3c', fillOpacity: 0.4 };
 
-                 let newLayer = L.geoJSON(geojsonData, { 
-                     style: style,
-                     pane: 'cuencasPane',
-                     onEachFeature: (feature, layer) => {
-                         const props = feature.properties;
-                         const nEstaciones = props.n_estaciones || 0; 
-                         const popupContent = `
-                             <div style="line-height: 1.5;">
-                                 <h4 style="margin: 0 0 5px 0; color:#1a5276;">${config.name}: ${props[config.name_property] || 'N/A'}</h4>
-                                 <b>Código:</b> ${props[config.id_property]}<br>
-                                 <b>N° de estaciones:</b> ${nEstaciones}
-                             </div>`;
-                         layer.bindPopup(popupContent);
-                         layer.on({
-                             click: e => {
-                                 console.log(`Clic en polígono ${props[config.id_property]}. HighlightedFeature:`, highlightedFeature ? 'existe' : 'null'); 
-                                 if (highlightedFeature) {
-                                     try {
+                let newLayer = L.geoJSON(geojsonData, { 
+                    style: style,
+                    pane: 'cuencasPane',
+                    onEachFeature: (feature, layer) => {
+                        const props = feature.properties;
+                        const nEstaciones = props.n_estaciones || 0; 
+                        const popupContent = `
+                            <div style="line-height: 1.5;">
+                                <h4 style="margin: 0 0 5px 0; color:#1a5276;">${config.name}: ${props[config.name_property] || 'N/A'}</h4>
+                                <b>Código:</b> ${props[config.id_property]}<br>
+                                <b>N° de estaciones:</b> ${nEstaciones}
+                            </div>`;
+                        layer.bindPopup(popupContent);
+                        layer.on({
+                            click: e => {
+                                console.log(`Clic en polígono ${props[config.id_property]}. HighlightedFeature:`, highlightedFeature ? 'existe' : 'null'); 
+                                if (highlightedFeature) {
+                                    try {
                                          newLayer.resetStyle(highlightedFeature); 
                                          console.log("Estilo reseteado para polígono anterior."); 
-                                     } catch(err) {
-                                         console.warn("No se pudo resetear el estilo del polígono anterior (puede ser normal si cambió la capa):", err);
-                                     }
-                                 }
-                                 highlightedFeature = e.target; 
-                                 e.target.setStyle(highlightStyle);
-                                 console.log("Nuevo polígono resaltado:", highlightedFeature); 
-                                 
-                                 displayBasinChart(props[config.id_property], props[config.name_property] || '', hierarchyKey);
-                                 
-                                 const comparatorSection = document.querySelector('.basin-comparator-section');
-                                 comparatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                             }
-                         });
-                     }
-                 }).addTo(mapa);
-                 
-                 let layerName = "Capa";
-                 if (hierarchyKey === 'cuencas') { cuencasLayer = newLayer; layerName = "Cuencas"; }
-                 else if (hierarchyKey === 'subcuencas') { subcuencasLayer = newLayer; layerName = "Subcuencas"; }
-                 else { subsubcuencasLayer = newLayer; layerName = "Subsubcuencas"; }
-                 
-                 layerControl.addOverlay(newLayer, layerName);
-                 updateLayerInteractivity();
-                 console.log(`Capa ${layerName} (${currentVariable}) añadida al mapa.`); 
+                                    } catch(err) {
+                                        console.warn("No se pudo resetear el estilo del polígono anterior (puede ser normal si cambió la capa):", err);
+                                    }
+                                }
+                                highlightedFeature = e.target; 
+                                e.target.setStyle(highlightStyle);
+                                console.log("Nuevo polígono resaltado:", highlightedFeature); 
+                                
+                                displayBasinChart(props[config.id_property], props[config.name_property] || '', hierarchyKey);
+                                
+                                const comparatorSection = document.querySelector('.basin-comparator-section');
+                                comparatorSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            }
+                        });
+                    }
+                }).addTo(mapa);
+                
+                let layerName = "Capa";
+                if (hierarchyKey === 'cuencas') { cuencasLayer = newLayer; layerName = "Cuencas"; }
+                else if (hierarchyKey === 'subcuencas') { subcuencasLayer = newLayer; layerName = "Subcuencas"; }
+                else { subsubcuencasLayer = newLayer; layerName = "Subsubcuencas"; }
+                
+                layerControl.addOverlay(newLayer, layerName);
+                updateLayerInteractivity();
+                console.log(`Capa ${layerName} (${currentVariable}) añadida al mapa.`); 
 
-             } catch (error) { console.error(`Error FATAL en switchHierarchyLayer (${hierarchyKey}, ${currentVariable}):`, error); }
+            } catch (error) { console.error(`Error FATAL en switchHierarchyLayer (${hierarchyKey}, ${currentVariable}):`, error); }
         }
 
+        // --- (Función updateLayerInteractivity SIN CAMBIOS) ---
         function updateLayerInteractivity() {
-             // ... (sin cambios) ...
              if (!mapa) return;
             const zoom = mapa.getZoom();
 
@@ -769,68 +682,67 @@
             else if (currentHierarchy === 'subcuencas') activeHierarchyLayer = subcuencasLayer;
             else activeHierarchyLayer = subsubcuencasLayer;
             if (activeHierarchyLayer) {
-                activeHierarchyLayer.eachLayer(layer => {
-                    if (zoom < ZOOM_THRESHOLD) {
-                        if (!layer.listens('mouseover')) {
-                            layer.on({
-                                mouseover: function (e) { this.openPopup(e.latlng); },
-                                mouseout: function () { this.closePopup(); },
-                                mousemove: function (e) { if (this.isPopupOpen()) this.getPopup().setLatLng(e.latlng); }
-                            });
-                        }
-                    } else {
-                        layer.off('mouseover mouseout mousemove');
-                        layer.closePopup();
-                    }
-                });
+                 activeHierarchyLayer.eachLayer(layer => {
+                     if (zoom < ZOOM_THRESHOLD) {
+                         if (!layer.listens('mouseover')) {
+                             layer.on({
+                                 mouseover: function (e) { this.openPopup(e.latlng); },
+                                 mouseout: function () { this.closePopup(); },
+                                 mousemove: function (e) { if (this.isPopupOpen()) this.getPopup().setLatLng(e.latlng); }
+                             });
+                         }
+                     } else {
+                         layer.off('mouseover mouseout mousemove');
+                         layer.closePopup();
+                     }
+                 });
             }
 
             if (estacionesLayer) {
-                estacionesLayer.eachLayer(layer => {
-                    const props = layer.feature.properties;
-                    const variables = (props.variables_disponibles || "").split('|');
-                    const hasData = variables.includes(currentVariable.toUpperCase());
+                 estacionesLayer.eachLayer(layer => {
+                     const props = layer.feature.properties;
+                     const variables = (props.variables_disponibles || "").split('|');
+                     const hasData = variables.includes(currentVariable.toUpperCase());
 
-                    if (zoom < ZOOM_THRESHOLD) {
-                        layer.setRadius(3);
-                        layer.off('mouseover mouseout click');
-                    } else {
-                        layer.setRadius(6);
-                        if (hasData) {
-                            if (!layer.listens('click')) { 
-                                layer.on({
-                                    mouseover: function () { this.openPopup(); },
-                                    mouseout: function () { this.closePopup(); },
-                                    click: () => { displayTimeSeries(props.code_internal); } 
-                                });
-                            }
-                        } else {
+                     if (zoom < ZOOM_THRESHOLD) {
+                         layer.setRadius(3);
+                         layer.off('mouseover mouseout click');
+                     } else {
+                         layer.setRadius(6);
+                         if (hasData) {
+                             if (!layer.listens('click')) { 
+                                 layer.on({
+                                     mouseover: function () { this.openPopup(); },
+                                     mouseout: function () { this.closePopup(); },
+                                     click: () => { displayTimeSeries(props.code_internal); } 
+                                 });
+                             }
+                         } else {
                              if (layer.listens('click')) { 
                                  layer.off('mouseover mouseout click');
                              }
-                        }
-                    }
-                });
+                         }
+                     }
+                 });
             } else {
                  console.warn("updateLayerInteractivity: estacionesLayer no existe todavía."); 
             }
         }
-
-        // --- ¡FUNCIÓN ACTUALIZADA! ---
+        
         async function displayBasinChart(featureId, featureName, hierarchyKey) {
             const chartDiv = document.getElementById('basinChartContainer');
             const buttonContainer = document.getElementById('basinYearButtonsContainer');
             Plotly.purge(chartDiv); 
             buttonContainer.innerHTML = '';
-            document.getElementById('at-stats-selector-container').style.display = 'none'; // <-- CORRECCIÓN AÑADIDA
-            // No intentes ocultar #basinChartStatus
+            document.getElementById('at-stats-selector-container').style.display = 'none'; 
 
             const hierarchyConfig = HIERARCHY_CONFIG[hierarchyKey];
             const locationTitle = `${hierarchyConfig.name} ${featureName} (${featureId})`;
             document.getElementById('comparator-title').innerText = `Análisis Comparativo para ${locationTitle}`;
             chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando datos de ${locationTitle}...</p>`;
 
-            const jsonUrl = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${featureId}_${currentVariable}.json`;
+            // --- CORRECCIÓN 4 (Cache-Busting): Añadido `?v=${Date.now()}` ---
+            const jsonUrl = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${featureId}_${currentVariable}.json?v=${Date.now()}`;
             console.log("Intentando cargar JSON de cuenca:", jsonUrl); 
 
             try {
@@ -844,8 +756,8 @@
                 currentBasinFullData = await response.json(); 
 
                 if (!currentBasinFullData || typeof currentBasinFullData !== 'object' || Object.keys(currentBasinFullData).length === 0) {
-                     console.warn(`Los datos JSON para ${featureId} (${currentVariable}) están vacíos o son inválidos.`);
-                     throw new Error(`No hay datos válidos para mostrar para ${locationTitle} (Variable: ${currentVariable}).`);
+                    console.warn(`Los datos JSON para ${featureId} (${currentVariable}) están vacíos o son inválidos.`);
+                    throw new Error(`No hay datos válidos para mostrar para ${locationTitle} (Variable: ${currentVariable}).`);
                 }
                 console.log(`JSON ${jsonUrl} cargado OK y contiene datos.`); 
 
@@ -856,9 +768,9 @@
                 
                 const allDates = Object.values(currentBasinFullData).flatMap(s => s.dates);
                 if (allDates.length === 0) {
-                     console.warn(`No se encontraron fechas en los datos JSON para ${featureId}.`);
-                     renderBasinPlot({}, null, null); 
-                     return;
+                    console.warn(`No se encontraron fechas en los datos JSON para ${featureId}.`);
+                    renderBasinPlot({}, null, null); 
+                    return;
                 }
                 const years = [...new Set(allDates.map(d => parseInt(d.substring(0, 4), 10)))].sort((a,b)=>a-b);
 
@@ -892,33 +804,36 @@
                 });
                 // --- Fin Botones de Año ---
 
-                // --- BOTÓN DE ANÁLISIS ANUAL (DINÁMICO) ---
+                // --- CORRECCIÓN: Lógica de botones anuales alineada con el backend ---
                 const annualConfig = VARIABLE_UI_CONFIG[currentVariable];
                 const analysisType = annualConfig.annual_analysis_type;
 
                 if (analysisType) { // Si hay algún tipo de análisis anual definido
-                     const annualBtn = document.createElement("button");
-                     let buttonText = "Análisis Anual"; // Texto por defecto
-                     let clickHandler = null;
+                    const annualBtn = document.createElement("button");
+                    let buttonText = "Análisis Anual"; 
+                    let clickHandler = null;
 
-                     if (analysisType === 'ppt_robust') {
-                         buttonText = "Acumulación Anual";
-                         clickHandler = () => renderBasinAnnualPlot(featureId, hierarchyKey, annualBtn);
-                     } else if (analysisType === 'sd_max') {
-                         buttonText = "Máximo Anual";
-                         clickHandler = () => renderBasinAnnualMaxPlot(featureId, hierarchyKey, annualBtn);
-                     } else if (analysisType === 'at_stats') {
-                         buttonText = "Extremos Anuales";
-                         clickHandler = () => renderBasinAnnualStatsPlot(featureId, hierarchyKey, annualBtn);
-                     }
-                     
-                     if(clickHandler) {
-                         annualBtn.textContent = buttonText;
-                         annualBtn.onclick = clickHandler;
-                         buttonContainer.appendChild(annualBtn);
-                     }
+                    if (analysisType === 'ppt_annual') {
+                        buttonText = "Acumulación Anual";
+                        // Llama a la función original de PPT, que ya era correcta
+                        clickHandler = () => renderBasinAnnualPlot(featureId, hierarchyKey, annualBtn);
+                    } else if (analysisType === 'sd_median') {
+                        buttonText = "Mediana Anual (May-Oct)";
+                        // Llama a la función que vamos a CORREGIR
+                        clickHandler = () => renderBasinAnnualMedianPlot_SD(featureId, hierarchyKey, annualBtn);
+                    } else if (analysisType === 'at_median') {
+                        buttonText = "Mediana Anual (May-Oct)";
+                        // Llama a la función que vamos a CORREGIR
+                        clickHandler = () => renderBasinAnnualMedianPlot_AT(featureId, hierarchyKey, annualBtn);
+                    }
+                    
+                    if(clickHandler) {
+                        annualBtn.textContent = buttonText;
+                        annualBtn.onclick = clickHandler;
+                        buttonContainer.appendChild(annualBtn);
+                    }
                 }
-                // --- FIN BOTÓN ANÁLISIS ANUAL ---
+                // --- FIN CORRECCIÓN ---
                 
                 renderBasinPlot(currentBasinFullData, null, allBtn); // Muestra el gráfico mensual por defecto
             } catch (error) {
@@ -927,33 +842,29 @@
                 currentBasinFullData = null;
             }
         }
-        // --- FIN ACTUALIZACIÓN ---
-
-
+        
+        // --- (Función renderBasinPlot SIN CAMBIOS, ya era correcta) ---
         function renderBasinPlot(dataToPlot, year, activeBtn) {
-             document.getElementById('at-stats-selector-container').style.display = 'none'; // <-- CORRECCIÓN AÑADIDA
-             document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
+            document.getElementById('at-stats-selector-container').style.display = 'none'; 
+            document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
 
-             if (Object.keys(dataToPlot).length === 0) {
-                 console.log("renderBasinPlot: No hay datos para graficar.");
-                 Plotly.newPlot('basinChartContainer', [], {title: `No hay datos disponibles${year ? ` (${year})` : ''}`});
-                 return;
-             }
+            if (Object.keys(dataToPlot).length === 0) {
+                console.log("renderBasinPlot: No hay datos para graficar.");
+                Plotly.newPlot('basinChartContainer', [], {title: `No hay datos disponibles${year ? ` (${year})` : ''}`});
+                return;
+            }
 
             const sortedStations = Object.entries(dataToPlot).sort(([, stationA], [, stationB]) => {
-                // Trata nulls como +Infinity para que siempre vayan al fondo de la lista
-                const elevA = stationA.elevation === null ? Infinity : stationA.elevation;
-                const elevB = stationB.elevation === null ? Infinity : stationB.elevation;
+                const elevA = stationA.elevation === null ? Infinity : stationA.elevation;
+                const elevB = stationB.elevation === null ? Infinity : stationB.elevation;
 
-                if (currentVariable === 'at') {
-                    // ASCENDENTE para Temperatura (Menor elevación primero)
-                    return elevA - elevB; 
-                } else {
-                    // DESCENDENTE para PPT y Nieve (Mayor elevación primero)
-                    return elevB - elevA;
-                }
-            });
+                if (currentVariable === 'at') {
+                    return elevA - elevB; 
+                } else {
+                    return elevB - elevA;
+                }
+            });
 
             const config = VARIABLE_UI_CONFIG[currentVariable];
             const yAxisTitle = `${config.name} (${config.unit})`;
@@ -995,14 +906,15 @@
         }
 
         async function renderBasinAnnualPlot(featureId, hierarchyKey, activeBtn) {
-             document.getElementById('at-stats-selector-container').style.display = 'none'; // <-- CORRECCIÓN AÑADIDA
-             document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
+            document.getElementById('at-stats-selector-container').style.display = 'none'; 
+            document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
 
             const chartDiv = document.getElementById('basinChartContainer');
             chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando datos de acumulación anual...</p>`;
 
-            const annualUrl = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${featureId}_${currentVariable}_annual.json`; // _ppt_annual.json
+            // --- CORRECCIÓN 5 (Cache-Busting): Añadido `?v=${Date.now()}` ---
+            const annualUrl = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${featureId}_${currentVariable}_annual.json?v=${Date.now()}`; // _ppt_annual.json
             console.log("Intentando cargar JSON anual PPT:", annualUrl); 
 
             try {
@@ -1035,7 +947,7 @@
                 });
 
                 const layout = {
-                    title: 'Precipitación Acumulada Anual (Años Válidos)',
+                    title: 'Precipitación Acumulada Anual (Años Válidos May-Oct)', // --- CORRECCIÓN --- Título actualizado
                     xaxis: { title: 'Año', type: 'category' }, yaxis: { title: yAxisTitle }, 
                     hovermode: 'closest',
                     legend: { traceorder: 'normal', title: { text: '<b>Estaciones</b><br> ', font: { size: 14 } }, bgcolor: 'rgba(248, 249, 250, 0.95)', bordercolor: '#dee2e6', borderwidth: 1, borderRadius: 8, x: 1.02, xanchor: 'left' },
@@ -1047,26 +959,26 @@
             } catch (error) { console.error("Error en renderBasinAnnualPlot:", error); chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`; }
         }
 
-        // --- ¡NUEVA FUNCIÓN para SD Max Anual! ---
-        async function renderBasinAnnualMaxPlot(featureId, hierarchyKey, activeBtn) {
-            document.getElementById('at-stats-selector-container').style.display = 'none'; // <-- CORRECCIÓN AÑADIDA
+        // --- CORRECCIÓN: Función REESCRITA para SD (Mediana) ---
+        async function renderBasinAnnualMedianPlot_SD(featureId, hierarchyKey, activeBtn) {
+            document.getElementById('at-stats-selector-container').style.display = 'none'; 
             document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
 
             const chartDiv = document.getElementById('basinChartContainer');
-            chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando máximos anuales de nieve...</p>`;
+            chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando mediana anual de nieve (May-Oct)...</p>`;
 
-            // Construye la URL del nuevo archivo JSON
-            const annualUrl = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${featureId}_sd_annual_max.json`; 
-            console.log("Intentando cargar JSON anual SD Max:", annualUrl); 
+            // Construye la URL del archivo CORRECTO del backend
+            const annualUrl = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${featureId}_sd_annual_median.json?v=${Date.now()}`; 
+            console.log("Intentando cargar JSON anual SD Median:", annualUrl); 
 
             try {
                 const response = await fetch(annualUrl);
-                if (!response.ok) { console.error(`Error ${response.status} al cargar ${annualUrl}`); throw new Error(`No se encontraron datos de máximo anual de nieve.`); }
+                if (!response.ok) { console.error(`Error ${response.status} al cargar ${annualUrl}`); throw new Error(`No se encontraron datos de mediana anual de nieve.`); }
                  console.log(`JSON anual ${annualUrl} cargado OK.`); 
                 const annualData = await response.json();
 
-                 if (Object.keys(annualData).length === 0) { console.warn("renderBasinAnnualMaxPlot: No hay datos anuales SD max."); Plotly.newPlot('basinChartContainer', [], {title: 'No hay datos de máximo anual de nieve disponibles'}); return; }
+                 if (Object.keys(annualData).length === 0) { console.warn("renderBasinAnnualMedianPlot_SD: No hay datos."); Plotly.newPlot('basinChartContainer', [], {title: 'No hay datos de mediana anual de nieve disponibles'}); return; }
 
                 const sortedStations = Object.entries(annualData).sort(([, stationA], [, stationB]) => {
                     const elevA = stationA.elevation === null ? -Infinity : stationA.elevation;
@@ -1075,7 +987,7 @@
                 });
 
                 const config = VARIABLE_UI_CONFIG['sd']; // Usa config de SD
-                const yAxisTitle = `Máximo Mensual Anual (${config.unit})`;
+                const yAxisTitle = `Mediana Anual (May-Oct) (${config.unit})`;
                 const hoverUnit = config.unit;
                 const hoverName = config.name;
 
@@ -1083,145 +995,97 @@
                     const elevationText = station.elevation !== null ? `${station.elevation} msnm` : 'N/A';
                     return {
                         x: station.years, 
-                        y: station.values, // 'values' contiene los máximos anuales
+                        y: station.values, // 'values' contiene las medianas anuales
                         name: `${station.name} (${elevationText})`,
                         type: 'scatter', mode: 'lines+markers', connectgaps: false,
                         line: { color: stationColorMap[stationCode] || '#333' }, 
                         marker: { color: stationColorMap[stationCode] || '#333' },
-                        hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>Máx. ${hoverName}: %{y:.1f} ${hoverUnit}<extra></extra>`, // Texto hover ajustado
+                        hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>Med. ${hoverName}: %{y:.1f} ${hoverUnit}<extra></extra>`, // Texto hover ajustado
                     };
                 });
 
                 const layout = {
-                    title: 'Altura de Nieve Máxima Mensual por Año (Años Válidos)', // Título ajustado
+                    title: 'Altura de Nieve - Mediana Anual (May-Oct) (Años Válidos)', // Título ajustado
                     xaxis: { title: 'Año', type: 'category' }, yaxis: { title: yAxisTitle }, 
                     hovermode: 'closest',
                     legend: { traceorder: 'normal', title: { text: '<b>Estaciones</b><br> ', font: { size: 14 } }, bgcolor: 'rgba(248, 249, 250, 0.95)', bordercolor: '#dee2e6', borderwidth: 1, borderRadius: 8, x: 1.02, xanchor: 'left' },
                     margin: { r: 250 }
                 };
                 Plotly.newPlot('basinChartContainer', traces, layout, {responsive: true});
-                 console.log("Gráfico anual SD Max renderizado."); 
+                 console.log("Gráfico anual SD Median renderizado."); 
 
-            } catch (error) { console.error("Error en renderBasinAnnualMaxPlot:", error); chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`; }
+            } catch (error) { console.error("Error en renderBasinAnnualMedianPlot_SD:", error); chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`; }
         }
+        // --- FIN CORRECCIÓN ---
 
-        // --- ¡FUNCIÓN ACTUALIZADA para AT Max/Min Anual! ---
-        async function renderBasinAnnualStatsPlot(featureId, hierarchyKey, activeBtn) {
+
+        // --- CORRECCIÓN: Función REESCRITA para AT (Mediana) ---
+        async function renderBasinAnnualMedianPlot_AT(featureId, hierarchyKey, activeBtn) {
             document.querySelectorAll("#basinYearButtonsContainer button").forEach(b => b.classList.remove("active"));
             if (activeBtn) activeBtn.classList.add("active");
 
-            // --- ¡NUEVO! Mostrar y configurar selector ---
-            const selectorContainer = document.getElementById('at-stats-selector-container');
-            selectorContainer.style.display = 'block'; // Mostrarlo
-            
-            const selector = document.getElementById('at-stats-select');
-            // Asigna el evento onchange para que vuelva a llamar a esta misma función
-            selector.onchange = () => {
-                // featureId, hierarchyKey, y activeBtn están disponibles en este scope
-                renderBasinAnnualStatsPlot(featureId, hierarchyKey, activeBtn); 
-            };
-            // --- Fin Configuración Selector ---
+            // Oculta el selector de min/max, ya no es relevante
+            document.getElementById('at-stats-selector-container').style.display = 'none'; 
 
             const chartDiv = document.getElementById('basinChartContainer');
-            chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando extremos anuales de temperatura...</p>`;
-
-            const annualUrl = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${featureId}_at_annual_stats.json`; 
-            console.log("Intentando cargar JSON anual AT Stats:", annualUrl); 
+            chartDiv.innerHTML = `<p style="text-align:center;color:#007bff;padding:100px;">Cargando mediana anual de temperatura (May-Oct)...</p>`;
+            
+            // Construye la URL del archivo CORRECTO del backend
+            const annualUrl = `${DATA_STATIC_BASE_URL}/${hierarchyKey}_${featureId}_at_annual_median.json?v=${Date.now()}`; 
+            console.log("Intentando cargar JSON anual AT Median:", annualUrl); 
 
             try {
                 const response = await fetch(annualUrl);
-                if (!response.ok) { console.error(`Error ${response.status} al cargar ${annualUrl}`); throw new Error(`No se encontraron datos de extremos anuales de temperatura.`); }
+                if (!response.ok) { console.error(`Error ${response.status} al cargar ${annualUrl}`); throw new Error(`No se encontraron datos de mediana anual de temperatura.`); }
                  console.log(`JSON anual ${annualUrl} cargado OK.`); 
                 const annualData = await response.json();
 
-                 if (Object.keys(annualData).length === 0) { console.warn("renderBasinAnnualStatsPlot: No hay datos anuales AT stats."); Plotly.newPlot('basinChartContainer', [], {title: 'No hay datos de extremos anuales de temperatura disponibles'}); return; }
+                 if (Object.keys(annualData).length === 0) { console.warn("renderBasinAnnualMedianPlot_AT: No hay datos."); Plotly.newPlot('basinChartContainer', [], {title: 'No hay datos de mediana anual de temperatura disponibles'}); return; }
 
-                const sortedStations = Object.entries(annualData).sort(([, stationA], [, stationB]) => {
-                    // Trata nulls como +Infinity para que siempre vayan al fondo de la lista
-                    const elevA = stationA.elevation === null ? Infinity : stationA.elevation;
-                    const elevB = stationB.elevation === null ? Infinity : stationB.elevation;
-                    // ASCENDENTE para Temperatura (Menor elevación primero)
-                    return elevA - elevB;
-                });
-
-                // --- ¡NUEVO! Leer valor del selector ---
-                const statToShow = document.getElementById('at-stats-select').value; // 'max' o 'min'
-
+                const sortedStations = Object.entries(annualData).sort(([, stationA], [, stationB]) => {
+                    const elevA = stationA.elevation === null ? Infinity : stationA.elevation;
+                    const elevB = stationB.elevation === null ? Infinity : stationB.elevation;
+                    return elevA - elevB; // Ascendente para Temperatura
+                });
+                
                 const config = VARIABLE_UI_CONFIG['at']; 
-                const yAxisTitle = `Temperatura (${config.unit})`;
+                const yAxisTitle = `Mediana Anual (May-Oct) (${config.unit})`;
                 const hoverUnit = config.unit;
+                const hoverName = config.name;
 
-                const traces = []; 
-
-                sortedStations.forEach(([stationCode, station]) => {
+                const traces = sortedStations.map(([stationCode, station]) => {
                     const elevationText = station.elevation !== null ? `${station.elevation} msnm` : 'N/A';
-                    const stationColor = stationColorMap[stationCode] || '#333'; 
-
-                    // Requerimiento 2: Nombre de leyenda simplificado
-                    const traceName = `${station.name} (${elevationText})`;
-
-                    // Requerimiento 1: Mostrar solo la traza seleccionada
-                    if (statToShow === 'max') {
-                        // Traza para Máximos (triángulo hacia arriba)
-                        traces.push({
-                            x: station.years, 
-                            y: station.max_values, // Usa max_values
-                            name: traceName, // Nombre simplificado
-                            legendgroup: stationCode,
-                            type: 'scatter', mode: 'lines+markers',connectgaps: false,
-                            line: { color: stationColor },
-                            marker: { 
-                                color: stationColor, 
-                                symbol: 'triangle-up', 
-                                size: 7
-                            }, 
-                            hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>Temp. Máx: %{y:.1f} ${hoverUnit}<extra></extra>`,
-                        });
-                    } else { // statToShow === 'min'
-                        // Traza para Mínimos (triángulo hacia abajo)
-                        traces.push({
-                            x: station.years, 
-                            y: station.min_values, // Usa min_values
-                            name: traceName, // Nombre simplificado
-                            legendgroup: stationCode,
-                            type: 'scatter', mode: 'lines+markers', connectgaps: false, 
-                            line: { color: stationColor, dash: 'dot' }, // Línea punteada
-                            marker: { 
-                                color: stationColor, 
-                                symbol: 'triangle-down', 
-                                size: 7 
-                            }, 
-                            hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>Temp. Mín: %{y:.1f} ${hoverUnit}<extra></extra>`,
-                        });
-                    }
+                    return {
+                        x: station.years, 
+                        y: station.values, // 'values' contiene las medianas
+                        name: `${station.name} (${elevationText})`,
+                        type: 'scatter', mode: 'lines+markers', connectgaps: false,
+                        line: { color: stationColorMap[stationCode] || '#333' }, 
+                        marker: { color: stationColorMap[stationCode] || '#333' },
+                        hovertemplate: `<b>${station.name}</b><br>Año: %{x}<br>Med. ${hoverName}: %{y:.1f} ${hoverUnit}<extra></extra>`,
+                    };
                 });
 
-                // Requerimiento 2: Título dinámico
-                const plotTitle = (statToShow === 'max') ? 
-                    'Temperatura Máxima Mensual por Año (Años Válidos)' : 
-                    'Temperatura Mínima Mensual por Año (Años Válidos)';
-
                 const layout = {
-                    title: plotTitle, // Título actualizado
+                    title: 'Temperatura - Mediana Anual (May-Oct) (Años Válidos)', // Título ajustado
                     xaxis: { title: 'Año', type: 'category' }, yaxis: { title: yAxisTitle }, 
                     hovermode: 'closest',
                     legend: { 
-                        traceorder: 'normal', // 'normal' es mejor ahora
-                        title: { text: '<b>Estaciones</b><br> ', font: { size: 14 } }, // Título de leyenda simple
+                        traceorder: 'normal', 
+                        title: { text: '<b>Estaciones</b><br> ', font: { size: 14 } }, 
                         bgcolor: 'rgba(248, 249, 250, 0.95)', bordercolor: '#dee2e6', borderwidth: 1, borderRadius: 8, x: 1.02, xanchor: 'left' 
                     },
                     margin: { r: 250 }
                 };
                 Plotly.newPlot('basinChartContainer', traces, layout, {responsive: true});
-                 console.log(`Gráfico anual AT Stats renderizado (Modo: ${statToShow}).`); 
+                 console.log(`Gráfico anual AT Median renderizado.`); 
 
             } catch (error) { 
-                console.error("Error en renderBasinAnnualStatsPlot:", error); 
+                console.error("Error en renderBasinAnnualMedianPlot_AT:", error); 
                 chartDiv.innerHTML = `<p style="text-align:center;color:#dc3545;padding:100px;">${error.message}</p>`;
-                document.getElementById('at-stats-selector-container').style.display = 'none'; // Oculta el selector si hay error
             }
         }
-        // --- FIN NUEVAS FUNCIONES ---
+        // --- FIN CORRECCIÓN ---
 
     </script>
 </body>

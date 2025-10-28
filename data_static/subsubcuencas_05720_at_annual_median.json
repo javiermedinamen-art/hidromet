@@ -1,0 +1,98 @@
+{
+  "cerro3puntas": {
+    "name": "Cerro3Puntas",
+    "elevation": 3685.0,
+    "years": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      -0.9,
+      -1.7
+    ]
+  },
+  "vallenevado_meteo": {
+    "name": "ValleNevado_METEO",
+    "elevation": 3042.0,
+    "years": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      2.1,
+      null,
+      2.2,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "vallenevado_spa": {
+    "name": "ValleNevado_SPA",
+    "elevation": 3042.0,
+    "years": [
+      2013,
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      1.7,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    ]
+  }
+}

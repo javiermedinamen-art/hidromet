@@ -1,0 +1,82 @@
+{
+  "1130001": {
+    "name": "Cordon Divisadero",
+    "elevation": 1430.0,
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      -1.9
+    ]
+  },
+  "1130004": {
+    "name": "Balmaceda Ad",
+    "elevation": 517.0,
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      2.9,
+      null
+    ]
+  },
+  "1130003": {
+    "name": "Teniente Vidal. Coyhaique Ad",
+    "elevation": 299.0,
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      5.2,
+      4.7,
+      null,
+      4.2,
+      4.1,
+      4.2
+    ]
+  },
+  "1130002": {
+    "name": "Mirador Marchant. Coyhaique",
+    "elevation": null,
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      3.4,
+      3.5
+    ]
+  }
+}

@@ -1,0 +1,98 @@
+{
+  "05706005": {
+    "name": "Glaciar Olivares Alfa",
+    "elevation": 4230.0,
+    "years": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "05706004": {
+    "name": "Glaciar Juncal Sur",
+    "elevation": 4035.0,
+    "years": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      0.0,
+      0.0,
+      14.3,
+      3.7
+    ]
+  },
+  "05706002": {
+    "name": "Glaciar Olivares Gamma",
+    "elevation": 3628.0,
+    "years": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      4.2,
+      6.4,
+      null,
+      null,
+      null,
+      null,
+      25.1,
+      48.9
+    ]
+  },
+  "05706003": {
+    "name": "Valle Olivares",
+    "elevation": 2787.0,
+    "years": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      14.7,
+      null,
+      0.0,
+      null,
+      null,
+      6.5,
+      null,
+      25.9
+    ]
+  }
+}

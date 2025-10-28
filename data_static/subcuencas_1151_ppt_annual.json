@@ -22,7 +22,7 @@
       null,
       null,
       null,
-      null,
+      636.1,
       1058.2,
       611.3
     ]
@@ -78,37 +78,9 @@
       null,
       null,
       null,
-      null,
+      6370.8,
       null,
       3955.8
-    ]
-  },
-  "riotranquilo_nerc": {
-    "name": "RioTranquilo_NERC",
-    "elevation": null,
-    "years": [
-      2015,
-      2016,
-      2017,
-      2018,
-      2019,
-      2020,
-      2021,
-      2022,
-      2023,
-      2024
-    ],
-    "values": [
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null
     ]
   }
 }

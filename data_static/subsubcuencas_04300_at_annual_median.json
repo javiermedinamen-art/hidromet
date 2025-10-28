@@ -1,0 +1,212 @@
+{
+  "0430015": {
+    "name": "Paso Agua Negra",
+    "elevation": 4774.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      -8.9,
+      null,
+      null,
+      null,
+      null,
+      -7.5,
+      -7.6,
+      null,
+      -6.6,
+      null
+    ]
+  },
+  "0430004": {
+    "name": "Tapado (TPF)",
+    "elevation": 4306.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      -3.6,
+      -5.1,
+      null,
+      null,
+      -3.9,
+      -4.0,
+      -3.9,
+      null,
+      null,
+      -2.3,
+      null
+    ]
+  },
+  "0430005": {
+    "name": "El Tapado 2",
+    "elevation": 4250.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      -3.5
+    ]
+  },
+  "04300004": {
+    "name": "Glaciar Tapado en Los Corrales",
+    "elevation": 4060.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      -1.5,
+      -1.7,
+      -3.8,
+      -0.4,
+      -2.4
+    ]
+  },
+  "0430014": {
+    "name": "Los Corrales",
+    "elevation": 3982.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      -4.0,
+      null,
+      null
+    ]
+  },
+  "0430012": {
+    "name": "Llano de Las Liebres",
+    "elevation": 3565.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      0.5,
+      null,
+      null,
+      null,
+      null,
+      -0.1
+    ]
+  },
+  "04300001": {
+    "name": "Cerro Olivares",
+    "elevation": 3550.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      0.4
+    ]
+  }
+}
