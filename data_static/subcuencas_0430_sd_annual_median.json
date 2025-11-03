@@ -3,8 +3,6 @@
     "name": "Tapado (TPF)",
     "elevation": 4306.0,
     "years": [
-      2015,
-      2016,
       2017,
       2018,
       2019,
@@ -15,8 +13,6 @@
       2024
     ],
     "values": [
-      null,
-      null,
       null,
       29.2,
       34.4,
@@ -31,8 +27,6 @@
     "name": "Glaciar Tapado en Los Corrales",
     "elevation": 4060.0,
     "years": [
-      2015,
-      2016,
       2017,
       2018,
       2019,
@@ -43,8 +37,6 @@
       2024
     ],
     "values": [
-      null,
-      null,
       null,
       null,
       null,
@@ -59,8 +51,6 @@
     "name": "Los Corrales",
     "elevation": 3982.0,
     "years": [
-      2015,
-      2016,
       2017,
       2018,
       2019,
@@ -71,8 +61,6 @@
       2024
     ],
     "values": [
-      null,
-      null,
       null,
       null,
       null,
@@ -87,8 +75,6 @@
     "name": "Llano de Las Liebres",
     "elevation": 3565.0,
     "years": [
-      2015,
-      2016,
       2017,
       2018,
       2019,
@@ -99,8 +85,6 @@
       2024
     ],
     "values": [
-      null,
-      null,
       null,
       null,
       0.0,
@@ -115,8 +99,6 @@
     "name": "Cerro Olivares",
     "elevation": 3550.0,
     "years": [
-      2015,
-      2016,
       2017,
       2018,
       2019,
@@ -132,38 +114,8 @@
       null,
       null,
       null,
-      null,
-      null,
       0.0,
       null,
-      0.0
-    ]
-  },
-  "0430009": {
-    "name": "La Laguna",
-    "elevation": 3209.0,
-    "years": [
-      2015,
-      2016,
-      2017,
-      2018,
-      2019,
-      2020,
-      2021,
-      2022,
-      2023,
-      2024
-    ],
-    "values": [
-      null,
-      0.0,
-      null,
-      null,
-      null,
-      null,
-      null,
-      0.0,
-      0.0,
       0.0
     ]
   }
