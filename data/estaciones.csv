@@ -52,9 +52,9 @@ vallenevado_spa,ValleNevado_SPA,-33.35157,-70.24680,3042,Rio Maipo,UdeChile,Rio 
 09401001,Tricauco,-38.84389,-71.55139,520,Rio Tolten,DGA,Rio Tolten
 09416002,Lago Tinquilco,-39.1725,-71.73194,850,Rio Tolten,DGA,Rio Tolten
 09412002,Curarrehue,-39.365,-71.58222,420,Rio Tolten,DGA,Rio Tolten
-1110001,Puyuhuapi,-44.4479,-72.5968,,Costeras e Islas entre R.Palena y R.Aisen,CIEP,Costeras e Islas entre R.Palena y R.Aisen
-1110002,Puerto Cisnes,-44.7447,-72.7016,,Costeras e Islas entre R.Palena y R.Aisen,CIEP,Costeras e Islas entre R.Palena y R.Aisen
-1130002,Mirador Marchant. Coyhaique,-45.5253,-72.0981,,Rio Aysen,DMC,Rio Aysen
+1110001,Puyuhuapi,-44.4479,-72.5968,35,Costeras e Islas entre R.Palena y R.Aisen,CIEP,Costeras e Islas entre R.Palena y R.Aisen
+1110002,Puerto Cisnes,-44.7447,-72.7016,5,Costeras e Islas entre R.Palena y R.Aisen,CIEP,Costeras e Islas entre R.Palena y R.Aisen
+1130002,Mirador Marchant. Coyhaique,-45.5253,-72.0981,415,Rio Aysen,DMC,Rio Aysen
 1130003,Teniente Vidal. Coyhaique Ad,-45.5908,-72.1022,299,Rio Aysen,DMC,Rio Aisen
 1130001,Cordon Divisadero,-45.61647,-72.01345,1430,Rio Aysen,CECS,Rio Aisen
 1130004,Balmaceda Ad,-45.9183,-71.6778,517,Rio Aysen,DMC,Rio Aisen
@@ -64,13 +64,13 @@ vallenevado_spa,ValleNevado_SPA,-33.35157,-70.24680,3042,Rio Maipo,UdeChile,Rio 
 11513001,Bahia Murta,-46.45583,-72.6725,240,Rio Baker,DGA,Rio Baker
 11521002,Chile Chico,-46.54333,-71.69944,215,Rio Baker,DGA,Rio Baker
 11521005,Lago General Carrera Fachinal,-46.54333,-72.22639,18,Rio Baker,DGA,Rio Baker
-1150001,Rio Tranquilo,-46.6341,-72.6484,,Rio Baker,CIEP,Rio Baker
+1150001,Rio Tranquilo,-46.6341,-72.6484,235,Rio Baker,CIEP,Rio Baker
 11523002,Lago General Carrera en Puerto Guadal,-46.84194,-72.69722,205,Rio Baker,DGA,Rio Baker
 11517002,Lago General Carrera en Desag e,-46.84639,-72.80333,210,Rio Baker,DGA,Rio Baker
 11533001,Estancia Valle Chacabuco,-47.11861,-72.49389,343,Rio Baker,DGA,Rio Baker
 11532001,Rio Nef antes Junta Estero El Rebalse,-47.14,-73.09389,280,Rio Baker,DGA,Rio Baker
 11540000,Lago Cachet 2 en Glaciar Colonia ,-47.19889,-73.25,427,Rio Baker,DGA,Rio Baker
-1150002,Tortel,-47.7949,-73.5316,,Rio Baker,CIEP,Rio Baker
+1150002,Tortel,-47.7949,-73.5316,39,Rio Baker,CIEP,Rio Baker
 riotranquilo_nerc,RioTranquilo_NERC,-46.65384,-72.76430,,Rio Baker,CIEP_NERC,Rio Baker
 01220,Paso de Agua Negra,-30.189444,-69.801445,4459,San Juan,ainigla?,San Juan
 02325,La Hoya,-42.832964,-71.253820,1530,Chubut,ainigla?,Chubut
@@ -78,8 +78,8 @@ riotranquilo_nerc,RioTranquilo_NERC,-46.65384,-72.76430,,Rio Baker,CIEP_NERC,Rio
 0430012,Llano de Las Liebres,-30.254000,-69.934000,3565,Rio Elqui,CEAZAMET,Elqui
 0430014,Los Corrales,-30.161408,-69.875994,3982,Rio Elqui,CEAZAMET,Elqui
 0430015,Paso Agua Negra,-30.19100,-69.82600,4774,Rio Elqui,CEAZAMET,Elqui
-0430016,Casa del Canto,-31.417337,-70.589000,3570,Rio Limari,CEAZAMET,Limari
-0430017,Tascadero,-31.262951,-70.539993,3427,Rio Limari,CEAZAMET,Limari
+0470001,Casa del Canto,-31.417337,-70.589000,3570,Rio Choapa,CEAZAMET,Choapa
+0450001,Tascadero,-31.262951,-70.539993,3427,Rio Limari,CEAZAMET,Limari
 04511004,Cerro Vega Negra,-30.903333,-70.515833,3600,Rio Limari,DGA,Limari
 04520006,Quebrada Larga Cota 3500,-30.725278,-70.291667,3500,Rio Limari,DGA,Limari
 04700002,El Soldado,-32.006667,-70.321389,3290,Rio Choapa,DGA,Choapa
