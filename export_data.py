@@ -219,8 +219,12 @@ def procesar_jerarquia_geoespacial(shapefile_path, id_columna, output_prefix, gd
                     # Usar .get() para evitar KeyError si la elevación es NaN o falta
                     station_info = estaciones_ordenadas.set_index('code_internal').loc[station_code]
                     if isinstance(station_info, pd.DataFrame): station_info = station_info.iloc[0]
-                    elevation_value = station_info.get('elevation') # Usar .get()
-                    if pd.isna(elevation_value): elevation_value = None # Convertir NaN a None explícitamente
+                    elevation_val_raw = station_info.get('elevation')
+                    if pd.isna(elevation_val_raw): 
+                        elevation_value = None
+                    else:
+                        # Explicitly convert numpy types to native Python float
+                        elevation_value = float(elevation_val_raw)
                     station_name = station_info.get('name', station_code) # Usar código si falta nombre
                 except KeyError: 
                     station_name = station_code
@@ -293,8 +297,12 @@ def procesar_jerarquia_geoespacial(shapefile_path, id_columna, output_prefix, gd
                         try:
                             station_info = estaciones_ordenadas.set_index('code_internal').loc[station_code]
                             if isinstance(station_info, pd.DataFrame): station_info = station_info.iloc[0]
-                            elevation_value = station_info.get('elevation')
-                            if pd.isna(elevation_value): elevation_value = None
+                            elevation_val_raw = station_info.get('elevation')
+                            if pd.isna(elevation_val_raw): 
+                                elevation_value = None
+                            else:
+                                # Explicitly convert numpy types to native Python float
+                                elevation_value = float(elevation_val_raw)
                             station_name = station_info.get('name', station_code)
                         except KeyError: 
                             station_name = station_code
@@ -303,7 +311,7 @@ def procesar_jerarquia_geoespacial(shapefile_path, id_columna, output_prefix, gd
                         values_with_nulls = [None if pd.isna(val) else round(val, 1) for val in df_annual[station_code]]
                         # Incluir solo si hay algún valor anual válido
                         if any(v is not None for v in values_with_nulls):
-                             output_annual_json[station_code] = {'name': station_name, 'elevation': elevation_value, 'years': df_annual.index.year.tolist(), 'values': values_with_nulls}
+                             output_annual_json[station_code] = {'name': station_name, 'elevation': elevation_value, 'years': [int(y) for y in df_annual.index.year], 'values': values_with_nulls}
                     
                     if output_annual_json: # Guardar solo si no está vacío
                         with open(annual_ppt_path, 'w', encoding='utf-8') as f: json.dump(output_annual_json, f, ensure_ascii=False, indent=2)
@@ -368,8 +376,12 @@ def procesar_jerarquia_geoespacial(shapefile_path, id_columna, output_prefix, gd
                         try:
                             station_info = estaciones_ordenadas.set_index('code_internal').loc[station_code]
                             if isinstance(station_info, pd.DataFrame): station_info = station_info.iloc[0]
-                            elevation_value = station_info.get('elevation')
-                            if pd.isna(elevation_value): elevation_value = None
+                            elevation_val_raw = station_info.get('elevation')
+                            if pd.isna(elevation_val_raw): 
+                                elevation_value = None
+                            else:
+                                # Explicitly convert numpy types to native Python float
+                                elevation_value = float(elevation_val_raw)
                             station_name = station_info.get('name', station_code)
                         except KeyError: 
                              station_name = station_code

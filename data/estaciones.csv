@@ -4,6 +4,7 @@ code_internal,name,lat,lon,elevation,basin,fuente,nom_cuen
 04313003,Cochiguaz,-30.1425,-70.40667,1560,Rio Elqui,DGA,Rio Elqui
 0430005,El Tapado 2,-30.15400,-69.89600,4250,Rio Elqui,CEAZAMET,Rio Elqui
 0430006,Estero Derecho,-30.38400,-70.41300,3020,Rio Elqui,CEAZAMET,Rio Elqui
+0430009,La Laguna,-30.2032,-70.0371,3209,Rio Elqui,CEAZAMET,Rio Elqui
 04300004,Glaciar Tapado en Los Corrales,-30.1554,-69.88275,4060,Rio Elqui,DGA,Rio Elqui
 0430004,Tapado (TPF),-30.1583,-69.90818,4306,Rio Elqui,CEAZAMET,Rio Elqui
 04301005,Embalse La Laguna,-30.20222,-70.04139,3160,Rio Elqui,DGA,Rio Elqui
@@ -57,61 +58,65 @@ vallenevado_spa,ValleNevado_SPA,-33.35157,-70.24680,3042,Rio Maipo,UdeChile,Rio 
 1130003,Teniente Vidal. Coyhaique Ad,-45.5908,-72.1022,299,Rio Aysen,DMC,Rio Aisen
 1130001,Cordon Divisadero,-45.61647,-72.01345,1430,Rio Aysen,CECS,Rio Aisen
 1130004,Balmaceda Ad,-45.9183,-71.6778,517,Rio Aysen,DMC,Rio Aisen
-11503002,Portezuelo Iba ez,-46.0778,-72.0508,1080,Rio Baker,DGA,Rio Baker
+11503002,Portezuelo Ibañez,-46.0778,-72.0508,1080,Rio Baker,DGA,Rio Baker
 11503001,Villa Cerro Castillo,-46.12111,-72.15861,345,Rio Baker,DGA,Rio Baker
-11505001,Rio Iba ez en Desembocadura,-46.26861,-71.98889,220,Rio Baker,DGA,Rio Baker
+11505001,Rio Ibañez en Desembocadura,-46.26861,-71.98889,220,Rio Baker,DGA,Rio Baker
 11513001,Bahia Murta,-46.45583,-72.6725,240,Rio Baker,DGA,Rio Baker
 11521002,Chile Chico,-46.54333,-71.69944,215,Rio Baker,DGA,Rio Baker
 11521005,Lago General Carrera Fachinal,-46.54333,-72.22639,18,Rio Baker,DGA,Rio Baker
 1150001,Rio Tranquilo,-46.6341,-72.6484,235,Rio Baker,CIEP,Rio Baker
+1150003,Steffen,-47.55550,-73.69580,30,Rio Baker,CIEP,Rio Baker
 11523002,Lago General Carrera en Puerto Guadal,-46.84194,-72.69722,205,Rio Baker,DGA,Rio Baker
-11517002,Lago General Carrera en Desag e,-46.84639,-72.80333,210,Rio Baker,DGA,Rio Baker
+11517002,Lago General Carrera en Desagüe,-46.84639,-72.80333,210,Rio Baker,DGA,Rio Baker
 11533001,Estancia Valle Chacabuco,-47.11861,-72.49389,343,Rio Baker,DGA,Rio Baker
 11532001,Rio Nef antes Junta Estero El Rebalse,-47.14,-73.09389,280,Rio Baker,DGA,Rio Baker
 11540000,Lago Cachet 2 en Glaciar Colonia ,-47.19889,-73.25,427,Rio Baker,DGA,Rio Baker
 1150002,Tortel,-47.7949,-73.5316,39,Rio Baker,CIEP,Rio Baker
-riotranquilo_nerc,RioTranquilo_NERC,-46.65384,-72.76430,,Rio Baker,CIEP_NERC,Rio Baker
-01220,Paso de Agua Negra,-30.189444,-69.801445,4459,San Juan,ainigla?,San Juan
-02325,La Hoya,-42.832964,-71.253820,1530,Chubut,ainigla?,Chubut
-0430003,El Jote,-30.405266,-70.279483,3660,Rio Elqui,CEAZAMET,Elqui
-0430012,Llano de Las Liebres,-30.254000,-69.934000,3565,Rio Elqui,CEAZAMET,Elqui
-0430014,Los Corrales,-30.161408,-69.875994,3982,Rio Elqui,CEAZAMET,Elqui
-0430015,Paso Agua Negra,-30.19100,-69.82600,4774,Rio Elqui,CEAZAMET,Elqui
-0470001,Casa del Canto,-31.417337,-70.589000,3570,Rio Choapa,CEAZAMET,Choapa
-0450001,Tascadero,-31.262951,-70.539993,3427,Rio Limari,CEAZAMET,Limari
-04511004,Cerro Vega Negra,-30.903333,-70.515833,3600,Rio Limari,DGA,Limari
-04520006,Quebrada Larga Cota 3500,-30.725278,-70.291667,3500,Rio Limari,DGA,Limari
-04700002,El Soldado,-32.006667,-70.321389,3290,Rio Choapa,DGA,Choapa
-05100003,Nacimiento Del Sobrante,-32.188889,-70.483056,3380,Rio Petorca,DGA,Petorca
-05401007,Portillo,-32.844444,-70.110833,3000,Rio Aconcagua,DGA,Aconcagua
-05414004,Resguardo Los Patos,-32.50139,-70.58167,1220,Rio Aconcagua,DGA,Aconcagua
-05701011,Las Hualtatas,-34.067762,-70.108742,2020,Rio Maipo,DGA,Maipo
-05703009,Laguna Negra,-33.665833,-70.107778,2780,Rio Maipo,DGA,Maipo
-06000004,Laguna El Yeso,-34.411111,-70.210277,2140,Rio Rapel,DGA,Rapel
-06020001,Termas Del Flaco,-34.891667,-70.329722,2650,Rio Rapel,DGA,Rapel
-07100006,Paso Vergara,-35.195284,-70.511469,2602,Rio Mataquito,DGA,Mataquito
-07301000,Lo Aguirre,-35.970278,-70.571944,2000,Rio Maule,DGA,Maule
-07301001,Los Condores,-36.009722,-70.547778,2441,Rio Maule,DGA,Maule
-07301002,NUEVA LO AGUIRRE,-35.971394,-70.570011,1997,Rio Maule,DGA,Maule
-07350008,Nevado Longavi,-36.234170,-71.143339,1974,Rio Maule,DGA,Maule
-08130009,Nevado Chillan,-36.847291,-71.415957,2610,Rio Itata,DGA,Itata 
-08301001,Liucura,-38.645114,-71.091007,1152,Rio Biobio,DGA,Biobio
-08372001,Alto Mallines,-37.159067,-71.242754,1900,Rio Biobio,DGA,Biobio
-08374001,Volcan Chillan,-36.893900,-71.411944,2393,Rio Itata,DGA,Itata
-09104,Laguna Atuel,-34.511094,-70.045911,3420,Mendoza,ainigla?,Mendoza
-09120,Paso Pehuenche,-35.979944,-70.394028,2555,Mendoza,ainigla?,Mendoza
-09121,Valle Hermoso,-35.142250,-70.201556,2250,Mendoza,ainigla?,Mendoza
-09131,Laguna Diamante,-34.198889,-69.698139,3300,Mendoza,ainigla?,Mendoza
-09145,Toscas,-33.164167,-69.888611,3000,Mendoza,ainigla?,Mendoza
-09160,Las Leñas,-35.139556,-70.091753,2545,Mendoza,ainigla?,Mendoza
-09250,Cerro Negro,-29.890611,-69.558083,4172,San Juan,ainigla?,San Juan
-09300,Lago Gaucho,-43.828894,-71.405436,1165,Chubut,ainigla?,Chubut
-1150003,Rio Tranquilo,-46.653841,-72.764295,1250,Rio Baker,CIEP - NERC,Baker
-amtc10,Yerba Loca Alto,-33.209000,-70.277000,3340,Rio Maipo,UdeChile,Maipo
-amtc12,Molina Medio,-33.375434,-70.241487,2200,Rio Maipo,UdeChile,Maipo
-amtc13,Molina en Cepo,-33.290967,-70.217264,3380,Rio Maipo,UdeChile,Maipo
-amtc8,Yerba Loca Medio,-33.273000,-70.300000,2520,Rio Maipo,UdeChile,Maipo
-piuquenes10,Piuquenes 10,-33.31321,-70.24766,3570,Rio Maipo,UdeChile,Maipo
-piuquenes14,Piuquenes 14,-33.31764,-70.25167,3380,Rio Maipo,UdeChile,Maipo
-piuquenes6,Piuquenes 6,-33.3165,-70.26112,3556,Rio Maipo,UdeChile,Maipo
-piuquenes7,Piuquenes 7,-33.31332,-70.25608,3483,Rio Maipo,UdeChile,Maipo
+riotranquilo_nerc,RioTranquilo_NERC,-46.65384,-72.76430,1255,Rio Baker,CIEP_NERC,Rio Baker
+01220,Paso de Agua Negra,-30.189444,-69.801445,4459,San Juan,IANIGLA,San Juan
+02325,La Hoya,-42.832964,-71.253820,1530,Chubut,IANIGLA,Chubut
+0430003,El Jote,-30.405266,-70.279483,3660,Rio Elqui,CEAZAMET,Rio Elqui
+0430012,Llano de Las Liebres,-30.254000,-69.934000,3565,Rio Elqui,CEAZAMET,Rio Elqui
+0430014,Los Corrales,-30.161408,-69.875994,3982,Rio Elqui,CEAZAMET,Rio Elqui
+0430015,Paso Agua Negra,-30.19100,-69.82600,4774,Rio Elqui,CEAZAMET,Rio Elqui
+0470001,Casa del Canto,-31.417337,-70.589000,3570,Rio Choapa,CEAZAMET,Rio Choapa
+0450001,Tascadero,-31.262951,-70.539993,3427,Rio Limari,CEAZAMET,Rio Limari
+04511004,Cerro Vega Negra,-30.903333,-70.515833,3600,Rio Limari,DGA,Rio Limari
+04520006,Quebrada Larga Cota 3500,-30.725278,-70.291667,3500,Rio Limari,DGA,Rio Limari
+04700002,El Soldado,-32.006667,-70.321389,3290,Rio Choapa,DGA,Rio Choapa
+05100003,Nacimiento Del Sobrante,-32.188889,-70.483056,3380,Rio Petorca,DGA,Rio Petorca
+05401007,Portillo,-32.844444,-70.110833,3000,Rio Aconcagua,DGA,Rio Aconcagua
+05414004,Resguardo Los Patos,-32.50139,-70.58167,1220,Rio Aconcagua,DGA,Rio Aconcagua
+05701011,Las Hualtatas,-34.067762,-70.108742,2020,Rio Maipo,DGA,Rio Maipo
+05703009,Laguna Negra,-33.665833,-70.107778,2780,Rio Maipo,DGA,Rio Maipo
+06000004,Laguna El Yeso,-34.411111,-70.210277,2140,Rio Rapel,DGA,Rio Rapel
+06020001,Termas Del Flaco,-34.891667,-70.329722,2650,Rio Rapel,DGA,Rio Rapel
+07100006,Paso Vergara,-35.195284,-70.511469,2602,Rio Mataquito,DGA,Rio Mataquito
+07301000,Lo Aguirre,-35.970278,-70.571944,2000,Rio Maule,DGA,Rio Maule
+07301001,Los Condores,-36.009722,-70.547778,2441,Rio Maule,DGA,Rio Maule
+07301002,NUEVA LO AGUIRRE,-35.971394,-70.570011,1997,Rio Maule,DGA,Rio Maule
+07350008,Nevado Longavi,-36.234170,-71.143339,1974,Rio Maule,DGA,Rio Maule
+08130009,Nevado Chillan,-36.847291,-71.415957,2610,Rio Itata,DGA,Rio Itata 
+08301001,Liucura,-38.645114,-71.091007,1152,Rio Biobio,DGA,Rio Biobio
+08372001,Alto Mallines,-37.159067,-71.242754,1900,Rio Biobio,DGA,Rio Biobio
+08374001,Volcan Chillan,-36.893900,-71.411944,2393,Rio Itata,DGA,Rio Itata
+09104,Laguna Atuel,-34.511094,-70.045911,3420,Mendoza,IANIGLA,Mendoza
+09120,Paso Pehuenche,-35.979944,-70.394028,2555,Mendoza,IANIGLA,Mendoza
+09121,Valle Hermoso,-35.142250,-70.201556,2250,Mendoza,IANIGLA,Mendoza
+09131,Laguna Diamante,-34.198889,-69.698139,3300,Mendoza,IANIGLA,Mendoza
+09145,Toscas,-33.164167,-69.888611,3000,Mendoza,IANIGLA,Mendoza
+09160,Las Leñas,-35.139556,-70.091753,2545,Mendoza,IANIGLA,Mendoza
+09250,Cerro Negro,-29.890611,-69.558083,4172,San Juan,IANIGLA,San Juan
+09300,Lago Gaucho,-43.828894,-71.405436,1165,Chubut,IANIGLA,Chubut
+amtc10,Yerba Loca Alto,-33.209000,-70.277000,3340,Rio Maipo,UdeChile,Rio Maipo
+amtc12,Molina Medio,-33.375434,-70.241487,2200,Rio Maipo,UdeChile,Rio Maipo
+amtc13,Molina en Cepo,-33.290967,-70.217264,3380,Rio Maipo,UdeChile,Rio Maipo
+amtc8,Yerba Loca Medio,-33.273000,-70.300000,2520,Rio Maipo,UdeChile,Rio Maipo
+piuquenes10,Piuquenes 10,-33.31321,-70.24766,3570,Rio Maipo,UdeChile,Rio Maipo
+piuquenes14,Piuquenes 14,-33.31764,-70.25167,3380,Rio Maipo,UdeChile,Rio Maipo
+piuquenes6,Piuquenes 6,-33.3165,-70.26112,3556,Rio Maipo,UdeChile,Rio Maipo
+piuquenes7,Piuquenes 7,-33.31332,-70.25608,3483,Rio Maipo,UdeChile,Rio Maipo
+081001,Node1,-36.9148,-71.4166,1633,Rio Itata,UdeChile,Rio Itata
+081002,Node2,-36.9104,-71.4089,1809,Rio Itata,UdeChile,Rio Itata
+081003,Node3,-36.9103,-71.3989,1938,Rio Itata,UdeChile,Rio Itata
+081004,Node4,-36.9205,-71.4180,1695,Rio Itata,UdeChile,Rio Itata
