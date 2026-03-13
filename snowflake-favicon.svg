@@ -1,0 +1,45 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="128" cy="128" r="128" fill="url(#bg)"/>
+<circle cx="128" cy="128" r="92" fill="url(#halo)" fill-opacity="0.55"/>
+<g stroke="#F7FBFF" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M128 44V212"/>
+  <path d="M55.25 86L200.75 170"/>
+  <path d="M55.25 170L200.75 86"/>
+  <path d="M128 44L112 60"/>
+  <path d="M128 44L144 60"/>
+  <path d="M128 212L112 196"/>
+  <path d="M128 212L144 196"/>
+  <path d="M55.25 86L77 89"/>
+  <path d="M55.25 86L64 106"/>
+  <path d="M200.75 170L179 167"/>
+  <path d="M200.75 170L192 150"/>
+  <path d="M55.25 170L64 150"/>
+  <path d="M55.25 170L77 167"/>
+  <path d="M200.75 86L179 89"/>
+  <path d="M200.75 86L192 106"/>
+  <path d="M128 86L112 102"/>
+  <path d="M128 86L144 102"/>
+  <path d="M128 170L112 154"/>
+  <path d="M128 170L144 154"/>
+  <path d="M91.63 107L113.49 111"/>
+  <path d="M91.63 107L99.67 127.7"/>
+  <path d="M164.37 149L142.51 145"/>
+  <path d="M164.37 149L156.33 128.3"/>
+  <path d="M91.63 149L99.67 128.3"/>
+  <path d="M91.63 149L113.49 145"/>
+  <path d="M164.37 107L142.51 111"/>
+  <path d="M164.37 107L156.33 127.7"/>
+</g>
+<circle cx="128" cy="128" r="16" fill="#F7FBFF"/>
+<circle cx="128" cy="128" r="7" fill="#62B8E8"/>
+<defs>
+  <linearGradient id="bg" x1="32" y1="24" x2="224" y2="232" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#1D4F7A"/>
+    <stop offset="1" stop-color="#62B8E8"/>
+  </linearGradient>
+  <radialGradient id="halo" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(128 128) rotate(90) scale(92)">
+    <stop stop-color="#EAF7FF"/>
+    <stop offset="1" stop-color="#EAF7FF" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+</svg>
