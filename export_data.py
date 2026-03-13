@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 
 import geopandas as gpd
 import numpy as np
@@ -24,15 +25,23 @@ ID_COLUMNA_SUBSUBCUENCA = "COD_SSUBC"
 
 
 def cleanup_output_dir():
-    """Remove previously generated files so the folder only keeps current SD outputs."""
+    """
+    Remove all previously generated data files so each run produces a full refresh.
+    Data in 'data/' (estaciones, SD series, shapefiles) changes over time;
+    this ensures data_static always reflects the current sources.
+    """
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
         return
 
+    removed = 0
     for filename in os.listdir(OUTPUT_DIR):
         path = os.path.join(OUTPUT_DIR, filename)
         if os.path.isfile(path) and filename.endswith((".csv", ".json", ".geojson")):
             os.remove(path)
+            removed += 1
+    if removed:
+        print(f"Cleaned {removed} previous output file(s) from {OUTPUT_DIR}.")
 
 
 def cargar_estaciones():
@@ -347,6 +356,24 @@ def exportar_datos_estaticos():
     procesar_jerarquia_geoespacial(PATH_CUENCAS_SHP, ID_COLUMNA_CUENCA, "cuencas", gdf_estaciones_sd, df_monthly, df_annual)
     procesar_jerarquia_geoespacial(PATH_SUBCUENCAS_SHP, ID_COLUMNA_SUBCUENCA, "subcuencas", gdf_estaciones_sd, df_monthly, df_annual)
     procesar_jerarquia_geoespacial(PATH_SUBSUBCUENCAS_SHP, ID_COLUMNA_SUBSUBCUENCA, "subsubcuencas", gdf_estaciones_sd, df_monthly, df_annual)
+
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    version_for_cache = datetime.now().strftime("%Y-%m-%d-sd")
+    metadata_path = os.path.join(OUTPUT_DIR, "export_metadata.json")
+    with open(metadata_path, "w", encoding="utf-8") as f:
+        json.dump(
+            {
+                "export_timestamp": timestamp,
+                "data_version": version_for_cache,
+                "sources": {
+                    "estaciones": PATH_ESTACIONES,
+                    "sd_series": SD_FILE_PATH,
+                },
+            },
+            f,
+            indent=2,
+        )
+    print(f"Wrote {metadata_path} (data_version: {version_for_cache})")
     print("SnowData static export finished.")
 
 

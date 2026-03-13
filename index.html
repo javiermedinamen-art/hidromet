@@ -46,101 +46,101 @@
         }
         .hero {
             display: flex;
-            align-items: stretch;
+            align-items: center;
             justify-content: space-between;
-            gap: 24px;
+            gap: 32px;
             margin-bottom: 22px;
             padding: 8px 4px 18px;
             border-bottom: 1px solid var(--border);
         }
+        .hero-brand {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-shrink: 0;
+        }
+        .hero-brand-icon {
+            width: 84px;
+            height: 84px;
+            border-radius: 18px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .hero-brand-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .hero-brand-titles {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .hero-brand-primary {
+            font-size: clamp(16px, 1.8vw, 20px);
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: 0.02em;
+            color: var(--primary-strong);
+            text-transform: uppercase;
+        }
+        .hero-brand-separator {
+            width: 1px;
+            height: 1.4em;
+            background: rgba(130, 167, 194, 0.5);
+        }
+        .hero-brand-secondary {
+            font-size: clamp(16px, 1.8vw, 20px);
+            font-weight: 400;
+            line-height: 1.2;
+            letter-spacing: 0.02em;
+            color: var(--muted);
+            text-transform: uppercase;
+        }
         .hero-copy {
-            flex: 1.1;
+            flex: 1;
+            min-width: 0;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 14px;
-        }
-        .hero-kicker {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            width: fit-content;
-            padding: 7px 12px;
-            border-radius: 999px;
-            background: rgba(98, 184, 232, 0.12);
-            border: 1px solid rgba(98, 184, 232, 0.24);
-            color: var(--primary-strong);
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-        .hero-copy h1 {
-            margin: 0;
-            font-size: clamp(28px, 3vw, 38px);
-            font-weight: 600;
-            letter-spacing: -0.025em;
-            color: var(--primary);
         }
         .hero-description {
             margin: 0;
-            max-width: 860px;
             line-height: 1.7;
             color: var(--muted);
             font-size: 15px;
-            padding: 16px 18px;
+            padding: 16px 20px;
             border-radius: 18px;
             background: linear-gradient(135deg, rgba(229, 244, 253, 0.95), rgba(255, 255, 255, 0.96));
             border: 1px solid var(--border);
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
         }
-        .brand-mark {
-            flex: 0 0 420px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-            min-height: 150px;
-            padding: 20px 24px;
-            border-radius: 22px;
-            background: linear-gradient(135deg, rgba(229, 244, 253, 0.98), rgba(201, 231, 247, 0.95));
+        .how-to-box {
+            padding: 18px 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(229, 244, 253, 0.95), rgba(255, 255, 255, 0.98));
             border: 1px solid var(--border);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
-        }
-        .brand-mark img { width: 78px; height: 78px; }
-        .brand-mark span {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.22em;
             color: var(--muted);
-        }
-        .toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: end;
-            gap: 16px;
+            font-size: 14px;
+            line-height: 1.7;
             margin-bottom: 20px;
-            padding: 16px;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, 0.78);
-            border: 1px solid var(--border);
         }
-        .toolbar-note {
-            min-width: 240px;
-            padding: 12px 14px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, rgba(229, 244, 253, 0.9), rgba(255, 255, 255, 0.96));
-            border: 1px solid var(--border);
-            color: var(--muted);
-            font-size: 13px;
-            line-height: 1.55;
+        .how-to-box h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
         }
+        .how-to-box strong { color: var(--primary); }
         .control-block {
             display: flex;
             flex-direction: column;
             gap: 6px;
             min-width: 220px;
             flex: 1;
+        }
+        .control-block-inline {
+            flex: 0 0 auto;
         }
         .control-block label {
             font-size: 13px;
@@ -180,6 +180,16 @@
             flex: 1.15;
             min-width: 520px;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .map-panel-header {
+            padding: 20px 20px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .map-panel-header select {
+            width: 100%;
+            max-width: 220px;
         }
         .data-panel {
             flex: 1.08;
@@ -188,38 +198,104 @@
             display: flex;
             flex-direction: column;
         }
-        .panel-topline {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-            color: var(--muted);
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-        #mapa {
-            width: 100%;
-            height: 100%;
-            min-height: 560px;
-        }
-        .section-title {
+        .panel-title {
             margin: 0 0 12px;
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 600;
             color: var(--primary);
         }
-        .section-subtitle {
-            margin: -6px 0 14px;
-            color: var(--muted);
-            font-size: 13px;
+        #mapa {
+            flex: 1;
+            width: 100%;
+            min-height: 520px;
         }
         .control-stack {
             display: flex;
             flex-direction: column;
             gap: 10px;
             margin-bottom: 12px;
+        }
+        .station-combobox {
+            position: relative;
+            width: 100%;
+        }
+        .station-combobox-inner {
+            display: flex;
+            align-items: stretch;
+            border: 1px solid rgba(148, 163, 184, 0.4);
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.97);
+        }
+        .station-combobox-inner:focus-within {
+            border-color: rgba(61, 139, 189, 0.7);
+            box-shadow: 0 0 0 4px rgba(98, 184, 232, 0.18);
+        }
+        #station-search {
+            flex: 1.2;
+            min-width: 0;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 0;
+            background: transparent;
+            font-size: 14px;
+        }
+        #station-search:focus {
+            outline: none;
+        }
+        .station-dropdown-btn {
+            flex: 0 0 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-left: 1px solid rgba(148, 163, 184, 0.3);
+            background: rgba(248, 251, 255, 0.9);
+            color: var(--muted);
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .station-dropdown-btn:hover {
+            background: rgba(98, 184, 232, 0.15);
+            color: var(--primary);
+        }
+        .station-dropdown-list {
+            display: none;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 100%;
+            margin-top: 4px;
+            max-height: 280px;
+            overflow-y: auto;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 32px rgba(15, 23, 42, 0.14);
+            z-index: 500;
+        }
+        .station-dropdown-list.visible {
+            display: block;
+        }
+        .station-dropdown-group {
+            padding: 6px 12px 2px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--muted);
+        }
+        .station-dropdown-item {
+            padding: 10px 14px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .station-dropdown-item:hover {
+            background: rgba(98, 184, 232, 0.12);
+        }
+        .station-dropdown-item:last-child {
+            border-radius: 0 0 12px 12px;
         }
         #chartContainer,
         #basinChartContainer {
@@ -284,10 +360,8 @@
             margin-top: 24px;
             padding: 18px;
         }
-        .basin-header h2 {
-            margin: 0 0 4px;
-            font-size: 24px;
-            color: var(--primary);
+        .basin-header .panel-title {
+            margin-bottom: 4px;
         }
         .basin-header p {
             margin: 0 0 16px;
@@ -337,7 +411,7 @@
         }
         @media (max-width: 900px) {
             .hero { flex-direction: column; align-items: flex-start; }
-            .brand-mark { width: 100%; flex-basis: auto; min-height: auto; }
+            .hero-brand { flex-wrap: wrap; }
             .map-panel, .data-panel { min-width: 100%; }
         }
     </style>
@@ -345,52 +419,55 @@
 <body>
     <div class="main-container">
         <section class="hero">
+            <div class="hero-brand">
+                <div class="hero-brand-icon">
+                    <img src="snowflake-logo.svg" alt="">
+                </div>
+                <div class="hero-brand-titles">
+                    <div class="hero-brand-primary">Snow Depth<br>Observatory</div>
+                    <div class="hero-brand-separator"></div>
+                    <div class="hero-brand-secondary">Southern<br>Andes</div>
+                </div>
+            </div>
             <div class="hero-copy">
-                <h1>Snow Depth Data | Southern Andes</h1>
                 <p class="hero-description">
                     A scientific portal for exploring curated snow depth observations across the Southern Andes.
                     Browse stations, compare watersheds, and inspect both monthly and annual metrics derived from
                     quality-controlled daily records.
                 </p>
             </div>
-            <div class="brand-mark">
-                <img src="snowflake-logo.svg" alt="Snowflake logo">
-                <div>
-                    <span>Scientific Data Explorer</span>
-                    <div style="font-size: 22px; font-weight: 600; color: var(--primary); margin-top: 6px;">Snow Depth Observatory</div>
-                </div>
-            </div>
         </section>
 
-        <section class="toolbar">
-            <div class="control-block" style="max-width: 280px;">
-                <label for="hierarchy-select">Analysis level</label>
-                <select id="hierarchy-select">
-                    <option value="cuencas">Basins</option>
-                    <option value="subcuencas">Sub-basins</option>
-                    <option value="subsubcuencas">Nested sub-basins</option>
-                </select>
-            </div>
-            <div class="control-block">
-                <label for="station-filter">Station search</label>
-                <input id="station-filter" type="text" placeholder="Search by station name or code">
-            </div>
-            <div class="toolbar-note">
-                Explore daily station records in the right panel and compare watershed-scale variability in the lower panel.
-            </div>
-        </section>
+        <div class="how-to-box">
+            <h3>How to use</h3>
+            <p style="margin:0;">Use the <strong>Map</strong> panel to explore station locations and basin boundaries. Use the <strong>Analysis level</strong> selector to switch between basins, sub-basins, or nested sub-basins. The <strong>Station explorer</strong> panel lets you search and select stations to view their daily snow depth series. Click a polygon on the map to compare multiple stations within a watershed in the <strong>Watershed comparison</strong> panel.</p>
+        </div>
 
         <div class="dashboard-layout">
             <div class="map-panel">
+                <div class="map-panel-header">
+                    <h3 class="panel-title">Analysis level</h3>
+                    <select id="hierarchy-select" aria-label="Analysis level">
+                        <option value="cuencas">Basins</option>
+                        <option value="subcuencas">Sub-basins</option>
+                        <option value="subsubcuencas">Nested sub-basins</option>
+                    </select>
+                </div>
                 <div id="mapa"></div>
             </div>
 
             <aside class="data-panel">
-                <div class="panel-topline">Station explorer</div>
+                <h3 class="panel-title">Station explorer</h3>
                 <div class="control-stack">
-                    <select id="station-select" aria-label="Station selector">
-                        <option value="" selected disabled>Select a station</option>
-                    </select>
+                    <div class="station-combobox" id="station-combobox">
+                        <div class="station-combobox-inner">
+                            <input id="station-search" type="text" placeholder="Search or select station..." aria-label="Search or select station" autocomplete="off">
+                            <button type="button" id="station-dropdown-btn" class="station-dropdown-btn" aria-label="Show stations" title="Show stations">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                        </div>
+                        <div id="station-dropdown-list" class="station-dropdown-list" role="listbox" aria-hidden="true"></div>
+                    </div>
                 </div>
                 <div id="stationButtonsContainer"></div>
                 <div id="chartContainer">
@@ -401,8 +478,7 @@
 
         <section class="basin-comparator-section">
             <div class="basin-header">
-                <div class="panel-topline">Regional comparison</div>
-                <h2 id="comparator-title">Watershed comparison</h2>
+                <h3 class="panel-title" id="comparator-title">Watershed comparison</h3>
                 <p id="comparator-subtitle">Click a polygon on the map to compare monthly and annual snow depth across stations.</p>
             </div>
             <div id="basinButtonsContainer"></div>
@@ -423,7 +499,7 @@
         Plotly.setPlotConfig({ locale: "en", displaylogo: false, responsive: true });
 
         const DATA_STATIC_BASE_URL = "data_static";
-        const DATA_VERSION = "2026-03-01-sd";
+        let DATA_VERSION = "2026-03-01-sd";
         const ZOOM_THRESHOLD = 10;
 
         const HIERARCHY_CONFIG = {
@@ -464,18 +540,27 @@
         let currentHierarchy = "cuencas";
         let currentBasinFullData = null;
         let stationColorMap = {};
+        let stationListData = [];
 
         const jsonCache = new Map();
         const textCache = new Map();
 
         window.onload = async () => {
+            try {
+                const metaResp = await fetch(`${DATA_STATIC_BASE_URL}/export_metadata.json?t=${Date.now()}`);
+                if (metaResp.ok) {
+                    const meta = await metaResp.json();
+                    if (meta.data_version) DATA_VERSION = meta.data_version;
+                }
+            } catch (_) { /* keep fallback DATA_VERSION */ }
+
             const savedHierarchy = localStorage.getItem(STORAGE_KEYS.hierarchy);
             const savedFilter = localStorage.getItem(STORAGE_KEYS.stationFilter);
             if (savedHierarchy && HIERARCHY_CONFIG[savedHierarchy]) {
                 currentHierarchy = savedHierarchy;
             }
             if (savedFilter) {
-                document.getElementById("station-filter").value = savedFilter;
+                document.getElementById("station-search").value = savedFilter;
             }
             document.getElementById("hierarchy-select").value = currentHierarchy;
 
@@ -493,13 +578,35 @@
                 await switchHierarchyLayer(currentHierarchy);
             });
 
-            document.getElementById("station-filter").addEventListener("input", () => {
-                localStorage.setItem(STORAGE_KEYS.stationFilter, document.getElementById("station-filter").value);
-                filterStationDropdown();
+            const stationSearch = document.getElementById("station-search");
+            const stationDropdownBtn = document.getElementById("station-dropdown-btn");
+            const stationDropdownList = document.getElementById("station-dropdown-list");
+
+            stationSearch.addEventListener("input", () => {
+                const value = stationSearch.value.trim();
+                localStorage.setItem(STORAGE_KEYS.stationFilter, value);
+                filterAndRenderStationDropdown();
+                openStationDropdown();
             });
 
-            document.getElementById("station-select").addEventListener("change", (event) => {
-                displayStationTimeSeries(event.target.value);
+            stationSearch.addEventListener("focus", () => openStationDropdown());
+
+            stationSearch.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") closeStationDropdown();
+            });
+
+            stationDropdownBtn.addEventListener("click", () => {
+                if (stationDropdownList.classList.contains("visible")) {
+                    closeStationDropdown();
+                } else {
+                    filterAndRenderStationDropdown();
+                    openStationDropdown();
+                }
+            });
+
+            document.addEventListener("click", (e) => {
+                const combo = document.getElementById("station-combobox");
+                if (combo && !combo.contains(e.target)) closeStationDropdown();
             });
         }
 
@@ -644,9 +751,9 @@
 
                 stationNameMap = nameData || {};
                 globalGeojsonData = geojsonData;
-                populateStationDropdown(globalGeojsonData.features || []);
+                populateStationCombobox(globalGeojsonData.features || []);
+                filterAndRenderStationDropdown();
                 renderStationLayer();
-                filterStationDropdown();
             } catch (error) {
                 console.error("Fatal station loading error:", error);
                 document.body.innerHTML = `<h1 style="padding:32px; color:#b91c1c;">Critical loading error: ${error.message}</h1>`;
@@ -689,10 +796,7 @@
             updateLayerInteractivity();
         }
 
-        function populateStationDropdown(features) {
-            const stationSelect = document.getElementById("station-select");
-            stationSelect.innerHTML = '<option value="" selected disabled>Select a station</option>';
-
+        function populateStationCombobox(features) {
             const basinData = {};
             features.forEach((feature) => {
                 const props = feature.properties;
@@ -705,42 +809,67 @@
                 basinData[basinName].stations.push(props);
             });
 
-            Object.values(basinData)
+            stationListData = Object.values(basinData)
                 .sort((a, b) => parseInt(a.code, 10) - parseInt(b.code, 10))
-                .forEach((basin) => {
-                    const optgroup = document.createElement("optgroup");
-                    optgroup.label = `${basin.name} (${basin.code})`;
-
-                    basin.stations
+                .map((basin) => ({
+                    name: basin.name,
+                    code: basin.code,
+                    stations: basin.stations
                         .sort((a, b) => String(a.code_internal).localeCompare(String(b.code_internal)))
-                        .forEach((props) => {
-                            const option = new Option(`${props.name || "Unnamed"} (${props.code_internal})`, props.code_internal);
-                            optgroup.appendChild(option);
-                        });
-
-                    stationSelect.appendChild(optgroup);
-                });
+                        .map((p) => ({ code: p.code_internal, name: p.name || "Unnamed" })),
+                }));
         }
 
-        function filterStationDropdown() {
-            const stationSelect = document.getElementById("station-select");
-            const filterValue = document.getElementById("station-filter").value.trim().toLowerCase();
-            const previousValue = stationSelect.value;
-            stationSelect.value = "";
+        function openStationDropdown() {
+            document.getElementById("station-dropdown-list").classList.add("visible");
+            document.getElementById("station-dropdown-list").setAttribute("aria-hidden", "false");
+        }
 
-            for (const optgroup of stationSelect.querySelectorAll("optgroup")) {
-                let hasVisibleOptions = false;
-                for (const option of optgroup.querySelectorAll("option")) {
-                    const matchesFilter = !filterValue || option.textContent.toLowerCase().includes(filterValue);
-                    option.style.display = matchesFilter ? "block" : "none";
-                    if (matchesFilter) hasVisibleOptions = true;
-                }
-                optgroup.style.display = hasVisibleOptions ? "block" : "none";
-            }
+        function closeStationDropdown() {
+            document.getElementById("station-dropdown-list").classList.remove("visible");
+            document.getElementById("station-dropdown-list").setAttribute("aria-hidden", "true");
+        }
 
-            const optionToReselect = stationSelect.querySelector(`option[value="${previousValue}"]`);
-            if (optionToReselect && optionToReselect.style.display !== "none") {
-                stationSelect.value = previousValue;
+        function filterAndRenderStationDropdown() {
+            const filterValue = document.getElementById("station-search").value.trim().toLowerCase();
+            const listEl = document.getElementById("station-dropdown-list");
+            listEl.innerHTML = "";
+
+            stationListData.forEach((basin) => {
+                const displayStr = (s) => `${s.name} (${s.code})`;
+                const matchingStations = filterValue
+                    ? basin.stations.filter((s) => displayStr(s).toLowerCase().includes(filterValue))
+                    : basin.stations;
+
+                if (matchingStations.length === 0) return;
+
+                const group = document.createElement("div");
+                group.className = "station-dropdown-group";
+                group.textContent = `${basin.name} (${basin.code})`;
+                listEl.appendChild(group);
+
+                matchingStations.forEach((station) => {
+                    const item = document.createElement("div");
+                    item.className = "station-dropdown-item";
+                    item.textContent = `${station.name} (${station.code})`;
+                    item.dataset.code = station.code;
+                    item.setAttribute("role", "option");
+                    item.addEventListener("click", () => {
+                        document.getElementById("station-search").value = `${station.name} (${station.code})`;
+                        localStorage.setItem(STORAGE_KEYS.stationFilter, `${station.name} (${station.code})`);
+                        closeStationDropdown();
+                        displayStationTimeSeries(station.code);
+                    });
+                    listEl.appendChild(item);
+                });
+            });
+
+            if (listEl.children.length === 0) {
+                const empty = document.createElement("div");
+                empty.className = "station-dropdown-item";
+                empty.style.color = "var(--muted)";
+                empty.textContent = "No stations match";
+                listEl.appendChild(empty);
             }
         }
 
@@ -862,7 +991,8 @@
         async function displayStationTimeSeries(stationCode) {
             if (!stationCode) return;
             const stationName = stationNameMap[stationCode] || stationCode;
-            document.getElementById("station-select").value = stationCode;
+            document.getElementById("station-search").value = `${stationName} (${stationCode})`;
+            localStorage.setItem(STORAGE_KEYS.stationFilter, `${stationName} (${stationCode})`);
 
             showChartStatus("chartStatus", `Loading daily snow depth for <strong>${stationName}</strong>...`);
 

@@ -1,0 +1,8 @@
+{
+  "export_timestamp": "2026-03-13 14:33:15",
+  "data_version": "2026-03-13-sd",
+  "sources": {
+    "estaciones": "data/estaciones.csv",
+    "sd_series": "data/SD_clean_v3.csv"
+  }
+}
