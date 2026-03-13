@@ -1,6 +1,12 @@
 {
-  "export_timestamp": "2026-03-13 14:33:15",
+  "export_timestamp": "2026-03-13 15:42:19",
   "data_version": "2026-03-13-sd",
+  "data_sources": [
+    "CEAZAMET",
+    "CIEP",
+    "DGA",
+    "UdeChile"
+  ],
   "sources": {
     "estaciones": "data/estaciones.csv",
     "sd_series": "data/SD_clean_v3.csv"

@@ -545,12 +545,15 @@
         const jsonCache = new Map();
         const textCache = new Map();
 
+        let legendSources = null;
+
         window.onload = async () => {
             try {
                 const metaResp = await fetch(`${DATA_STATIC_BASE_URL}/export_metadata.json?t=${Date.now()}`);
                 if (metaResp.ok) {
                     const meta = await metaResp.json();
                     if (meta.data_version) DATA_VERSION = meta.data_version;
+                    if (Array.isArray(meta.data_sources)) legendSources = meta.data_sources;
                 }
             } catch (_) { /* keep fallback DATA_VERSION */ }
 
@@ -674,10 +677,15 @@
             const legend = L.control({ position: "bottomright" });
             legend.onAdd = function () {
                 const div = L.DomUtil.create("div", "info legend");
-                const items = Object.entries(SOURCE_COLORS)
-                    .map(([key, color]) => `<i style="background:${color}"></i>${key}`)
+                const sourcesToShow = legendSources && legendSources.length
+                    ? legendSources
+                    : Object.keys(SOURCE_COLORS).filter((k) => k !== "IANIGLA");
+                const toKey = (s) => (s || "").toUpperCase().replace(/_NERC/g, "");
+                const items = sourcesToShow
+                    .filter((src) => toKey(src) in SOURCE_COLORS)
+                    .map((src) => `<i style="background:${SOURCE_COLORS[toKey(src)]}"></i>${src}`)
                     .join("<br>");
-                div.innerHTML = `<strong>Data source</strong><div style="margin-top:6px;">${items}</div>`;
+                div.innerHTML = `<strong>Data source</strong><div style="margin-top:6px;">${items || "—"}</div>`;
                 return div;
             };
             legend.addTo(map);

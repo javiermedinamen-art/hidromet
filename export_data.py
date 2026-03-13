@@ -53,7 +53,13 @@ def cargar_estaciones():
     df = None
     for encoding in ("utf-8", "cp1252"):
         try:
-            df = pd.read_csv(PATH_ESTACIONES, encoding=encoding, sep=",", decimal=".")
+            df = pd.read_csv(
+                PATH_ESTACIONES,
+                encoding=encoding,
+                sep=",",
+                decimal=".",
+                dtype={"code_internal": str},
+            )
             print(f"Reading stations from {PATH_ESTACIONES} with encoding {encoding}")
             break
         except Exception:
@@ -89,6 +95,51 @@ def cargar_estaciones():
 
     geometry = [Point(xy) for xy in zip(df_clean["longitude"], df_clean["latitude"])]
     return gpd.GeoDataFrame(df_clean, geometry=geometry, crs="EPSG:4326")
+
+
+def _normalize_code(code):
+    """Normalize station code for matching: lowercase and remove spaces."""
+    if pd.isna(code):
+        return ""
+    return str(code).strip().lower().replace(" ", "")
+
+
+def _codes_match(a, b):
+    """Check if two codes match (handles leading zeros, spaces, case)."""
+    na, nb = _normalize_code(a), _normalize_code(b)
+    if na == nb:
+        return True
+    try:
+        return int(na) == int(nb) if na.isdigit() and nb.isdigit() else False
+    except (ValueError, TypeError):
+        return False
+
+
+def build_station_mapping(gdf_estaciones, sd_columns):
+    """
+    Build mapping from SD column names (data IDs) to station metadata.
+    Uses normalized matching (lowercase, no spaces, leading zeros) so
+    'Piuquenes 10' matches 'Piuquenes10' and '430004' matches '0430004'.
+    Returns a GeoDataFrame with SD column as code_internal.
+    """
+    estaciones = gdf_estaciones.copy()
+
+    rows = []
+    for sd_col in sd_columns:
+        match = None
+        for _, est_row in estaciones.iterrows():
+            if _codes_match(est_row["code_internal"], sd_col):
+                match = est_row
+                break
+        if match is not None:
+            row = match.copy()
+            row["code_internal"] = sd_col
+            rows.append(row)
+
+    if not rows:
+        return gpd.GeoDataFrame()
+
+    return gpd.GeoDataFrame(rows, crs=estaciones.crs)
 
 
 def cargar_series_temporales(file_path):
@@ -323,18 +374,19 @@ def exportar_datos_estaticos():
         print("No valid SD series found. Aborting.")
         return
 
-    station_codes_with_data = set(df_daily.columns)
-    gdf_estaciones_sd = gdf_estaciones[gdf_estaciones["code_internal"].isin(station_codes_with_data)].copy()
+    station_codes_with_data = list(df_daily.columns)
+    gdf_estaciones_sd = build_station_mapping(gdf_estaciones, station_codes_with_data)
     gdf_estaciones_sd["variables_disponibles"] = "SD"
 
     if gdf_estaciones_sd.empty:
         print("No station metadata matched the SD dataset. Aborting.")
         return
 
-    codes_only_in_data = station_codes_with_data - set(gdf_estaciones["code_internal"])
+    mapped = set(gdf_estaciones_sd["code_internal"])
+    codes_only_in_data = [c for c in station_codes_with_data if c not in mapped]
     if codes_only_in_data:
-        print(f"Warning: {len(codes_only_in_data)} SD stations are present in the data file but missing in estaciones.csv")
-        print(sorted(list(codes_only_in_data))[:10], "..." if len(codes_only_in_data) > 10 else "")
+        print(f"Warning: {len(codes_only_in_data)} SD stations have no match in estaciones.csv")
+        print(sorted(codes_only_in_data)[:10], "..." if len(codes_only_in_data) > 10 else "")
 
     df_monthly = calcular_agregacion_mensual(df_daily)
     df_annual = calcular_mediana_anual_mayo_octubre(df_daily, df_monthly)
@@ -359,12 +411,15 @@ def exportar_datos_estaticos():
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     version_for_cache = datetime.now().strftime("%Y-%m-%d-sd")
+    data_sources = sorted(gdf_estaciones_sd["fuente"].dropna().unique().tolist())
+
     metadata_path = os.path.join(OUTPUT_DIR, "export_metadata.json")
     with open(metadata_path, "w", encoding="utf-8") as f:
         json.dump(
             {
                 "export_timestamp": timestamp,
                 "data_version": version_for_cache,
+                "data_sources": data_sources,
                 "sources": {
                     "estaciones": PATH_ESTACIONES,
                     "sd_series": SD_FILE_PATH,
