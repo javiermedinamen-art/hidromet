@@ -3,56 +3,14 @@
     "name": "Cerro Vega Negra",
     "elevation": 3600.0,
     "years": [
-      2016,
       2017,
       2018,
-      2019,
-      2020,
-      2021,
-      2022,
-      2023,
-      2024,
-      2025
+      2020
     ],
     "values": [
-      null,
       80.3,
       49.5,
-      null,
-      8.9,
-      null,
-      null,
-      null,
-      null,
-      null
-    ]
-  },
-  "0450001": {
-    "name": "Tascadero",
-    "elevation": 3427.0,
-    "years": [
-      2016,
-      2017,
-      2018,
-      2019,
-      2020,
-      2021,
-      2022,
-      2023,
-      2024,
-      2025
-    ],
-    "values": [
-      null,
-      null,
-      null,
-      null,
-      0.0,
-      null,
-      40.9,
-      0.2,
-      21.6,
-      null
+      8.9
     ]
   }
 }

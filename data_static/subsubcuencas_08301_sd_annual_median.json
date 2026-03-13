@@ -3,14 +3,10 @@
     "name": "Liucura",
     "elevation": 1152.0,
     "years": [
-      2022,
-      2023,
-      2024
+      2022
     ],
     "values": [
-      0.0,
-      null,
-      null
+      1.0
     ]
   }
 }

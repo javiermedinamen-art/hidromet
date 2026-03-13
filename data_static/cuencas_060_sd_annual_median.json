@@ -1,11 +1,10 @@
 {
-  "06020001": {
-    "name": "Termas Del Flaco",
-    "elevation": 2650.0,
+  "06001000": {
+    "name": "Glaciar Cortaderal",
+    "elevation": 3156.0,
     "years": [
       2013,
       2014,
-      2015,
       2016,
       2017,
       2018,
@@ -14,13 +13,109 @@
       2021,
       2022,
       2023,
-      2024
+      2024,
+      2025
     ],
     "values": [
-      50.6,
-      93.9,
       null,
-      61.7,
+      null,
+      null,
+      null,
+      null,
+      126.1,
+      169.7,
+      64.8,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "06021002": {
+    "name": "Cerro Los Guzmanes",
+    "elevation": 3125.0,
+    "years": [
+      2013,
+      2014,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      0.0,
+      0.0
+    ]
+  },
+  "06005005": {
+    "name": "Codelco Cerro Teniente",
+    "elevation": 2950.0,
+    "years": [
+      2013,
+      2014,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      48.2
+    ]
+  },
+  "06020001": {
+    "name": "Termas Del Flaco",
+    "elevation": 2650.0,
+    "years": [
+      2013,
+      2014,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "values": [
+      51.0,
+      93.7,
+      61.4,
       75.0,
       56.0,
       31.5,
@@ -28,7 +123,104 @@
       6.0,
       71.5,
       null,
+      177.9,
+      60.3
+    ]
+  },
+  "06023000": {
+    "name": "Glaciar Universidad en Río San Andrés",
+    "elevation": 2436.0,
+    "years": [
+      2013,
+      2014,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      80.4
+    ]
+  },
+  "06013008": {
+    "name": "Laguna Los Cristales",
+    "elevation": 2357.0,
+    "years": [
+      2013,
+      2014,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "values": [
+      77.6,
+      117.8,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
+    ]
+  },
+  "06000004": {
+    "name": "Laguna El Yeso",
+    "elevation": 2140.0,
+    "years": [
+      2013,
+      2014,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      0.0,
+      0.0,
+      64.2,
+      2.1
     ]
   }
 }

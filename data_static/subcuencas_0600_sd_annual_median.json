@@ -1,0 +1,68 @@
+{
+  "06001000": {
+    "name": "Glaciar Cortaderal",
+    "elevation": 3156.0,
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "values": [
+      126.1,
+      169.7,
+      64.8,
+      null,
+      null,
+      null,
+      null
+    ]
+  },
+  "06005005": {
+    "name": "Codelco Cerro Teniente",
+    "elevation": 2950.0,
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      48.2
+    ]
+  },
+  "06000004": {
+    "name": "Laguna El Yeso",
+    "elevation": 2140.0,
+    "years": [
+      2019,
+      2020,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      0.0,
+      0.0,
+      64.2,
+      2.1
+    ]
+  }
+}
