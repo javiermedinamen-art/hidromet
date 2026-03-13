@@ -602,7 +602,7 @@
                 if (stationDropdownList.classList.contains("visible")) {
                     closeStationDropdown();
                 } else {
-                    filterAndRenderStationDropdown();
+                    filterAndRenderStationDropdown(true);
                     openStationDropdown();
                 }
             });
@@ -838,8 +838,8 @@
             document.getElementById("station-dropdown-list").setAttribute("aria-hidden", "true");
         }
 
-        function filterAndRenderStationDropdown() {
-            const filterValue = document.getElementById("station-search").value.trim().toLowerCase();
+        function filterAndRenderStationDropdown(showAll) {
+            const filterValue = showAll ? "" : document.getElementById("station-search").value.trim().toLowerCase();
             const listEl = document.getElementById("station-dropdown-list");
             listEl.innerHTML = "";
 
