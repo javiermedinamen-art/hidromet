@@ -35,6 +35,7 @@
                 linear-gradient(180deg, #f8fbff 0%, #edf5fb 100%);
         }
         .main-container {
+            position: relative;
             width: min(96%, 1480px);
             margin: 24px auto 36px;
             padding: 24px;
@@ -115,23 +116,30 @@
             border: 1px solid var(--border);
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
         }
-        .how-to-box {
-            padding: 18px 20px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, rgba(229, 244, 253, 0.95), rgba(255, 255, 255, 0.98));
-            border: 1px solid var(--border);
-            color: var(--muted);
-            font-size: 14px;
-            line-height: 1.7;
-            margin-bottom: 20px;
+        .top-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin: -4px 0 14px;
         }
-        .how-to-box h3 {
-            margin: 0 0 8px;
-            font-size: 16px;
-            font-weight: 600;
+        .tour-trigger-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(98, 184, 232, 0.35);
+            background: rgba(255, 255, 255, 0.96);
             color: var(--primary);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s ease;
         }
-        .how-to-box strong { color: var(--primary); }
+        .tour-trigger-btn:hover {
+            background: rgba(229, 244, 253, 0.95);
+            border-color: rgba(98, 184, 232, 0.6);
+        }
         .control-block {
             display: flex;
             flex-direction: column;
@@ -453,12 +461,144 @@
             .hero-brand { flex-wrap: wrap; }
             .map-panel, .data-panel { min-width: 100%; }
         }
+
+        /* Onboarding */
+        .onboarding-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+        }
+        .onboarding-overlay.active {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: none;
+        }
+        .onboarding-shade {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .onboarding-shade svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .onboarding-target {
+            position: relative;
+            transition: box-shadow 0.25s ease, outline 0.25s ease, transform 0.25s ease;
+        }
+        .onboarding-target.highlight {
+            box-shadow:
+                0 0 0 3px rgba(98, 184, 232, 0.95),
+                0 0 0 10px rgba(98, 184, 232, 0.18),
+                0 18px 40px rgba(15, 23, 42, 0.16);
+            outline: 2px solid rgba(255,255,255,0.92);
+            outline-offset: 3px;
+            border-radius: 20px;
+            z-index: 10001;
+            transform: translateY(-1px);
+        }
+        .onboarding-card {
+            position: absolute;
+            max-width: 320px;
+            padding: 18px 22px;
+            background: var(--panel);
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(15, 23, 42, 0.18);
+            border: 1px solid var(--border);
+            z-index: 10002;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            pointer-events: auto;
+        }
+        .onboarding-card-wrapper {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 10002;
+        }
+        .onboarding-card-wrapper .onboarding-card {
+            pointer-events: auto;
+        }
+        .onboarding-card-wrapper .onboarding-card.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .onboarding-card h4 {
+            margin: 0 0 6px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--primary-strong);
+        }
+        .onboarding-card p {
+            margin: 0 0 16px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--muted);
+        }
+        .onboarding-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .onboarding-actions button {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .onboarding-skip {
+            background: transparent;
+            color: var(--muted);
+        }
+        .onboarding-skip:hover { color: var(--text); }
+        .onboarding-next {
+            background: var(--primary);
+            color: white;
+        }
+        .onboarding-next:hover { background: var(--primary-strong); }
+        .onboarding-progress {
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 8px;
+        }
+        .onboarding-brand {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            margin: 0 0 12px;
+        }
+        .onboarding-brand.visible {
+            display: flex;
+        }
+        .onboarding-brand img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .onboarding-brand-text {
+            font-size: 12px;
+            line-height: 1.2;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
     </style>
 </head>
 <body>
     <div class="main-container">
         <section class="hero">
-            <div class="hero-brand">
+            <div class="hero-brand onboarding-target" id="onboarding-welcome">
                 <div class="hero-brand-icon">
                     <img src="snowflake-logo.svg" alt="">
                 </div>
@@ -477,26 +617,30 @@
             </div>
         </section>
 
-        <div class="how-to-box">
-            <h3>How to use</h3>
-            <p style="margin:0;">Use the <strong>Map</strong> panel to explore station locations and basin boundaries. Use the <strong>Analysis level</strong> selector to switch between basins and sub-basins. The <strong>Station explorer</strong> panel lets you search and select stations to view their daily snow depth series. Click a polygon on the map to compare multiple stations within a watershed in the <strong>Watershed comparison</strong> panel.</p>
+        <div class="top-actions">
+            <a class="tour-trigger-btn" id="tour-trigger" href="#">Take the tour</a>
         </div>
 
         <div class="dashboard-layout">
-            <div class="map-panel">
+            <div class="map-panel onboarding-target" id="map-panel">
                 <div class="map-panel-header">
                     <h3 class="panel-title">Analysis level</h3>
-                    <select id="hierarchy-select" aria-label="Analysis level">
-                        <option value="cuencas">Basins</option>
-                        <option value="subcuencas">Sub-basins</option>
-                    </select>
+                    <div class="onboarding-target" id="onboarding-hierarchy" style="display:inline-block;">
+                        <select id="hierarchy-select" aria-label="Analysis level">
+                            <option value="cuencas">Basins</option>
+                            <option value="subcuencas">Sub-basins</option>
+                        </select>
+                    </div>
                 </div>
-                <div id="mapa"></div>
+                <div id="onboarding-map" style="flex:1; min-height:520px;">
+                    <div id="mapa"></div>
+                </div>
             </div>
 
-            <aside class="data-panel">
+            <aside class="data-panel onboarding-target" id="data-panel">
                 <h3 class="panel-title">Station explorer</h3>
                 <div class="control-stack">
+                    <div class="onboarding-target" id="onboarding-station-combobox">
                     <div class="station-combobox" id="station-combobox">
                         <div class="station-combobox-inner">
                             <input id="station-search" type="text" placeholder="Search or select station..." aria-label="Search or select station" autocomplete="off">
@@ -506,21 +650,25 @@
                         </div>
                         <div id="station-dropdown-list" class="station-dropdown-list" role="listbox" aria-hidden="true"></div>
                     </div>
+                    </div>
                 </div>
+                <div class="onboarding-target" id="onboarding-station" style="flex:1; display:flex; flex-direction:column; min-height:0;">
                 <div id="stationButtonsContainer"></div>
                 <div id="chartContainer">
                     <div id="chartStatus" class="chart-status visible">Select a station on the map or from the list to display its time series.</div>
                 </div>
+                </div>
             </aside>
         </div>
 
-        <section class="basin-comparator-section">
+        <section class="basin-comparator-section onboarding-target" id="basin-comparator-section">
+            <div id="onboarding-watershed-inner">
             <div class="basin-header">
                 <h3 class="panel-title" id="comparator-title">Watershed comparison</h3>
                 <p id="comparator-subtitle">Click a polygon on the map to compare monthly and annual snow depth across stations.</p>
             </div>
             <div id="basinButtonsContainer"></div>
-            <div class="basin-chart-wrapper" style="position:relative; min-height:520px;">
+            <div id="basin-chart-wrapper" class="basin-chart-wrapper" style="position:relative; min-height:520px;">
                 <div id="basinChartStatus" class="chart-status visible">Select a basin or sub-basin on the map to start the comparison.</div>
                 <div id="basinChartContainer"></div>
             </div>
@@ -529,7 +677,38 @@
                 <p><strong>Monthly median:</strong> a month is retained only if at least 70% of daily values are available.</p>
                 <p><strong>Annual median (May-Oct):</strong> a year is retained only if every month from May to October satisfies the monthly coverage rule. The annual value is the median of all daily snow depth measurements within that May-October period.</p>
             </div>
+            </div>
         </section>
+        <div class="onboarding-card-wrapper">
+            <div class="onboarding-card">
+                <div class="onboarding-progress" id="onboarding-progress"></div>
+                <div class="onboarding-brand" id="onboarding-brand">
+                    <img src="snowflake-logo.svg" alt="">
+                    <div class="onboarding-brand-text">Snow Depth Observatory<br>Southern Andes</div>
+                </div>
+                <h4 id="onboarding-title"></h4>
+                <p id="onboarding-text"></p>
+                <div class="onboarding-actions">
+                    <button type="button" class="onboarding-skip" id="onboarding-skip">Skip</button>
+                    <button type="button" class="onboarding-next" id="onboarding-next">Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="onboarding-overlay" class="onboarding-overlay" aria-hidden="true">
+        <div class="onboarding-shade" aria-hidden="true">
+            <svg id="onboarding-shade-svg" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" preserveAspectRatio="none">
+                <defs>
+                    <mask id="onboarding-cutout-mask">
+                        <rect id="onboarding-mask-bg" width="100%" height="100%" fill="white"/>
+                        <rect id="onboarding-mask-hole" x="0" y="0" width="0" height="0" fill="black"/>
+                        <rect id="onboarding-mask-hole-card" x="0" y="0" width="0" height="0" fill="black"/>
+                    </mask>
+                </defs>
+                <rect id="onboarding-shade-rect" width="100%" height="100%" fill="rgba(15, 35, 66, 0.52)" mask="url(#onboarding-cutout-mask)"/>
+            </svg>
+        </div>
     </div>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -537,7 +716,7 @@
         Plotly.setPlotConfig({ locale: "en", displaylogo: false, responsive: true });
 
         const DATA_STATIC_BASE_URL = "data_static";
-        let DATA_VERSION = "2026-03-01-sd";
+        let DATA_VERSION = "2026-03-17-sd";
         const ZOOM_THRESHOLD = 10;
 
         const HIERARCHY_CONFIG = {
@@ -575,8 +754,25 @@
 
         const STORAGE_KEYS = {
             hierarchy: "snowdata_hierarchy",
-            stationFilter: "snowdata_station_filter"
+            stationFilter: "snowdata_station_filter",
+            onboardingDone: "snowdata_onboarding_done"
         };
+
+        const ONBOARDING_STEPS = [
+            { id: "onboarding-welcome", placement: "right", title: "Welcome", text: "Welcome to Snow Depth Observatory. This short tour will guide you through the main controls and analysis panels.", showBrand: true },
+            // 1: Panel 1 – map (full rounded box)
+            { id: "map-panel", placement: "right", title: "Map panel", text: "Use the map to explore stations and basin boundaries. Clicking a basin drives the comparison workflow." },
+            // 2: Selector panel 1 – analysis level
+            { id: "onboarding-hierarchy", placement: "right", title: "Analysis level selector", text: "Switch between basins and sub-basins to change the spatial scale shown on the map." },
+            // 3: Panel 2 – station explorer (full rounded box)
+            { id: "data-panel", placement: "left", title: "Station explorer panel", text: "This panel shows the daily snow-depth series for the station you choose." },
+            // 4: Selector panel 2 – station combobox
+            { id: "onboarding-station-combobox", placement: "left", title: "Station selector", text: "Type a station name or code to filter the list, or use the arrow to browse all available stations." },
+            // 5: Zoom and select Maipo basin on the map
+            { id: "map-panel", placement: "right", title: "Example basin: Río Maipo", text: "Here we zoom to the Maipo basin and select it, so you can see how the basin workflow connects to the comparison panel." },
+            // 6: Panel 3 – watershed comparison, popup centered in panel
+            { id: "basin-comparator-section", placement: "inside-center", title: "Watershed comparison panel", text: "This panel compares monthly and annual snow depth across the stations inside the selected basin or sub-basin." }
+        ];
 
         let map = null;
         let layerControl = null;
@@ -617,9 +813,235 @@
 
             initializeMap();
             bindEvents();
+            initOnboarding();
             await loadStationGeodata();
             await switchHierarchyLayer(currentHierarchy);
         };
+
+        function initOnboarding() {
+            const overlay = document.getElementById("onboarding-overlay");
+            const progress = document.getElementById("onboarding-progress");
+            const brand = document.getElementById("onboarding-brand");
+            const title = document.getElementById("onboarding-title");
+            const text = document.getElementById("onboarding-text");
+            const skipBtn = document.getElementById("onboarding-skip");
+            const nextBtn = document.getElementById("onboarding-next");
+            const tourTrigger = document.getElementById("tour-trigger");
+            let step = 0;
+
+            async function selectExampleMaipoBasin() {
+                try {
+                    // Ensure we are in basin mode
+                    const hierarchySelect = document.getElementById("hierarchy-select");
+                    if (hierarchySelect && hierarchySelect.value !== "cuencas") {
+                        hierarchySelect.value = "cuencas";
+                        await switchHierarchyLayer("cuencas");
+                    }
+
+                    const layer = basinLayers["cuencas"];
+                    if (!layer) return;
+
+                    let targetFeature = null;
+                    layer.eachLayer((lyr) => {
+                        const code = lyr?.feature?.properties?.[HIERARCHY_CONFIG.cuencas.id_property];
+                        if (!targetFeature && String(code) === "057") {
+                            targetFeature = lyr;
+                        }
+                    });
+                    if (!targetFeature) return;
+
+                    const config = HIERARCHY_CONFIG.cuencas;
+                    const props = targetFeature.feature.properties || {};
+
+                    if (highlightedFeature) {
+                        try {
+                            layer.resetStyle(highlightedFeature);
+                        } catch (_) { /* ignore */ }
+                    }
+                    highlightedFeature = targetFeature;
+                    targetFeature.setStyle({ color: "#fb8500", weight: 3, fillOpacity: 0.28 });
+
+                    if (targetFeature.getBounds) {
+                        map.fitBounds(targetFeature.getBounds(), { maxZoom: 10, padding: [8, 8] });
+                    }
+
+                    await displayBasinChart(props[config.id_property], props[config.name_property] || "Río Maipo", "cuencas");
+                } catch (_) {
+                    // If anything fails, we silently ignore – onboarding should not break the app.
+                }
+            }
+
+            function updateSpotlight(target, card) {
+                const hole = document.getElementById("onboarding-mask-hole");
+                const holeCard = document.getElementById("onboarding-mask-hole-card");
+                const svg = document.getElementById("onboarding-shade-svg");
+                if (!hole || !svg || !target) return;
+                const rect = target.getBoundingClientRect();
+                const vw = window.innerWidth;
+                const vh = window.innerHeight;
+                svg.setAttribute("viewBox", `0 0 ${vw} ${vh}`);
+                hole.setAttribute("x", String(rect.left));
+                hole.setAttribute("y", String(rect.top));
+                hole.setAttribute("width", String(Math.max(0, rect.width)));
+                hole.setAttribute("height", String(Math.max(0, rect.height)));
+                if (holeCard && card) {
+                    const cardRect = card.getBoundingClientRect();
+                    holeCard.setAttribute("x", String(cardRect.left));
+                    holeCard.setAttribute("y", String(cardRect.top));
+                    holeCard.setAttribute("width", String(Math.max(0, cardRect.width)));
+                    holeCard.setAttribute("height", String(Math.max(0, cardRect.height)));
+                } else if (holeCard) {
+                    holeCard.setAttribute("width", "0");
+                    holeCard.setAttribute("height", "0");
+                }
+            }
+
+            function positionCard(card, target, placement, overlayTarget) {
+                const gap = 28;
+                const rect = (overlayTarget || target).getBoundingClientRect();
+                const cardRect = card.getBoundingClientRect();
+                const main = document.querySelector(".main-container");
+                const mainRect = main ? main.getBoundingClientRect() : { left: 0, top: 0 };
+                const centerY = rect.top + rect.height / 2;
+                let top, left;
+                if (placement === "inside-center") {
+                    left = rect.left + (rect.width / 2) - (cardRect.width / 2);
+                    top = rect.top + (rect.height / 2) - (cardRect.height / 2);
+                } else if (placement === "inside-over-legend") {
+                    left = rect.right - cardRect.width - 24;
+                    top = rect.top + Math.max(60, rect.height * 0.15);
+                } else if (placement === "right" || placement === "left" || placement === "inside-right" || placement === "inside") {
+                    top = placement === "inside" ? rect.top + 24 : centerY - cardRect.height / 2;
+                } else if (placement === "top") {
+                    top = rect.top - cardRect.height - gap;
+                } else {
+                    top = rect.bottom + gap;
+                }
+                if (placement === "inside-center" || placement === "inside-over-legend") {
+                    // already set above
+                } else if (placement === "right") {
+                    left = rect.right + gap;
+                } else if (placement === "left") {
+                    left = rect.left - cardRect.width - gap;
+                } else if (placement === "top") {
+                    left = rect.left + (rect.width / 2) - (cardRect.width / 2);
+                } else if (placement === "inside-right") {
+                    left = rect.right - cardRect.width - gap;
+                } else if (placement === "inside") {
+                    left = rect.left + 24;
+                } else {
+                    left = rect.left + (rect.width / 2) - (cardRect.width / 2);
+                }
+                const pad = 12;
+                if (placement === "inside" || placement === "inside-over-legend" || placement === "inside-center") {
+                    left = left - mainRect.left;
+                    top = top - mainRect.top;
+                    left = Math.max(rect.left - mainRect.left + 24, Math.min(left, rect.right - mainRect.left - cardRect.width - 24));
+                    top = Math.max(rect.top - mainRect.top + 24, Math.min(top, rect.bottom - mainRect.top - cardRect.height - 24));
+                } else {
+                    left = left - mainRect.left;
+                    top = top - mainRect.top;
+                    left = Math.max(pad, Math.min(left, mainRect.width - cardRect.width - pad));
+                    top = Math.max(pad, Math.min(top, mainRect.height - cardRect.height - pad));
+                }
+                card.style.left = left + "px";
+                card.style.top = top + "px";
+            }
+
+            function showStep(idx) {
+                step = idx;
+                const card = document.querySelector(".onboarding-card");
+                card.classList.add("visible");
+                document.querySelectorAll(".onboarding-target").forEach((el) => el.classList.remove("highlight"));
+                if (idx < ONBOARDING_STEPS.length) {
+                    const s = ONBOARDING_STEPS[idx];
+                    const target = document.getElementById(s.id);
+                    const overlayTarget = s.overlayTargetId ? document.getElementById(s.overlayTargetId) : null;
+                    if (target) {
+                        target.classList.add("highlight");
+                        brand.classList.toggle("visible", Boolean(s.showBrand));
+                        if (idx !== 4) closeStationDropdown();
+                        if (idx !== 0) target.scrollIntoView({ behavior: "smooth", block: "center" });
+                        setTimeout(() => {
+                            // On step 6 (index 5), zoom and select Maipo basin
+                            if (idx === 5) {
+                                selectExampleMaipoBasin();
+                            }
+                            if (idx === 4) {
+                                filterAndRenderStationDropdown(true);
+                                openStationDropdown();
+                            }
+                            positionCard(card, target, s.placement || "right", overlayTarget);
+                            updateSpotlight(target, card);
+                        }, 500);
+                    }
+                    progress.textContent = `${idx + 1} / ${ONBOARDING_STEPS.length}`;
+                    title.textContent = s.title;
+                    text.textContent = s.text;
+                    nextBtn.textContent = idx === ONBOARDING_STEPS.length - 1 ? "Got it" : "Next";
+                }
+            }
+
+            let refreshSpotlightRaf = null;
+            function refreshSpotlight() {
+                if (!overlay.classList.contains("active")) return;
+                const target = document.querySelector(".onboarding-target.highlight");
+                if (!target) return;
+                const stepData = ONBOARDING_STEPS[step];
+                const overlayTarget = stepData?.overlayTargetId ? document.getElementById(stepData.overlayTargetId) : null;
+                if (refreshSpotlightRaf) cancelAnimationFrame(refreshSpotlightRaf);
+                refreshSpotlightRaf = requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        const card = document.querySelector(".onboarding-card");
+                        if (card && stepData) positionCard(card, target, stepData.placement || "right", overlayTarget);
+                        updateSpotlight(target, card);
+                        refreshSpotlightRaf = null;
+                    });
+                });
+            }
+
+            function closeOnboarding() {
+                overlay.classList.remove("active");
+                overlay.setAttribute("aria-hidden", "true");
+                brand.classList.remove("visible");
+                document.querySelector(".onboarding-card")?.classList.remove("visible");
+                closeStationDropdown();
+                document.querySelectorAll(".onboarding-target").forEach((el) => el.classList.remove("highlight"));
+                const hole = document.getElementById("onboarding-mask-hole");
+                if (hole) {
+                    hole.setAttribute("x", "0");
+                    hole.setAttribute("y", "0");
+                    hole.setAttribute("width", "0");
+                    hole.setAttribute("height", "0");
+                }
+                window.removeEventListener("resize", refreshSpotlight);
+                document.removeEventListener("scroll", refreshSpotlight, true);
+                localStorage.setItem(STORAGE_KEYS.onboardingDone, "1");
+            }
+
+            function startOnboarding() {
+                localStorage.removeItem(STORAGE_KEYS.onboardingDone);
+                overlay.classList.add("active");
+                overlay.setAttribute("aria-hidden", "false");
+                window.addEventListener("resize", refreshSpotlight);
+                document.addEventListener("scroll", refreshSpotlight, true);
+                showStep(0);
+            }
+
+            nextBtn.addEventListener("click", () => {
+                if (step < ONBOARDING_STEPS.length - 1) showStep(step + 1);
+                else closeOnboarding();
+            });
+            skipBtn.addEventListener("click", closeOnboarding);
+            tourTrigger.addEventListener("click", (e) => {
+                e.preventDefault();
+                startOnboarding();
+            });
+
+            setTimeout(() => {
+                startOnboarding();
+            }, 450);
+        }
 
         function bindEvents() {
             document.getElementById("hierarchy-select").addEventListener("change", async (event) => {
@@ -1121,12 +1543,26 @@
             if (activeBtn) activeBtn.classList.add("active");
             hideChartStatus("chartStatus");
 
+            const dataByDate = new Map();
+            data.forEach((row) => {
+                const val = row.Snow_Depth_cm;
+                dataByDate.set(String(row.Date), Number.isFinite(val) ? val : null);
+            });
+            const dates = data.map((r) => String(r.Date)).sort();
+            if (!dates.length) return;
+            const first = new Date(dates[0] + "T12:00:00Z");
+            const last = new Date(dates[dates.length - 1] + "T12:00:00Z");
+            const x = [];
+            const y = [];
+            const oneDay = 86400000;
+            for (let t = first.getTime(); t <= last.getTime(); t += oneDay) {
+                const key = new Date(t).toISOString().slice(0, 10);
+                x.push(key);
+                y.push(dataByDate.has(key) ? dataByDate.get(key) : null);
+            }
             const trace = {
-                x: data.map((row) => row.Date),
-                y: data.map((row) => {
-                    const value = row.Snow_Depth_cm;
-                    return Number.isFinite(value) ? value : null;
-                }),
+                x,
+                y,
                 type: "scatter",
                 mode: "lines+markers",
                 connectgaps: false,

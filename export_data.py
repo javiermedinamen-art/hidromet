@@ -51,7 +51,13 @@ def cargar_hierarquia(path):
         print(f"Warning: {path} not found. Skipping.")
         return None
     try:
-        return gpd.read_file(path).to_crs("EPSG:4326")
+        return gpd.read_file(path, encoding="utf-8").to_crs("EPSG:4326")
+    except Exception:
+        try:
+            return gpd.read_file(path, encoding="latin-1").to_crs("EPSG:4326")
+        except Exception as exc:
+            print(f"Critical error reading {path}: {exc}")
+            return None
     except Exception as exc:
         print(f"Critical error reading {path}: {exc}")
         return None
@@ -98,7 +104,7 @@ def cargar_estaciones():
         return None
 
     df = None
-    for encoding in ("utf-8", "cp1252"):
+    for encoding in ("utf-8", "cp1252", "latin-1"):
         try:
             df = pd.read_csv(
                 PATH_ESTACIONES,
@@ -217,11 +223,20 @@ def _text_match(a, b, threshold=0.86):
     return SequenceMatcher(None, na, nb).ratio() >= threshold
 
 
+def _name_first_word_match(est_name, sd_col):
+    """Match when the first word of station name equals the SD column (case-insensitive)."""
+    if pd.isna(est_name) or pd.isna(sd_col):
+        return False
+    first = str(est_name).strip().split()[0] if str(est_name).strip() else ""
+    return _normalize_code(first) == _normalize_code(sd_col)
+
+
 def build_station_mapping(gdf_estaciones, sd_columns):
     """
     Build mapping from SD column names (data IDs) to station metadata.
     Uses normalized matching (lowercase, no spaces, leading zeros) so
     'Piuquenes 10' matches 'Piuquenes10' and '430004' matches '0430004'.
+    Also matches by first word of name (e.g. 'Portillo' matches 'Portillo Argentino').
     Returns a GeoDataFrame with SD column as code_internal.
     """
     estaciones = gdf_estaciones.copy()
@@ -236,6 +251,11 @@ def build_station_mapping(gdf_estaciones, sd_columns):
         if match is None:
             for _, est_row in estaciones.iterrows():
                 if _text_match(est_row["code_internal"], sd_col):
+                    match = est_row
+                    break
+        if match is None:
+            for _, est_row in estaciones.iterrows():
+                if _name_first_word_match(est_row["name"], sd_col):
                     match = est_row
                     break
         if match is not None:
@@ -257,7 +277,7 @@ def cargar_series_temporales(file_path):
         return None
 
     df = None
-    for encoding in ("utf-8", "cp1252"):
+    for encoding in ("utf-8", "cp1252", "latin-1"):
         try:
             df = pd.read_csv(file_path, encoding=encoding, sep=",", decimal=".")
             print(f"Reading series with encoding {encoding}")
@@ -389,6 +409,7 @@ def exportar_series_estacion(df_daily, df_annual, gdf_estaciones_sd):
                 index=True,
                 index_label="Date",
                 date_format="%Y-%m-%d",
+                encoding="utf-8",
             )
             exported_daily += 1
 
@@ -401,7 +422,11 @@ def exportar_series_estacion(df_daily, df_annual, gdf_estaciones_sd):
                         "Snow_Depth_cm": annual_series.round(1).values,
                     }
                 )
-                annual_output.to_csv(os.path.join(OUTPUT_DIR, f"{code}_sd_annual.csv"), index=False)
+                annual_output.to_csv(
+                    os.path.join(OUTPUT_DIR, f"{code}_sd_annual.csv"),
+                    index=False,
+                    encoding="utf-8",
+                )
                 exported_annual += 1
 
     print(f"Exported {exported_daily} daily station CSV files.")
@@ -428,7 +453,7 @@ def procesar_jerarquia_geoespacial(gdf_hierarchy, id_columna, output_prefix, gdf
     gdf_filtrado["n_estaciones"] = gdf_filtrado["n_estaciones"].fillna(0).astype(int)
 
     geojson_path = os.path.join(OUTPUT_DIR, f"{output_prefix}_sd.geojson")
-    gdf_filtrado.to_file(geojson_path, driver="GeoJSON")
+    gdf_filtrado.to_file(geojson_path, driver="GeoJSON", encoding="utf-8")
     print(f"Exported hierarchy GeoJSON: {geojson_path}")
 
     station_metadata = obtener_metadata_estaciones(gdf_join)
@@ -495,7 +520,9 @@ def exportar_datos_estaticos():
     df_annual = calcular_mediana_anual_mayo_octubre(df_daily, df_monthly)
 
     estaciones_geojson_path = os.path.join(OUTPUT_DIR, "estaciones.geojson")
-    gdf_estaciones_sd[gdf_estaciones_sd.is_valid].to_file(estaciones_geojson_path, driver="GeoJSON")
+    gdf_estaciones_sd[gdf_estaciones_sd.is_valid].to_file(
+        estaciones_geojson_path, driver="GeoJSON", encoding="utf-8"
+    )
     print(f"Exported stations GeoJSON: {estaciones_geojson_path}")
 
     station_names = (
