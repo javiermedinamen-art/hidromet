@@ -1,6 +1,8 @@
 import json
 import os
 from datetime import datetime
+from difflib import SequenceMatcher
+import unicodedata
 
 import geopandas as gpd
 import numpy as np
@@ -18,10 +20,9 @@ MONTHS_REQUIRED = [5, 6, 7, 8, 9, 10]
 
 PATH_CUENCAS_SHP = "data/cuencas_bna/cuencas_bna.shp"
 ID_COLUMNA_CUENCA = "COD_CUEN"
+PATH_CUENCAS_ARG_SHP = "data/cuencas_arg/cuencas_arg.shp"
 PATH_SUBCUENCAS_SHP = "data/subcuencas_bna/subcuencas_bna.shp"
 ID_COLUMNA_SUBCUENCA = "COD_SUBC"
-PATH_SUBSUBCUENCAS_SHP = "data/subsubcuencas_bna/subsubcuencas_bna.shp"
-ID_COLUMNA_SUBSUBCUENCA = "COD_SSUBC"
 
 
 def cleanup_output_dir():
@@ -42,6 +43,52 @@ def cleanup_output_dir():
             removed += 1
     if removed:
         print(f"Cleaned {removed} previous output file(s) from {OUTPUT_DIR}.")
+
+
+def cargar_hierarquia(path):
+    """Read a hierarchy shapefile and return it in EPSG:4326."""
+    if not os.path.exists(path):
+        print(f"Warning: {path} not found. Skipping.")
+        return None
+    try:
+        return gpd.read_file(path).to_crs("EPSG:4326")
+    except Exception as exc:
+        print(f"Critical error reading {path}: {exc}")
+        return None
+
+
+def cargar_cuencas_chile_estandar():
+    """Load Chilean basins with standard basin ID/name columns."""
+    gdf = cargar_hierarquia(PATH_CUENCAS_SHP)
+    if gdf is None or gdf.empty:
+        return gpd.GeoDataFrame(columns=["COD_CUEN", "NOM_CUEN", "geometry"], crs="EPSG:4326")
+    return gdf[["COD_CUEN", "NOM_CUEN", "geometry"]].copy()
+
+
+def cargar_cuencas_argentina_estandar():
+    """Load Argentine basins and map them to the same basin schema used by the app."""
+    gdf = cargar_hierarquia(PATH_CUENCAS_ARG_SHP)
+    if gdf is None or gdf.empty:
+        return gpd.GeoDataFrame(columns=["COD_CUEN", "NOM_CUEN", "geometry"], crs="EPSG:4326")
+
+    gdf = gdf[["CUENCA", "geometry"]].copy()
+    gdf = gdf[gdf["CUENCA"].notna()].copy()
+    gdf["CUENCA"] = gdf["CUENCA"].astype(str).str.strip()
+    gdf = gdf[gdf["CUENCA"] != ""].copy()
+    gdf = gdf.drop_duplicates(subset=["CUENCA"]).reset_index(drop=True)
+    gdf["COD_CUEN"] = [f"ARG_{idx:03d}" for idx in range(1, len(gdf) + 1)]
+    gdf["NOM_CUEN"] = gdf["CUENCA"]
+    return gdf[["COD_CUEN", "NOM_CUEN", "geometry"]].copy()
+
+
+def obtener_cuencas_combinadas():
+    """Combine Chilean and Argentine basins into one basin layer."""
+    chile = cargar_cuencas_chile_estandar()
+    argentina = cargar_cuencas_argentina_estandar()
+    frames = [gdf for gdf in (chile, argentina) if gdf is not None and not gdf.empty]
+    if not frames:
+        return gpd.GeoDataFrame(columns=["COD_CUEN", "NOM_CUEN", "geometry"], crs="EPSG:4326")
+    return gpd.GeoDataFrame(pd.concat(frames, ignore_index=True), crs="EPSG:4326")
 
 
 def cargar_estaciones():
@@ -85,8 +132,8 @@ def cargar_estaciones():
     df["elevation"] = pd.to_numeric(df["elevation"], errors="coerce")
     df["code_internal"] = df["code_internal"].astype(str).str.strip().str.lower()
     df["name"] = df["name"].astype(str).str.strip()
-    df["fuente"] = df["fuente"].astype(str).str.strip()
-    df["basin"] = df["basin"].astype(str).str.strip()
+    df["fuente"] = df["fuente"].where(df["fuente"].notna(), "").astype(str).str.strip()
+    df["basin"] = df["basin"].where(df["basin"].notna(), "").astype(str).str.strip()
 
     df_clean = df.dropna(subset=["longitude", "latitude"]).copy()
     if df_clean.empty:
@@ -97,11 +144,56 @@ def cargar_estaciones():
     return gpd.GeoDataFrame(df_clean, geometry=geometry, crs="EPSG:4326")
 
 
+def completar_cuencas_en_memoria(gdf_estaciones):
+    """
+    Fill missing basin names in memory using station coordinates and the
+    combined Chile/Argentina basin layer, without editing estaciones.csv.
+    """
+    if gdf_estaciones is None or gdf_estaciones.empty:
+        return gdf_estaciones
+
+    gdf = gdf_estaciones.copy()
+    basin_series = gdf["basin"].fillna("").astype(str).str.strip()
+    missing_mask = basin_series.isin({"", "-", "nan", "NaN"})
+    if not missing_mask.any():
+        return gdf
+
+    cuencas = obtener_cuencas_combinadas()
+    if cuencas.empty:
+        return gdf
+
+    gdf_missing = gdf[missing_mask].copy()
+    if gdf_missing.empty:
+        return gdf
+
+    joined = gpd.sjoin(gdf_missing, cuencas[["NOM_CUEN", "geometry"]], how="left", predicate="within")
+    filled = 0
+    for idx in gdf_missing.index:
+        matches = joined.loc[joined.index == idx, "NOM_CUEN"].dropna().unique().tolist()
+        if matches:
+            gdf.at[idx, "basin"] = matches[0]
+            filled += 1
+
+    if filled:
+        print(f"Filled {filled} missing basin name(s) in memory from basin shapefiles.")
+    return gdf
+
+
 def _normalize_code(code):
     """Normalize station code for matching: lowercase and remove spaces."""
     if pd.isna(code):
         return ""
     return str(code).strip().lower().replace(" ", "")
+
+
+def _normalize_text_key(text):
+    """Normalize free text for resilient station matching."""
+    if pd.isna(text):
+        return ""
+    text = str(text).strip().lower()
+    text = unicodedata.normalize("NFKD", text)
+    text = "".join(ch for ch in text if not unicodedata.combining(ch))
+    return "".join(ch for ch in text if ch.isalnum())
 
 
 def _codes_match(a, b):
@@ -113,6 +205,16 @@ def _codes_match(a, b):
         return int(na) == int(nb) if na.isdigit() and nb.isdigit() else False
     except (ValueError, TypeError):
         return False
+
+
+def _text_match(a, b, threshold=0.86):
+    """Fallback fuzzy match for text-like station identifiers."""
+    na, nb = _normalize_text_key(a), _normalize_text_key(b)
+    if not na or not nb:
+        return False
+    if na == nb:
+        return True
+    return SequenceMatcher(None, na, nb).ratio() >= threshold
 
 
 def build_station_mapping(gdf_estaciones, sd_columns):
@@ -131,6 +233,11 @@ def build_station_mapping(gdf_estaciones, sd_columns):
             if _codes_match(est_row["code_internal"], sd_col):
                 match = est_row
                 break
+        if match is None:
+            for _, est_row in estaciones.iterrows():
+                if _text_match(est_row["code_internal"], sd_col):
+                    match = est_row
+                    break
         if match is not None:
             row = match.copy()
             row["code_internal"] = sd_col
@@ -301,18 +408,13 @@ def exportar_series_estacion(df_daily, df_annual, gdf_estaciones_sd):
     print(f"Exported {exported_annual} annual station CSV files.")
 
 
-def procesar_jerarquia_geoespacial(shapefile_path, id_columna, output_prefix, gdf_estaciones_sd, df_monthly, df_annual):
+def procesar_jerarquia_geoespacial(gdf_hierarchy, id_columna, output_prefix, gdf_estaciones_sd, df_monthly, df_annual):
     """Export hierarchy GeoJSON plus monthly and annual SD JSON payloads."""
     print(f"\n--- Processing hierarchy: {output_prefix} ---")
-    if not os.path.exists(shapefile_path):
-        print(f"Warning: {shapefile_path} not found. Skipping.")
+    if gdf_hierarchy is None or gdf_hierarchy.empty:
+        print(f"Warning: {output_prefix} hierarchy is empty. Skipping.")
         return
-
-    try:
-        gdf_hierarchy = gpd.read_file(shapefile_path).to_crs(gdf_estaciones_sd.crs)
-    except Exception as exc:
-        print(f"Critical error reading {shapefile_path}: {exc}")
-        return
+    gdf_hierarchy = gdf_hierarchy.to_crs(gdf_estaciones_sd.crs)
 
     gdf_join = gpd.sjoin(gdf_estaciones_sd, gdf_hierarchy, how="inner", predicate="within")
     if gdf_join.empty:
@@ -368,6 +470,7 @@ def exportar_datos_estaticos():
     if gdf_estaciones is None or gdf_estaciones.empty:
         print("Station loading failed. Aborting.")
         return
+    gdf_estaciones = completar_cuencas_en_memoria(gdf_estaciones)
 
     df_daily = cargar_series_temporales(SD_FILE_PATH)
     if df_daily is None or df_daily.empty:
@@ -405,13 +508,20 @@ def exportar_datos_estaticos():
     print("Exported station_names.json")
 
     exportar_series_estacion(df_daily, df_annual, gdf_estaciones_sd)
-    procesar_jerarquia_geoespacial(PATH_CUENCAS_SHP, ID_COLUMNA_CUENCA, "cuencas", gdf_estaciones_sd, df_monthly, df_annual)
-    procesar_jerarquia_geoespacial(PATH_SUBCUENCAS_SHP, ID_COLUMNA_SUBCUENCA, "subcuencas", gdf_estaciones_sd, df_monthly, df_annual)
-    procesar_jerarquia_geoespacial(PATH_SUBSUBCUENCAS_SHP, ID_COLUMNA_SUBSUBCUENCA, "subsubcuencas", gdf_estaciones_sd, df_monthly, df_annual)
+
+    cuencas_combinadas = obtener_cuencas_combinadas()
+    subcuencas = cargar_hierarquia(PATH_SUBCUENCAS_SHP)
+
+    procesar_jerarquia_geoespacial(cuencas_combinadas, ID_COLUMNA_CUENCA, "cuencas", gdf_estaciones_sd, df_monthly, df_annual)
+    procesar_jerarquia_geoespacial(subcuencas, ID_COLUMNA_SUBCUENCA, "subcuencas", gdf_estaciones_sd, df_monthly, df_annual)
 
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     version_for_cache = datetime.now().strftime("%Y-%m-%d-sd")
-    data_sources = sorted(gdf_estaciones_sd["fuente"].dropna().unique().tolist())
+    source_order = ["DGA", "CEAZAMET", "IANIGLA", "UdeChile", "CIEP"]
+    data_sources = sorted(
+        [src for src in gdf_estaciones_sd["fuente"].dropna().unique().tolist() if src and src.lower() != "nan"],
+        key=lambda source: source_order.index(source) if source in source_order else len(source_order),
+    )
 
     metadata_path = os.path.join(OUTPUT_DIR, "export_metadata.json")
     with open(metadata_path, "w", encoding="utf-8") as f:

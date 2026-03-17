@@ -1,28 +1,33 @@
 code_internal,name,lat,long,elevation,basin,fuente
-02000002,Volc�n Auncanquilcha,-21.1906,-68.4528,5087,Fronterizas Salar Michincha - R. Loa,DGA
-02400002,Cerro Chajnantor Cumbre,-22.9872,-67.7422,5625,Endorreica entre Fronterizas y Salar Atacama,DGA
-03031002,Volc�n Ojos del Salado bajo Refugio Atacama,-27.0519,-68.535,5201,Endorreicas entre Frontera y Vertiente,DGA
-03031003,Volc�n Ojos del Salado en Refugio Tejos,-27.0869,-68.5378,5804,Endorreicas entre Frontera y Vertiente,DGA
-03413001,Glaciar Maranceles,-28.4572,-69.7236,3985,Rio Copiapo,DGA
-04300004,Glaciar Tapado en Los Corrales,-30.1554,-69.8829,4060,Rio Elqui,DGA
-0430004,Tapado (TPF),-30.1584,-69.9084,4306,Rio Elqui,CEAZAMET
-0430014,Los Corrales,-30.1615,-69.8759,3982,Rio Elqui,CEAZAMET
-0430009,La Laguna,-30.2032,-70.0371,3209,Rio Elqui,CEAZAMET
-0430012,Llano de Las Liebres,-30.2542,-69.9345,3565,Rio Elqui,CEAZAMET
-04300001,Cerro Olivares,-30.2567,-69.9355,3550,Rio Elqui,DGA
-0430003,El Jote,-30.4053,-70.2795,3660,Rio Elqui,CEAZAMET
-04520006,Quebrada Larga Cota 3500,-30.7252,-70.2918,3500,Rio Limari,DGA
-04511004,Cerro Vega Negra,-30.9059,-70.5165,3600,Rio Limari,DGA
-0450001,Tascadero,-31.2628,-70.5399,3427,Rio Limari,CEAZAMET
-0470001,Casa del Canto,-31.4173,-70.589,3570,Rio Choapa,CEAZAMET
-04700002,El Soldado,-32.0066,-70.3213,3290,Rio Choapa,DGA
-05100003,Nacimiento Del Sobrante,-32.1889,-70.4829,3380,Rio Petorca,DGA
-05401007,Portillo,-32.8424,-70.097,3000,Rio Aconcagua,DGA
-05400005,Glaciar Le�n Negro,-32.9936,-70.0283,4350,Rio Aconcagua,DGA
-05706004,Glaciar Juncal Sur,-33.1175,-70.1119,4035,Rio Maipo,DGA
-05706002,Glaciar Olivares Gamma,-33.1564,-70.1528,3628,Rio Maipo,DGA
-05706005,Glaciar Olivares Alfa,-33.1786,-70.2181,4230,Rio Maipo,DGA
-05706003,Valle Olivares,-33.191,-70.1141,2787,Rio Maipo,DGA
+Portillo,Portillo Argentino,pendiente,pendiente,pendiente,-,IANIGLA
+2000002,Volc n Auncanquilcha,-21.1906,-68.4528,5087,Fronterizas Salar Michincha - R. Loa,DGA
+2300000,Paso Jama,-22.922,-67.701,4680,Fronterizas Salares Atacama-Socompa,DGA
+2400002,Cerro Chajnantor Cumbre,-22.9872,-67.7422,5625,Endorreica entre Fronterizas y Salar Atacama,DGA
+3031002,Volc n Ojos del Salado bajo Refugio Atacama,-27.0519,-68.535,5201,Endorreicas entre Frontera y Vertiente,DGA
+3031003,Volc n Ojos del Salado en Refugio Tejos,-27.0869,-68.5378,5804,Endorreicas entre Frontera y Vertiente,DGA
+3413001,Glaciar Maranceles,-28.4572,-69.7236,3985,Rio Copiapo,DGA
+4300004,Glaciar Tapado en Los Corrales,-30.1554,-69.8829,4065,Rio Elqui,DGA
+430004,Tapado (TPF),-30.1584,-69.9084,4306,Rio Elqui,CEAZA
+430014,Los Corrales,-30.1615,-69.8759,3982,Rio Elqui,CEAZA
+Capay n,Capay n,-30.1734,-69.8038,4754,R o J chal,IANIGLA
+430009,La Laguna,-30.2032,-70.0371,3209,Rio Elqui,CEAZA
+430012,Llano de Las Liebres,-30.2542,-69.9345,3565,Rio Elqui,CEAZA
+4300001,Cerro Olivares,-30.2567,-69.9355,3566,Rio Elqui,DGA
+430003,El Jote,-30.4053,-70.2795,3660,Rio Elqui,CEAZA
+4520006,Quebrada Larga Cota 3500,-30.7252,-70.2918,3550,Rio Limari,DGA
+4511004,Cerro Vega Negra,-30.9059,-70.5165,3529,Rio Limari,DGA
+450001,Tascadero,-31.2628,-70.5399,3427,Rio Limari,CEAZA
+470001,Casa del Canto,-31.4173,-70.589,3570,Rio Choapa,CEAZA
+4700002,El Soldado,-32.0066,-70.3213,3293,Rio Choapa,DGA
+5100003,Nacimiento Del Sobrante,-32.1889,-70.4829,3143,Rio Petorca,DGA
+Plaza,Plaza de Mulas,-32.6539,-70.0651,4320,R o Mendoza,IANIGLA
+Cuevas,Las Cuevas,-32.813,-70.053,3197,R o Mendoza,IANIGLA
+5401007,Portillo,-32.8424,-70.097,3032,Rio Aconcagua,DGA
+5400005,Glaciar Le n Negro,-32.9936,-70.0283,4350,Rio Aconcagua,DGA
+5706004,Glaciar Juncal Sur,-33.1175,-70.1119,4035,Rio Maipo,DGA
+5706002,Glaciar Olivares Gamma,-33.1564,-70.1528,3628,Rio Maipo,DGA
+5706005,Glaciar Olivares Alfa,-33.1786,-70.2181,4230,Rio Maipo,DGA
+5706003,Valle Olivares,-33.191,-70.1141,2786,Rio Maipo,DGA
 AMTC10,Yerba Loca Alto,-33.2092,-70.2769,3340,Rio Maipo,UdeChile
 AMTC8,Yerba Loca Medio,-33.273,-70.3,2520,Rio Maipo,UdeChile
 AMTC13,Molina en Cepo,-33.291,-70.2173,3380,Rio Maipo,UdeChile
@@ -30,45 +35,50 @@ Piuquenes 10,Piuquenes 10,-33.3126,-70.2481,3570,Rio Maipo,UdeChile
 Piuquenes 7,Piuquenes 7,-33.3133,-70.2561,3483,Rio Maipo,UdeChile
 Piuquenes 6,Piuquenes 6,-33.3165,-70.2611,3556,Rio Maipo,UdeChile
 Piuquenes 14,Piuquenes 14,-33.3176,-70.2516,3380,Rio Maipo,UdeChile
-05721019,La Parva,-33.3306,-70.2972,2703,Rio Maipo,DGA
-05720005,Farellones,-33.3517,-70.3128,2452,Rio Maipo,DGA
+5721019,La Parva,-33.3306,-70.2972,2703,Rio Maipo,DGA
+5720005,Farellones,-33.3517,-70.3128,2452,Rio Maipo,DGA
 AMTC12,Molina Medio,-33.3753,-70.2413,2200,Rio Maipo,UdeChile
-05705004,Glaciar Tupungatito Bajo,-33.3858,-69.8381,4425,Rio Maipo,DGA
-05703013,Portezuelo Glaciar Echaurren Norte,-33.5764,-70.1289,3847,Rio Maipo,DGA
-05703012,Valle Echaurren Norte,-33.5939,-70.1103,2950,Rio Maipo,DGA
-05703014,Termas Del Plomo,-33.6133,-69.9058,3000,Rio Maipo,DGA
-05703009,Laguna Negra,-33.6659,-70.1077,2780,Rio Maipo,DGA
-05701010,Las Melosas Ruta de Nieve,-33.8636,-70.2727,3320,Rio Maipo,DGA
-05701011,Las Hualtatas,-34.0677,-70.1089,2020,Rio Maipo,DGA
-06005005,Codelco Cerro Teniente,-34.2047,-70.2692,2950,Rio Rapel,DGA
-06000004,Laguna El Yeso,-34.4118,-70.2084,2140,Rio Rapel,DGA
-06013008,Laguna Los Cristales,-34.5611,-70.5097,2357,Rio Rapel,DGA
-06001000,Glaciar Cortaderal,-34.6608,-70.2561,3156,Rio Rapel,DGA
-06023000,Glaciar Universidad en R�o San Andr�s,-34.7186,-70.3592,2436,Rio Rapel,DGA
-06021002,Cerro Los Guzmanes,-34.8861,-70.4636,3125,Rio Rapel,DGA
-06020001,Termas Del Flaco,-34.893,-70.33,2650,Rio Rapel,DGA
-07100006,Paso Vergara,-35.1948,-70.5114,2602,Rio Mataquito,DGA
-07301000,Lo Aguirre,-35.9713,-70.5721,2000,Rio Maule,DGA
-07301002,NUEVA LO AGUIRRE,-35.9723,-70.5718,1997,Rio Maule,DGA
-07301001,Los Condores,-36.0097,-70.5478,2441,Rio Maule,DGA
-07350008,Nevado Longavi,-36.2344,-71.1435,1974,Rio Maule,DGA
-08130009,Nevado Chillan,-36.8473,-71.416,2610,Rio Itata,DGA
-08374001,Volcan Chillan,-36.8939,-71.4116,2393,Rio Biobio,DGA
-081003,Node3,-36.9103,-71.3989,1938,Rio Itata,UdeChile
-081002,Node2,-36.9104,-71.4089,1809,Rio Itata,UdeChile
-081001,Node1,-36.9148,-71.4166,1633,Rio Itata,UdeChile
-081004,Node4,-36.9205,-71.418,1695,Rio Itata,UdeChile
-08372001,Alto Mallines,-37.1578,-71.243,1900,Rio Biobio,DGA
-08370010,Los Corralitos,-37.5772,-71.1575,1785,Rio Biobio,DGA
-08308003,Chenqueco,-38.0647,-71.3547,778,Rio Biobio,DGA
-08301001,Liucura,-38.6449,-71.0907,1152,Rio Biobio,DGA
-10105003,Volc�n Villarrica Pichillancahue,-39.435,-71.8758,1800,Rio Valdivia,DGA
-10110003,Complejo Volc�nico Mocho Choshuenco,-39.9514,-72.0586,1565,Rio Valdivia,DGA
+5705004,Glaciar Tupungatito Bajo,-33.3858,-69.8381,4425,Rio Maipo,DGA
+5703013,Portezuelo Glaciar Echaurren Norte,-33.5764,-70.1289,3847,Rio Maipo,DGA
+5703012,Valle Echaurren Norte,-33.5939,-70.1103,2950,Rio Maipo,DGA
+5703014,Termas Del Plomo,-33.6133,-69.9058,3027,Rio Maipo,DGA
+5703009,Laguna Negra,-33.6659,-70.1077,2785,Rio Maipo,DGA
+5701010,Las Melosas Ruta de Nieve,-33.8636,-70.2727,3317,Rio Maipo,DGA
+5701011,Las Hualtatas,-34.0677,-70.1089,2020,Rio Maipo,DGA
+6005005,Codelco Cerro Teniente,-34.2047,-70.2692,2950,Rio Rapel,DGA
+6000004,Laguna El Yeso,-34.4118,-70.2084,2140,Rio Rapel,DGA
+6013008,Laguna Los Cristales,-34.5611,-70.5097,2357,Rio Rapel,DGA
+6001000,Glaciar Cortaderal,-34.6608,-70.2561,3156,Rio Rapel,DGA
+6023000,Glaciar Universidad en R o San Andr s,-34.7186,-70.3592,2436,Rio Rapel,DGA
+6021002,Cerro Los Guzmanes,-34.8861,-70.4636,3125,Rio Rapel,DGA
+6020001,Termas Del Flaco,-34.893,-70.33,2665,Rio Rapel,DGA
+7100006,Paso Vergara,-35.1948,-70.5114,2602,Rio Mataquito,DGA
+Toqui,Toqui Lautaro,-35.2928,-70.5163,2453,R o Lautaro,IANIGLA
+7301000,Lo Aguirre,-35.9713,-70.5721,1989,Rio Maule,DGA
+7301002,NUEVA LO AGUIRRE,-35.9723,-70.5718,1997,Rio Maule,DGA
+7301001,Los Condores,-36.0097,-70.5478,2439,Rio Maule,DGA
+7350008,Nevado Longavi,-36.2344,-71.1435,1977,Rio Maule,DGA
+8130009,Nevado Chillan,-36.8473,-71.416,2546,Rio Itata,DGA
+8374001,Volcan Chillan,-36.8939,-71.4116,2078,Rio Biobio,DGA
+81003,Node3,-36.9103,-71.3989,1938,Rio Itata,UdeChile
+81002,Node2,-36.9104,-71.4089,1809,Rio Itata,UdeChile
+81001,Node1,-36.9148,-71.4166,1633,Rio Itata,UdeChile
+81004,Node4,-36.9205,-71.418,1695,Rio Itata,UdeChile
+8372001,Alto Mallines,-37.1578,-71.243,1784,Rio Biobio,DGA
+8370010,Los Corralitos,-37.5772,-71.1575,1785,Rio Biobio,DGA
+8308003,Chenqueco,-38.0647,-71.3547,778,Rio Biobio,DGA
+8301001,Liucura,-38.6449,-71.0907,1034,Rio Biobio,DGA
+10105003,Volc n Villarrica Pichillancahue,-39.435,-71.8758,1800,Rio Valdivia,DGA
+10110003,Complejo Volc nico Mocho Choshuenco,-39.9514,-72.0586,1565,Rio Valdivia,DGA
 10321001,Cardenal Samore,-40.6831,-71.9864,920,Rio Bueno,DGA
 10710004,Cuesta Moraga,-43.336,-72.399,575,Rio Yelcho,DGA
 1130001,Cerro Divisadero,-45.6165,-72.0134,1430,Rio Aysen,CIEP
 11314002,Cerro Divisadero en el Fraile,-45.627,-72.004,1190,Rio Aysen,DGA
-11503002,Portezuelo Iba�ez,-46.0778,-72.051,1080,Rio Baker,DGA
+11503002,Portezuelo Iba ez,-46.0778,-72.051,1080,Rio Baker,DGA
 11440001,Hielo Norte en Glaciar San Rafael,-46.7053,-73.5936,1187,Costeras e Islas R. Aisen R. Baker C. Gral. Martinez,DGA
 1150003,Steffen,-47.5555,-73.6958,30,Rio Baker,CIEP
+Epulef,Epulef,-49.0523,-72.9505,898,-,IANIGLA
+Aonikenk,Aonikenk,-49.2774,-72.9975,1233,-,IANIGLA
+Chalten,Chalten,-49.3381,-72.8844,400,R o Santa Cruz,IANIGLA
+Tumbado,Pliegue Tumbado,-49.3793,-72.9368,1070,-,IANIGLA
 12730001,Glaciar Snoring,-53.723,-72.608,70,Islas al sur Estrecho de Magallanes,DGA

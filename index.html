@@ -401,6 +401,45 @@
             font-family: 'Inter', sans-serif;
             color: var(--text);
         }
+        .station-popup {
+            min-width: 220px;
+        }
+        .station-popup-title {
+            margin: 0 0 4px;
+            color: var(--primary);
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.3;
+        }
+        .station-popup-code {
+            margin-bottom: 10px;
+            color: var(--muted);
+            font-size: 12px;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+        }
+        .station-popup-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 4px 0;
+            border-top: 1px solid rgba(130, 167, 194, 0.16);
+        }
+        .station-popup-row:first-of-type {
+            border-top: none;
+            padding-top: 0;
+        }
+        .station-popup-label {
+            color: var(--muted);
+            font-size: 12px;
+            white-space: nowrap;
+        }
+        .station-popup-value {
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 600;
+            text-align: right;
+        }
         .legend i {
             width: 12px;
             height: 12px;
@@ -440,7 +479,7 @@
 
         <div class="how-to-box">
             <h3>How to use</h3>
-            <p style="margin:0;">Use the <strong>Map</strong> panel to explore station locations and basin boundaries. Use the <strong>Analysis level</strong> selector to switch between basins, sub-basins, or nested sub-basins. The <strong>Station explorer</strong> panel lets you search and select stations to view their daily snow depth series. Click a polygon on the map to compare multiple stations within a watershed in the <strong>Watershed comparison</strong> panel.</p>
+            <p style="margin:0;">Use the <strong>Map</strong> panel to explore station locations and basin boundaries. Use the <strong>Analysis level</strong> selector to switch between basins and sub-basins. The <strong>Station explorer</strong> panel lets you search and select stations to view their daily snow depth series. Click a polygon on the map to compare multiple stations within a watershed in the <strong>Watershed comparison</strong> panel.</p>
         </div>
 
         <div class="dashboard-layout">
@@ -450,7 +489,6 @@
                     <select id="hierarchy-select" aria-label="Analysis level">
                         <option value="cuencas">Basins</option>
                         <option value="subcuencas">Sub-basins</option>
-                        <option value="subsubcuencas">Nested sub-basins</option>
                     </select>
                 </div>
                 <div id="mapa"></div>
@@ -483,7 +521,7 @@
             </div>
             <div id="basinButtonsContainer"></div>
             <div class="basin-chart-wrapper" style="position:relative; min-height:520px;">
-                <div id="basinChartStatus" class="chart-status visible">Select a basin, sub-basin, or nested sub-basin on the map to start the comparison.</div>
+                <div id="basinChartStatus" class="chart-status visible">Select a basin or sub-basin on the map to start the comparison.</div>
                 <div id="basinChartContainer"></div>
             </div>
             <div class="methodology-box">
@@ -504,12 +542,12 @@
 
         const HIERARCHY_CONFIG = {
             cuencas: { id_property: "COD_CUEN", name_property: "NOM_CUEN", name: "Basin" },
-            subcuencas: { id_property: "COD_SUBC", name_property: "NOM_SUBC", name: "Sub-basin" },
-            subsubcuencas: { id_property: "COD_SSUBC", name_property: "NOM_SSUBC", name: "Nested sub-basin" }
+            subcuencas: { id_property: "COD_SUBC", name_property: "NOM_SUBC", name: "Sub-basin" }
         };
 
         const SOURCE_COLORS = {
             DGA: "#ff0000",
+            CEAZA: "#fd7e14",
             CEAZAMET: "#fd7e14",
             CIEP: "#008f39",
             CECS: "#9b9b9b",
@@ -517,6 +555,16 @@
             CR2: "#FFB6C1",
             UDECHILE: "#0000ff",
             IANIGLA: "#87CEFA"
+        };
+
+        const SOURCE_LEGEND_ORDER = ["DGA", "CEAZA", "IANIGLA", "UDECHILE", "CIEP"];
+        const SOURCE_LABELS = {
+            DGA: "DGA",
+            CEAZA: "CEAZA",
+            CEAZAMET: "CEAZA",
+            IANIGLA: "IANIGLA",
+            UDECHILE: "UdeChile",
+            CIEP: "CIEP"
         };
 
         const HIGH_CONTRAST_PALETTE = [
@@ -533,7 +581,7 @@
         let map = null;
         let layerControl = null;
         let stationLayer = null;
-        let basinLayers = { cuencas: null, subcuencas: null, subsubcuencas: null };
+        let basinLayers = { cuencas: null, subcuencas: null };
         let highlightedFeature = null;
         let stationNameMap = {};
         let globalGeojsonData = null;
@@ -620,9 +668,9 @@
         function normalizeFeatureIdForUrl(featureId, hierarchyKey) {
             const s = String(featureId).trim();
             if (!s) return s;
-            const padLengths = { cuencas: 3, subcuencas: 4, subsubcuencas: 5 };
+            const padLengths = { cuencas: 3, subcuencas: 4 };
             const padTo = padLengths[hierarchyKey] || 3;
-            return s.length >= padTo ? s : s.padStart(padTo, "0");
+            return /^\d+$/.test(s) && s.length < padTo ? s.padStart(padTo, "0") : s;
         }
 
         async function fetchJsonWithCache(url) {
@@ -677,13 +725,13 @@
             const legend = L.control({ position: "bottomright" });
             legend.onAdd = function () {
                 const div = L.DomUtil.create("div", "info legend");
-                const sourcesToShow = legendSources && legendSources.length
-                    ? legendSources
-                    : Object.keys(SOURCE_COLORS).filter((k) => k !== "IANIGLA");
                 const toKey = (s) => (s || "").toUpperCase().replace(/_NERC/g, "");
-                const items = sourcesToShow
-                    .filter((src) => toKey(src) in SOURCE_COLORS)
-                    .map((src) => `<i style="background:${SOURCE_COLORS[toKey(src)]}"></i>${src}`)
+                const availableSources = new Set(
+                    (legendSources && legendSources.length ? legendSources : Object.keys(SOURCE_COLORS)).map(toKey)
+                );
+                const items = SOURCE_LEGEND_ORDER
+                    .filter((src) => availableSources.has(src) && src in SOURCE_COLORS)
+                    .map((src) => `<i style="background:${SOURCE_COLORS[src]}"></i>${SOURCE_LABELS[src] || src}`)
                     .join("<br>");
                 div.innerHTML = `<strong>Data source</strong><div style="margin-top:6px;">${items || "—"}</div>`;
                 return div;
@@ -710,6 +758,46 @@
         function getColorBySource(source) {
             const normalized = (source || "").toUpperCase().replace(/_NERC/g, "");
             return SOURCE_COLORS[normalized] || "#64748b";
+        }
+
+        function formatPopupValue(value, fallback = "N/A") {
+            if (value === null || value === undefined) return fallback;
+            const text = String(value).trim();
+            return text && text.toLowerCase() !== "nan" ? text : fallback;
+        }
+
+        function formatCoordinate(value) {
+            const num = Number(value);
+            return Number.isFinite(num) ? num.toFixed(4) : "N/A";
+        }
+
+        function formatElevation(value) {
+            const num = Number(value);
+            return Number.isFinite(num) ? `${Math.round(num)} m a.s.l.` : "N/A";
+        }
+
+        function createStationPopup(props) {
+            return `
+                <div class="station-popup">
+                    <div class="station-popup-title">${formatPopupValue(props.name, "Unnamed station")}</div>
+                    <div class="station-popup-code">Code ${formatPopupValue(props.code_internal)}</div>
+                    <div class="station-popup-row">
+                        <span class="station-popup-label">Basin</span>
+                        <span class="station-popup-value">${formatPopupValue(props.basin)}</span>
+                    </div>
+                    <div class="station-popup-row">
+                        <span class="station-popup-label">Latitude</span>
+                        <span class="station-popup-value">${formatCoordinate(props.latitude ?? props.lat)}</span>
+                    </div>
+                    <div class="station-popup-row">
+                        <span class="station-popup-label">Longitude</span>
+                        <span class="station-popup-value">${formatCoordinate(props.longitude ?? props.long)}</span>
+                    </div>
+                    <div class="station-popup-row">
+                        <span class="station-popup-label">Elevation</span>
+                        <span class="station-popup-value">${formatElevation(props.elevation)}</span>
+                    </div>
+                </div>`;
         }
 
         function createPlotLayout({ title, xaxis, yaxis, hovermode = "closest", legend = true, marginRight = 30 }) {
@@ -784,15 +872,7 @@
                 }),
                 onEachFeature: (feature, layer) => {
                     const props = feature.properties;
-                    const popup = `
-                        <div style="line-height:1.6;">
-                            <h4 style="margin:0 0 6px; color:${getColorBySource(props.fuente)}; font-size:16px;">${props.name || "Unnamed station"}</h4>
-                            <strong>Code:</strong> ${props.code_internal || "N/A"}<br>
-                            <strong>Elevation:</strong> ${props.elevation ?? "N/A"} m a.s.l.<br>
-                            <strong>Source:</strong> ${props.fuente || "N/A"}<br>
-                            <strong>Basin:</strong> ${props.basin || "N/A"}
-                        </div>`;
-                    layer.bindPopup(popup);
+                    layer.bindPopup(createStationPopup(props));
                 }
             }).addTo(map);
 
@@ -810,18 +890,16 @@
                 const props = feature.properties;
                 if (!props.code_internal || !props.basin) return;
                 const basinName = String(props.basin).replace(/\s*\([^)]*\)$/, "");
-                const basinCode = String(props.code_internal).substring(0, 3);
                 if (!basinData[basinName]) {
-                    basinData[basinName] = { name: basinName, code: basinCode, stations: [] };
+                    basinData[basinName] = { name: basinName, stations: [] };
                 }
                 basinData[basinName].stations.push(props);
             });
 
             stationListData = Object.values(basinData)
-                .sort((a, b) => parseInt(a.code, 10) - parseInt(b.code, 10))
+                .sort((a, b) => a.name.localeCompare(b.name))
                 .map((basin) => ({
                     name: basin.name,
-                    code: basin.code,
                     stations: basin.stations
                         .sort((a, b) => String(a.code_internal).localeCompare(String(b.code_internal)))
                         .map((p) => ({ code: p.code_internal, name: p.name || "Unnamed" })),
@@ -853,7 +931,7 @@
 
                 const group = document.createElement("div");
                 group.className = "station-dropdown-group";
-                group.textContent = `${basin.name} (${basin.code})`;
+                group.textContent = basin.name;
                 listEl.appendChild(group);
 
                 matchingStations.forEach((station) => {
@@ -993,7 +1071,7 @@
             document.getElementById("basinButtonsContainer").innerHTML = "";
             document.getElementById("comparator-title").innerText = "Watershed comparison";
             document.getElementById("comparator-subtitle").innerText = "Click a polygon on the map to compare monthly and annual snow depth across stations.";
-            showChartStatus("basinChartStatus", "Select a basin, sub-basin, or nested sub-basin on the map to start the comparison.");
+            showChartStatus("basinChartStatus", "Select a basin or sub-basin on the map to start the comparison.");
         }
 
         async function displayStationTimeSeries(stationCode) {

@@ -1,0 +1,114 @@
+{
+  "aonikenk": {
+    "name": "Aonikenk",
+    "elevation": 1233.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "values": [
+      71.6,
+      75.7,
+      4.1,
+      64.0,
+      37.0,
+      null,
+      71.3,
+      113.2,
+      89.5,
+      null
+    ]
+  },
+  "tumbado": {
+    "name": "Pliegue Tumbado",
+    "elevation": 1070.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      25.0,
+      55.6,
+      null,
+      null,
+      null
+    ]
+  },
+  "epulef": {
+    "name": "Epulef",
+    "elevation": 898.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      15.2,
+      24.1,
+      null,
+      71.4,
+      109.2,
+      null,
+      null
+    ]
+  },
+  "chalten": {
+    "name": "Chalten",
+    "elevation": 400.0,
+    "years": [
+      2014,
+      2015,
+      2016,
+      2017,
+      2018,
+      2021,
+      2022,
+      2023,
+      2024,
+      2025
+    ],
+    "values": [
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      0.0,
+      0.0,
+      2.7,
+      2.7
+    ]
+  }
+}
