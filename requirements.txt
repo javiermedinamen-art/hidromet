@@ -1,13 +1,7 @@
 pandas==2.3.3
-
-# Optional (only if you need GeoDataFrame support / shapefile I/O):
-# geopandas==1.1.1
-# shapely==2.1.2
-# pyproj==3.7.1
-# pyogrio==0.11.1
+geopandas==1.1.1
 
 # Notes:
 # - index.html uses frontend libraries (Plotly, Leaflet, PapaParse) via CDN, so
 #   they are NOT required in this Python requirements file.
-# - If you plan to run geospatial features server-side (GeoDataFrame operations),
-#   uncomment the optional packages and install via conda-forge for binary compatibility.
+# - geopandas pulls in pyproj, shapely, and a GDAL I/O backend (e.g. pyogrio) as dependencies.

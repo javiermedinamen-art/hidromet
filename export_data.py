@@ -11,7 +11,7 @@ from shapely.geometry import Point
 
 OUTPUT_DIR = "data_static"
 PATH_ESTACIONES = "data/estaciones.csv"
-SD_FILE_PATH = "data/SD_clean_v3.csv"
+SD_FILE_PATH = "data/SD_clean_v4.1.csv"
 SD_UNIT = "cm"
 SD_DISPLAY_NAME = "Snow_Depth"
 FILL_RULE_PERCENT = 0.7

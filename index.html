@@ -368,13 +368,48 @@
             margin-top: 24px;
             padding: 18px;
         }
-        .basin-header .panel-title {
-            margin-bottom: 4px;
+        .basin-header {
+            margin-bottom: 2px;
         }
-        .basin-header p {
+        .comparator-heading {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 4px;
+        }
+        .comparator-kicker {
+            margin: 0;
+            padding: 0;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #64748b;
+        }
+        .comparator-heading[data-state="idle"] .comparator-main-title {
+            font-size: 17px;
+            font-weight: 600;
+        }
+        .comparator-heading[data-state="selected"] .comparator-main-title {
+            margin: 0;
+            font-size: 1.35rem;
+            font-weight: 650;
+            line-height: 1.25;
+            letter-spacing: -0.02em;
+        }
+        .comparator-detail {
+            margin: 0 0 10px;
+            padding: 0;
+            font-size: 13px;
+            font-variant-numeric: tabular-nums;
+            font-family: ui-monospace, "Cascadia Code", "Segoe UI Mono", monospace;
+            color: var(--muted);
+        }
+        .comparator-hint {
             margin: 0 0 16px;
             color: var(--muted);
             font-size: 14px;
+            line-height: 1.5;
         }
         .methodology-box {
             margin-top: 18px;
@@ -658,8 +693,12 @@
         <section class="basin-comparator-section onboarding-target" id="basin-comparator-section">
             <div id="onboarding-watershed-inner">
             <div class="basin-header">
-                <h3 class="panel-title" id="comparator-title">Watershed comparison</h3>
-                <p id="comparator-subtitle">Click a polygon on the map to compare monthly and annual snow depth across stations.</p>
+                <div class="comparator-heading" id="comparator-heading" data-state="idle">
+                    <p class="comparator-kicker" id="comparator-kicker" hidden></p>
+                    <h3 class="panel-title comparator-main-title" id="comparator-title">Watershed comparison</h3>
+                    <p class="comparator-detail" id="comparator-detail" hidden></p>
+                </div>
+                <p id="comparator-subtitle" class="comparator-hint">Click a polygon on the map to compare monthly and annual snow depth across stations.</p>
             </div>
             <div id="basinButtonsContainer"></div>
             <div id="basin-chart-wrapper" class="basin-chart-wrapper" style="position:relative; min-height:520px;">
@@ -1300,6 +1339,28 @@
             updateLayerInteractivity();
         }
 
+        function stationLatitudeFromProps(props) {
+            const v = Number(props.latitude ?? props.lat);
+            return Number.isFinite(v) ? v : null;
+        }
+
+        function sortStationsByLatitudeNorthToSouth(stations) {
+            return [...stations].sort((a, b) => {
+                const la = stationLatitudeFromProps(a);
+                const lb = stationLatitudeFromProps(b);
+                if (la == null && lb == null) return String(a.code_internal).localeCompare(String(b.code_internal));
+                if (la == null) return 1;
+                if (lb == null) return -1;
+                return lb - la;
+            });
+        }
+
+        function basinNorthSortKey(basin) {
+            const lats = basin.stations.map(stationLatitudeFromProps).filter((x) => x != null);
+            if (!lats.length) return -Infinity;
+            return Math.max(...lats);
+        }
+
         function populateStationCombobox(features) {
             const basinData = {};
             features.forEach((feature) => {
@@ -1313,12 +1374,13 @@
             });
 
             stationListData = Object.values(basinData)
-                .sort((a, b) => a.name.localeCompare(b.name))
+                .sort((a, b) => basinNorthSortKey(b) - basinNorthSortKey(a))
                 .map((basin) => ({
                     name: basin.name,
-                    stations: basin.stations
-                        .sort((a, b) => String(a.code_internal).localeCompare(String(b.code_internal)))
-                        .map((p) => ({ code: p.code_internal, name: p.name || "Unnamed" })),
+                    stations: sortStationsByLatitudeNorthToSouth(basin.stations).map((p) => ({
+                        code: p.code_internal,
+                        name: p.name || "Unnamed",
+                    })),
                 }));
         }
 
@@ -1485,8 +1547,16 @@
         function resetBasinPanel() {
             Plotly.purge("basinChartContainer");
             document.getElementById("basinButtonsContainer").innerHTML = "";
+            const heading = document.getElementById("comparator-heading");
+            heading.dataset.state = "idle";
+            document.getElementById("comparator-kicker").hidden = true;
+            document.getElementById("comparator-kicker").textContent = "";
             document.getElementById("comparator-title").innerText = "Watershed comparison";
-            document.getElementById("comparator-subtitle").innerText = "Click a polygon on the map to compare monthly and annual snow depth across stations.";
+            document.getElementById("comparator-detail").hidden = true;
+            document.getElementById("comparator-detail").textContent = "";
+            const sub = document.getElementById("comparator-subtitle");
+            sub.hidden = false;
+            sub.innerText = "Click a polygon on the map to compare monthly and annual snow depth across stations.";
             showChartStatus("basinChartStatus", "Select a basin or sub-basin on the map to start the comparison.");
         }
 
@@ -1581,8 +1651,14 @@
             const hierarchyConfig = HIERARCHY_CONFIG[hierarchyKey];
             const buttonContainer = document.getElementById("basinButtonsContainer");
 
-            document.getElementById("comparator-title").innerText = `${hierarchyConfig.name} comparison`;
-            document.getElementById("comparator-subtitle").innerText = `${featureName} (${featureId})`;
+            const heading = document.getElementById("comparator-heading");
+            heading.dataset.state = "selected";
+            document.getElementById("comparator-kicker").hidden = false;
+            document.getElementById("comparator-kicker").textContent = `${hierarchyConfig.name} comparison`;
+            document.getElementById("comparator-title").innerText = featureName;
+            document.getElementById("comparator-detail").hidden = false;
+            document.getElementById("comparator-detail").textContent = `Code ${featureId}`;
+            document.getElementById("comparator-subtitle").hidden = true;
             showChartStatus("basinChartStatus", `Loading monthly snow depth summaries for <strong>${featureName}</strong>...`);
             buttonContainer.innerHTML = "";
 

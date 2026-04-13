@@ -1,6 +1,6 @@
 {
-  "export_timestamp": "2026-03-23 11:53:20",
-  "data_version": "2026-03-23-sd",
+  "export_timestamp": "2026-04-13 16:00:26",
+  "data_version": "2026-04-13-sd",
   "data_sources": [
     "DGA",
     "IANIGLA",
@@ -10,6 +10,6 @@
   ],
   "sources": {
     "estaciones": "data/estaciones.csv",
-    "sd_series": "data/SD_clean_v3.csv"
+    "sd_series": "data/SD_clean_v4.1.csv"
   }
 }
