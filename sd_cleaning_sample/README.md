@@ -1,27 +1,27 @@
-# sd_cleaning (muestra: baseline)
+# sd_cleaning (sample: baseline)
 
-Código **mínimo** que aísla **un solo paso** del pipeline de profundidad de nieve: la corrección de baseline en segmentos de baja varianza (`detect_flat_offsets` en `sd_ground_baseline.py`). El resto del procesamiento está fuera de esta carpeta.
+**Minimal** code that isolates **one step** of the snow-depth pipeline: baseline correction in low-variance segments (`detect_flat_offsets` in `sd_ground_baseline.py`). The rest of the processing lives outside this folder.
 
-## Contenido
+## Contents
 
-| Archivo | Rol |
-|---------|-----|
-| `sd_ground_baseline.py` | Algoritmo + CLI opcional para visualizar |
-| `baseline_viz.ipynb` | Misma idea paso a paso en Jupyter |
-| `SD_ValleOlivares_05706003.csv` | Ejemplo reproducible (`date` + serie `05706003`) |
-| `requirements.txt` | Dependencias |
+| File | Role |
+|------|------|
+| `sd_ground_baseline.py` | Algorithm + optional CLI for visualization |
+| `baseline_viz.ipynb` | Same logic, step by step, in Jupyter |
+| `SD_ValleOlivares_05706003.csv` | Reproducible example (`date` + `05706003` series) |
+| `requirements.txt` | Dependencies |
 
-## Uso rápido
+## Quick start
 
 ```bash
 python -m pip install -r requirements.txt
 ```
 
-- **Notebook**: abrir `baseline_viz.ipynb` y ejecutar las celdas en orden (ajusta la ruta del CSV si hace falta).
-- **Línea de comandos**: con el CSV de ejemplo por defecto:
+- **Notebook**: open `baseline_viz.ipynb` and run the cells in order (adjust the CSV path if needed).
+- **Command line** with the default sample CSV:
 
 ```bash
 python sd_ground_baseline.py
 ```
 
-Otros CSV necesitan una columna `date` y la columna de valores (única numérica salvo fecha, o bien `--col`). Sin entorno gráfico, puedes guardar la figura con `-o salida.png`.
+Other CSVs need a `date` column and the values column (the only numeric column besides date, or use `--col`). Without a graphical environment, you can save the figure with `-o output.png`.
