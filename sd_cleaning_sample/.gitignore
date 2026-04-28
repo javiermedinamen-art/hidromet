@@ -1,0 +1,9 @@
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.DS_Store
+
+# Large inputs (optional: keep local only; remove the # to ignore)
+# SD_mean_raw_v4.1.csv
+# Southern_Andes_Snow_Depth_Dataset_v4.2.csv
