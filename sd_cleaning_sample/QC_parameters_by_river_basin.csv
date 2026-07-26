@@ -8,14 +8,12 @@ Arid Andes,Río Copiapó,CL,034,5,0.5,0.3,0.3,5.0,1,3,4,100,0,180,
 Arid Andes,Río Elqui,CL,043,5,0.5,0.3,0.3,5.0,1,3,4,100,0,180,
 Arid Andes,Río Limarí,CL,045,5,0.5,0.3,0.3,5.0,4,9,4,100,0,200,
 Arid Andes,Río Choapa,CL,047,5,0.5,0.3,0.3,5.0,1,3,4,150,0,200,
-Arid Andes,ZONE MEDIAN (9 processing groups),,,5,0.5,0.3,0.3,5.0,1,3,4,50,0,100,Median of basin/group values (min_cm = 0 for all basins)
 Mediterranean Andes,Río Petorca,CL,051,5,0.5,0.3,0.3,5.0,4,9,4,100,0,180,
 Mediterranean Andes,Río Aconcagua,CL,054,5,0.5,0.3,0.3,5.0,7,15,6,200,0,300,
 Mediterranean Andes,Río Maipo (DGA and related),CL,057,5,0.5,0.3,0.3,5.0,4,9,7,100,0,500,Sample station Valle Olivares (05706003) uses these Step 2.1 parameters
 Mediterranean Andes,Río Maipo (UdeChile – McPhee/Piuquenes),CL,McPhee,5,0.5,0.3,0.3,5.0,1,3,4,100,0,250,Separate processing block; UdeChile series not redistributed in the public 69-station file
 Mediterranean Andes,Río Rapel,CL,060,5,0.5,0.3,0.3,5.0,5,11,4,150,0,500,
 Mediterranean Andes,Río Mataquito,CL,071,3,0.5,0.3,0.5,5.0,5,11,4,100,0,420,
-Mediterranean Andes,ZONE MEDIAN (6 processing groups),,,5.0,0.5,0.3,0.3,5.0,4.5,10.0,4.0,100.0,0.0,360.0,Median of basin/group values (min_cm = 0 for all basins)
 Wet Andes,Río Maule,CL,073,3,0.5,0.3,0.3,5.0,4,9,7,100,0,500,
 Wet Andes,Río Itata,CL,081,3,0.5,0.3,0.3,5.0,5,11,6,200,0,450,
 Wet Andes,Río Biobío,CL,083,4,0.5,0.3,0.3,5.0,6,13,5,60,0,600,
@@ -27,5 +25,4 @@ Wet Andes,Río Aysén,CL,113,5,0.5,0.3,0.3,5.0,1,3,6,140,0,300,
 Wet Andes,Costeras e Islas R. Aisén–R. Baker,CL,114,5,0.5,0.3,0.3,5.0,1,3,6,140,0,300,
 Wet Andes,Río Baker,CL,115,5,0.5,0.3,0.3,5.0,1,3,6,140,0,300,
 Wet Andes,Islas al sur Estrecho de Magallanes,CL,127,5,0.5,0.3,0.3,5.0,1,3,6,140,0,300,
-Wet Andes,ZONE MEDIAN (11 processing groups),,,5,0.5,0.3,0.3,5.0,3,7,6,140,0,300,Median of basin/group values (min_cm = 0 for all basins)
 Multiple (AR),"IANIGLA stations (Jáchal, Mendoza, Tunuyán, Santa Cruz)",AR,IANIGLA,5,0.5,0.3,0.3,5.0,1,3,4,100,0,250,Same parameters for all IANIGLA series
