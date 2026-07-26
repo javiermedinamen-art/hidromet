@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 """Flat-segment baseline correction: ``detect_flat_offsets``.
 
-This repository is a **minimal sample** of the full snow-depth processing chain: it
-isolates **one** step—piecewise baseline (ground-level) adjustment in low-variance
-segments. Other pipeline stages (spike removal, physical limits, multi-station I/O,
-etc.) live in the main project; they are **not** included here.
+This repository is a **minimal sample** of the full snow-depth processing chain:
+it isolates **one** step—piecewise baseline (ground-level) adjustment in
+low-variance segments (manuscript Step 2.1). Default keyword arguments match
+the Maipo basin settings used for the Valle Olivares example. Other pipeline
+stages (spike removal, physical limits, multi-station I/O, validation) are
+documented in the manuscript and in ``QC_parameters_by_river_basin.csv``; they
+are **not** included here.
 
-The module is meant to be imported from the full pipeline or used with
-``baseline_viz.ipynb`` and the bundled example CSV ``SD_ValleOlivares_05706003.csv``.
+Use with ``baseline_viz.ipynb`` and ``SD_ValleOlivares_05706003.csv``.
 """
 
 from __future__ import annotations
@@ -30,17 +32,18 @@ def detect_flat_offsets(
     data: pd.DataFrame,
     cols: List[str],
     *,
-    window: int = 7,
-    var_thr: float = 1,
-    tol: float = 0.5,
-    drift_thr: float = 0.5,
+    window: int = 5,
+    var_thr: float = 0.5,
+    tol: float = 0.3,
+    drift_thr: float = 0.3,
     snow_thr: float = 5.0,
     backfill_first: bool = True,
 ) -> Tuple[pd.DataFrame, Dict[str, pd.Series]]:
     """Detect and correct step-like baseline offsets in low-variance segments.
 
-    Uses a rolling min–max range; stable runs whose median (unless snow is likely)
-    become subtracted piecewise-constant offsets.
+    Default parameters match the Maipo basin block in the operational QC notebook
+    (Valle Olivares sample). Uses a rolling min–max range; stable runs whose
+    median (unless snow is likely) become subtracted piecewise-constant offsets.
     """
     corr = data.copy()
     offs: Dict[str, pd.Series] = {}
@@ -213,10 +216,10 @@ def visualize_baseline_from_csv(
     *,
     col: Optional[str] = None,
     date_col: str = "date",
-    window: int = 7,
-    var_thr: float = 1.0,
-    tol: float = 0.5,
-    drift_thr: float = 0.5,
+    window: int = 5,
+    var_thr: float = 0.5,
+    tol: float = 0.3,
+    drift_thr: float = 0.3,
     snow_thr: float = 5.0,
     backfill_first: bool = True,
     title: Optional[str] = None,
@@ -352,10 +355,10 @@ def main() -> None:
         default=None,
         help="Value column (e.g. 05703014). Inferred if there is a single numeric column.",
     )
-    p.add_argument("--window", type=int, default=7)
-    p.add_argument("--var-thr", type=float, default=1.0)
-    p.add_argument("--tol", type=float, default=0.5)
-    p.add_argument("--drift-thr", type=float, default=0.5)
+    p.add_argument("--window", type=int, default=5)
+    p.add_argument("--var-thr", type=float, default=0.5)
+    p.add_argument("--tol", type=float, default=0.3)
+    p.add_argument("--drift-thr", type=float, default=0.3)
     p.add_argument("--snow-thr", type=float, default=5.0)
     p.add_argument(
         "--no-backfill-first",
